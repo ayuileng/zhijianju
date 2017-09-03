@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title>注册</title>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <p><span sec:authentication="name">someone</span>,您已经登录!</p>
+    <p><a href="/">返回首页</a></p>
+</div>
+<!--<div sec:authorize="isAnonymous()">-->
+
+<!--</div>-->
+<form action="/signup" method="POST" th:object="${user}">
+    <div class="errors" th:if="${#fields.hasErrors('*')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('*')}"
+                th:text="${err}">Input has errors</li>
+        </ul>
+    </div>
+    <!--th:class="${#fields.hasErrors('username')} ? 'error'"-->
+    <label >用户名:</label>
+    <input th:value="*{username}" name="username" /><br/>
+
+    <label >密&nbsp;&nbsp;&nbsp;码:</label>
+    <input type="password" th:value="*{password}" name="password" /><br/>
+
+    <label >邮&nbsp;&nbsp;&nbsp;箱:</label>
+    <input type="email" th:value="*{email}" name="email" /><br/>
+    <input type="submit" value="注册！" name="submit"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title>index</title>
+</head>
+<body>
+质监局项目首页
+<div sec:authorize="isAuthenticated()">
+    <p><span sec:authentication="name">someone</span>,您已经登录!</p>
+    <p><a href="/logout">退出！</a></p>
+</div>
+<div sec:authorize="isAnonymous()">
+    <a href="/login">请登录：</a>
+</div>
+</body>
+</html>

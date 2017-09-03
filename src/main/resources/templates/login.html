@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title>login page</title>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <p><span sec:authentication="name">someone</span>,您已经登录!</p>
+    <p><a href="/logout">退出！</a></p>
+</div>
+<div sec:authorize="isAnonymous()">
+    <form th:action="@{/login}" method="POST">
+        <table>
+            <tr>
+                <td>username:</td>
+                <td><input type="username" name="username" value=""/></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="password" value=""/></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">记住我：<input type="checkbox" name="remember-me"/></td>
+                <td  style="text-align: right"><input type="submit" name="submit" value="登录"/></td>
+            </tr>
+        </table>
+    </form>
+    <div>
+        <p>没有账号？<a href="/signup">点击这儿注册!</a></p>
+    </div>
+</div>
+
+</body>
+</html>
