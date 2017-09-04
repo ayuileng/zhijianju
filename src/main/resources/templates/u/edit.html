@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>修改个人信息</title>
+</head>
+<body>
+<form action="/u/edit" method="POST" th:object="${user}" accept-charset="UTF-8">
+    <div class="errors" th:if="${#fields.hasErrors('*')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('*')}"
+                th:text="${err}">Input has errors
+            </li>
+        </ul>
+    </div>
+    <label>用户名:</label>
+    <input th:value="*{username}" name="username"/>
+    <span style="color: red" th:if="${msg} eq 'usernameExsit'" th:text="用户名已经被注册">username error</span><br/>
+
+    <input type="hidden" th:value="*{id}" name="id"/><br/>
+    <input type="hidden"  th:value="*{password}" name="password" />
+    <label>原始密码:</label>
+    <input type="password"  name="password_ori" />
+    <span style="color: red" th:if="${oriPwdError} != null " th:text="${oriPwdError}">password error</span><br/>
+
+    <label>新密码:</label>
+    <input type="password"  name="password_new"/><br/>
+
+    <label>邮箱:</label>
+    <input type="email" th:value="*{email}" name="email"/><br/>
+    <input type="submit" value="更改信息！" name="submit"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户个人信息</title>
+</head>
+<body>
+    <div th:if="${msg} eq null" th:object="${user}">
+        <p>以下是您的个人信息</p>
+        <p>用户名：<span th:text="*{username}">username_test</span></p>
+        <p>邮箱：<span th:text="*{email}">email_test</span></p>
+        <p><a th:href="@{'/u/'+${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}+'/edit'}">修改我的信息</a></p>
+        <div>用户搜索历史：todo</div>
+        <div>用户浏览历史：todo</div>
+    </div>
+
+</body>
+</html>

@@ -13,7 +13,7 @@
 <!--<div sec:authorize="isAnonymous()">-->
 
 <!--</div>-->
-<form action="/signup" method="POST" th:object="${user}">
+<form action="/signup" method="POST" th:object="${user}" accept-charset="UTF-8">
     <div class="errors" th:if="${#fields.hasErrors('*')}">
         <ul>
             <li th:each="err : ${#fields.errors('*')}"
@@ -22,7 +22,8 @@
     </div>
     <!--th:class="${#fields.hasErrors('username')} ? 'error'"-->
     <label >用户名:</label>
-    <input th:value="*{username}" name="username" /><br/>
+    <input th:value="*{username}" name="username" />
+    <span style="color: red" th:if="${msg} eq 'usernameExsit'" th:text="用户名已经存在">1</span><br/>
 
     <label >密&nbsp;&nbsp;&nbsp;码:</label>
     <input type="password" th:value="*{password}" name="password" /><br/>

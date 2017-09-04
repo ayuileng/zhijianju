@@ -10,8 +10,10 @@
     <p><span sec:authentication="name">someone</span>,您已经登录!</p>
     <p><a href="/logout">退出！</a></p>
 </div>
+
 <div sec:authorize="isAnonymous()">
-    <form th:action="@{/login}" method="POST">
+    <p th:if="${errorMSG} != null" th:text="${errorMSG}">请登录</p>
+    <form th:action="@{/login}" method="POST" accept-charset="UTF-8">
         <table>
             <tr>
                 <td>username:</td>

@@ -18,8 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByUsername(username);
         if(user == null){
-            //todo
-            System.out.println("用户不存在");
+            throw new UsernameNotFoundException("用户名不存在");
         }
        return user;
     }

@@ -8,8 +8,10 @@
 <body>
 质监局项目首页
 <div sec:authorize="isAuthenticated()">
-    <p><span sec:authentication="name">someone</span>,您已经登录!</p>
-    <p><a href="/logout">退出！</a></p>
+    <div><span sec:authentication="name">someone</span>,您已经登录!</div>
+    <!--<div th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}">id</div>-->
+    <div><a th:href="@{'/u/' + ${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}}">查看个人信息</a></div>
+    <div><a href="/logout">退出！</a></div>
 </div>
 <div sec:authorize="isAnonymous()">
     <a href="/login">请登录：</a>
