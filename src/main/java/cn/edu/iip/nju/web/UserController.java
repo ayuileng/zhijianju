@@ -2,8 +2,12 @@ package cn.edu.iip.nju.web;
 
 import cn.edu.iip.nju.exception.UsernameExsitedException;
 import cn.edu.iip.nju.model.User;
+import cn.edu.iip.nju.model.UserSearchHistory;
+import cn.edu.iip.nju.service.UserSearchHistoryService;
 import cn.edu.iip.nju.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +24,13 @@ import javax.validation.Valid;
 @RequestMapping("/u")
 public class UserController {
     private final UserService userService;
+    private final UserSearchHistoryService userSearchHistoryService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          UserSearchHistoryService userSearchHistoryService) {
         this.userService = userService;
+        this.userSearchHistoryService = userSearchHistoryService;
     }
 
     @GetMapping("/{id}")
@@ -58,7 +65,6 @@ public class UserController {
     public String saveEditedUser(Model model, @RequestParam(name = "password_new") String password_new,
                                  @RequestParam(name = "password_ori") String password_ori,
                                  @Valid User user, Errors errors) {
-        System.out.println("ori:"+password_ori+"/new:"+password_new+"/user:"+user.getPassword());
         if (noAccess(user.getId(), model)) {
             return "error/accessError";
         }
@@ -81,6 +87,19 @@ public class UserController {
             model.addAttribute("oriPwdError", "原始密码输入错误！！！");
             return "/u/edit";
         }
+    }
+
+    //需要对结果进行分页
+    @GetMapping("/{id}/searchHistory")
+    public String showUserSearchHistory(@PathVariable Integer id,Model model,
+                                        @RequestParam(name = "page",defaultValue = "0")Integer page,
+                                        @RequestParam(name = "size",defaultValue = "2",required = false)Integer size){
+        if (noAccess(id, model)) {
+            return "error/accessError";
+        }
+        Page<UserSearchHistory> history = userSearchHistoryService.getRecentHistory(id, new PageRequest(page, size));
+        model.addAttribute("history",history);
+        return "/u/searchHistory";
     }
 
     private boolean noAccess(@PathVariable Integer id, Model model) {

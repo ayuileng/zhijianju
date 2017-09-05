@@ -1,18 +1,17 @@
 package cn.edu.iip.nju.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 @Entity
 public class UserSearchHistory implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String userName;
+    private Integer userId;
+    //用户的搜索记录
     private String searchHistory;
+    //用户的搜索时间
     private Date searchTime;
 
     public Integer getId() {
@@ -23,12 +22,12 @@ public class UserSearchHistory implements Serializable {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getSearchHistory() {
@@ -47,5 +46,13 @@ public class UserSearchHistory implements Serializable {
         this.searchTime = searchTime;
     }
 
-
+    @Override
+    public String toString() {
+        return "UserSearchHistory{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", searchHistory='" + searchHistory + '\'' +
+                ", searchTime=" + searchTime +
+                '}';
+    }
 }

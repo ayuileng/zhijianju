@@ -9,12 +9,21 @@
 质监局项目首页
 <div sec:authorize="isAuthenticated()">
     <div><span sec:authentication="name">someone</span>,您已经登录!</div>
-    <!--<div th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}">id</div>-->
+
     <div><a th:href="@{'/u/' + ${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}}">查看个人信息</a></div>
     <div><a href="/logout">退出！</a></div>
 </div>
 <div sec:authorize="isAnonymous()">
     <a href="/login">请登录：</a>
+    <a href="/signup">没有账号？点这儿注册！</a>
+</div>
+<hr/>
+<img src="pic/shuwa.jpg" alt="树蛙一下，你就知道"/>
+<div style="text-align: center">
+    <form action="/search" method="get">
+        <input type="text" name="queryWord"/>
+        <input type="submit" value="树蛙一下"/>
+    </form>
 </div>
 </body>
 </html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>搜索历史</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <style>
+            .container {
+                text-align: center;
+                width: 60%;
+                margin: 0 auto;
+            }
+        .paging{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<table class="table">
+    <tr>
+        <td><b>搜索关键字</b></td>
+        <td><b>搜索时间</b></td>
+    </tr>
+    <tr th:each="c : ${history.content}">
+        <td th:text="${c.searchHistory}">搜索记录1</td>
+        <td th:text="${c.searchTime}">2017-9-5</td>
+    </tr>
+    <tr>
+        <td ><a href="" class="btn btn-danger">删除用户搜索记录！！</a></td>
+        <td ><a href="" class="btn btn-info">返回用户信息首页！！</a></td>
+    </tr>
+</table>
+</div>
+<div class="container paging">
+    <!--分页组件-->
+    <nav aria-label="Page navigation" th:object="${history}">
+        <ul class="pagination">
+            <!--首页-->
+            <li th:classappend="*{first} ? 'disabled' : ''">
+                <a th:href="@{'/u/'+${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}+'/searchHistory?page=0'} "
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <!--中间的页码-->
+            <li th:each="i : ${#numbers.sequence(0,history.totalPages-1)}"
+                th:classappend="${(history.number ) eq i} ? 'active' : '' ">
+
+                <a th:href="@{'/u/'+${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}+'/searchHistory?page='+${i}}"
+                   th:classappend="${(history.number +1) eq i} ? 'disabled' : '' ">
+                    <span th:text="${i+1}">1</span>
+                </a>
+            </li>
+            <!--尾页-->
+            <li th:classappend="*{last} ? 'disabled' : ''">
+                <a th:href="@{'/u/'+${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}+'/searchHistory?page='+${history.totalPages-1}} "
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>
