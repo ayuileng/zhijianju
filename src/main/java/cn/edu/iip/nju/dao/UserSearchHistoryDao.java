@@ -19,8 +19,12 @@ public interface UserSearchHistoryDao extends JpaRepository<UserSearchHistory,In
     //上一方法的分页实现
     Page<UserSearchHistory> findAllByUserIdOrderBySearchTimeDesc(Integer userId, Pageable pageable);
 
+    //删除某个用户的所有搜索历史
     void deleteAllByUserId(Integer userId);
 
     //根据时间顺序查询最近的搜索记录
     List<UserSearchHistory> findAll(Sort sort);
+
+    //查找该用户的最新一条搜索记录
+    UserSearchHistory findFirstByUserIdOrderBySearchTimeDesc(Integer userId);
 }

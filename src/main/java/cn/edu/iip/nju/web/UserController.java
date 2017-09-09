@@ -71,6 +71,10 @@ public class UserController {
         if (errors.hasErrors()) {
             return "/u/edit";
         }
+        if(password_new.length()>15||password_new.length()<6){
+            model.addAttribute("pwsNewError","密码的长度为6~15!");
+            return "/u/edit";
+        }
         if (userService.isPasswordRight(user, password_ori)) {
             try {
                 //注：此处service层必须调用dao层的saveAndFlush方法，
@@ -93,12 +97,20 @@ public class UserController {
     @GetMapping("/{id}/searchHistory")
     public String showUserSearchHistory(@PathVariable Integer id,Model model,
                                         @RequestParam(name = "page",defaultValue = "0")Integer page,
-                                        @RequestParam(name = "size",defaultValue = "2",required = false)Integer size){
+                                        @RequestParam(name = "size",defaultValue = "10",required = false)Integer size){
         if (noAccess(id, model)) {
             return "error/accessError";
         }
         Page<UserSearchHistory> history = userSearchHistoryService.getRecentHistory(id, new PageRequest(page, size));
         model.addAttribute("history",history);
+        System.out.println(history.getTotalElements());
+        return "/u/searchHistory";
+    }
+
+    @GetMapping("/{id}/searchHistory/delete")
+    public String deleteHistory(@PathVariable Integer id,Model model){
+        userSearchHistoryService.deleteAllHistoryByUserId(id);
+        model.addAttribute("deleteSuccess","删除用户搜索记录成功");
         return "/u/searchHistory";
     }
 

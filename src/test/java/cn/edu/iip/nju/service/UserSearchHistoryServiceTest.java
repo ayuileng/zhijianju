@@ -20,6 +20,25 @@ import java.util.Random;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ZhijianjuApplication.class)
 public class UserSearchHistoryServiceTest {
+    @Test
+    public void isNewSearchHistory() throws Exception {
+        UserSearchHistory history1 = new UserSearchHistory();
+        history1.setSearchTime(new Date(2017,9,9,16,11));
+        history1.setUserId(2);
+        history1.setSearchHistory("123");
+        userSearchHistoryService.saveSearchHistory(history1);
+        UserSearchHistory history2 = new UserSearchHistory();
+        history2.setSearchTime(new Date(2017,9,9,16,31));
+        history2.setUserId(2);
+        history2.setSearchHistory("123");
+        UserSearchHistory history3 = new UserSearchHistory();
+        history3.setSearchTime(new Date(2017,9,9,16,51));
+        history3.setUserId(2);
+        history3.setSearchHistory("123");
+        System.out.println(userSearchHistoryService.isNewSearchHistory(history2));//F
+        System.out.println(userSearchHistoryService.isNewSearchHistory(history3));//T
+    }
+
     @Autowired
     private UserSearchHistoryService userSearchHistoryService;
     @Test

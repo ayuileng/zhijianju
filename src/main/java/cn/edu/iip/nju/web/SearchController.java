@@ -1,10 +1,14 @@
 package cn.edu.iip.nju.web;
 
+import cn.edu.iip.nju.model.Document;
 import cn.edu.iip.nju.model.User;
 import cn.edu.iip.nju.model.UserSearchHistory;
+import cn.edu.iip.nju.service.SolrDocumentService;
 import cn.edu.iip.nju.service.UserSearchHistoryService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,26 +26,32 @@ import java.util.Date;
 public class SearchController {
     @Autowired
     private UserSearchHistoryService userSearchHistoryService;
+    @Autowired
+    private SolrDocumentService solrDocumentService;
 
     @GetMapping
-    public String processQuery(@RequestParam String queryWord, Model model) {
-        //TODO solr indexing
-
+    public String processQuery(@RequestParam(name = "queryWord") String queryWord, Model model,
+                               @RequestParam(name = "page", defaultValue = "0") Integer page) {
         //空查询则返回首页
-        if(StringUtils.isBlank(queryWord)){
+        if (StringUtils.isBlank(queryWord)) {
             return "/index";
         }
-        System.out.println(queryWord);
         //判断用户是否登录，如果是登录状态，则保存搜索历史
         Integer userId = isUserLogIn();
         if (userId != -1) {
+
             UserSearchHistory history = new UserSearchHistory();
             history.setUserId(userId);
             history.setSearchHistory(queryWord);
             history.setSearchTime(new Date());
-            userSearchHistoryService.saveSearchHistory(history);
+            if (userSearchHistoryService.isNewSearchHistory(history)) {
+                userSearchHistoryService.saveSearchHistory(history);
+            }
         }
-        model.addAttribute("queryWord",queryWord);
+        Page<Document> results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 10));
+        //TODO 快照，content略所
+        model.addAttribute("queryWord", queryWord);
+        model.addAttribute("results", results);
         return "/s/result";
 
     }

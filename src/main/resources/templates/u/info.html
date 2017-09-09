@@ -1,18 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8"/>
     <title>用户个人信息</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+
+    <style>
+        .container {
+            text-align: center;
+            width: 40%;
+            margin: 0 auto;
+        }
+        .wrapper {
+            margin-top: 5%;
+        }
+    </style>
 </head>
 <body>
-    <div th:if="${msg} eq null" th:object="${user}">
-        <div>以下是您的个人信息</div>
-        <div>用户名：<span th:text="*{username}">username_test</span></div>
-        <div>邮箱：<span th:text="*{email}">email_test</span></div>
-        <div><a th:href="@{'/u/'+${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}+'/edit'}">修改我的信息</a></div>
-        <div><a th:href="@{'/u/'+${user.id}+'/searchHistory'}">查看我的搜索历史</a></div>
-        <div>用户浏览历史：todo</div>
+<div th:replace="fragments/header :: header"></div>
+<div class="wrapper">
+
+    <div class="container" th:if="${msg} eq null">
+        <h2><span class="label label-primary big">用户信息：</span></h2>
+        <table class="table table-bordered table-striped" th:object="${user}">
+            <tr>
+                <td>用户名：</td>
+                <td th:text="*{username}">name</td>
+            </tr>
+            <tr>
+                <td>邮箱：</td>
+                <td th:text="*{email}">email</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a th:href="@{'/u/'+${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}+'/edit'}">修改我的信息</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a th:href="@{'/u/'+${user.id}+'/searchHistory'}">查看我的搜索历史</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a href="#">查看我的搜索历史</a>
+                </td>
+            </tr>
+        </table>
     </div>
+</div>
+<div th:replace="fragments/footer :: footer">...</div>
 
 </body>
 </html>

@@ -10,27 +10,27 @@
     <p><span sec:authentication="name">someone</span>,您已经登录!</p>
     <p><a href="/">返回首页</a></p>
 </div>
-<!--<div sec:authorize="isAnonymous()">-->
+<div sec:authorize="isAnonymous()">
+    <form action="/signup" method="POST" th:object="${user}" accept-charset="UTF-8">
+        <div class="errors" th:if="${#fields.hasErrors('*')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('*')}"
+                    th:text="${err}">Input has errors
+                </li>
+            </ul>
+        </div>
+        <!--th:class="${#fields.hasErrors('username')} ? 'error'"-->
+        <label>用户名:</label>
+        <input th:value="*{username}" name="username"/>
+        <span style="color: red" th:if="${msg} eq 'usernameExsit'" th:text="用户名已经存在">1</span><br/>
 
-<!--</div>-->
-<form action="/signup" method="POST" th:object="${user}" accept-charset="UTF-8">
-    <div class="errors" th:if="${#fields.hasErrors('*')}">
-        <ul>
-            <li th:each="err : ${#fields.errors('*')}"
-                th:text="${err}">Input has errors</li>
-        </ul>
-    </div>
-    <!--th:class="${#fields.hasErrors('username')} ? 'error'"-->
-    <label >用户名:</label>
-    <input th:value="*{username}" name="username" />
-    <span style="color: red" th:if="${msg} eq 'usernameExsit'" th:text="用户名已经存在">1</span><br/>
+        <label>密&nbsp;&nbsp;&nbsp;码:</label>
+        <input type="password" th:value="*{password}" name="password"/><br/>
 
-    <label >密&nbsp;&nbsp;&nbsp;码:</label>
-    <input type="password" th:value="*{password}" name="password" /><br/>
-
-    <label >邮&nbsp;&nbsp;&nbsp;箱:</label>
-    <input type="email" th:value="*{email}" name="email" /><br/>
-    <input type="submit" value="注册！" name="submit"/>
-</form>
+        <label>邮&nbsp;&nbsp;&nbsp;箱:</label>
+        <input type="email" th:value="*{email}" name="email"/><br/>
+        <input type="submit" value="注册！" name="submit"/>
+    </form>
+</div>
 </body>
 </html>
