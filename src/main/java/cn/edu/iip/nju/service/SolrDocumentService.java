@@ -26,7 +26,6 @@ public class SolrDocumentService {
         HighlightPage<Document> documents = solrDocumentDao.findBySearchText(searchText.trim(), pageable);
         for (HighlightEntry<Document> documentHighlightEntry : documents.getHighlighted()) {
             Document entity = documents.getContent().get(i);
-            System.out.println(entity.getContent().length());
             if (entity.getContent().length() > 100) {
                 entity.setContent(entity.getContent().substring(0, 99)+"...");
             }

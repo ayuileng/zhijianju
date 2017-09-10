@@ -13,12 +13,13 @@
         .wrapper {
             position: relative;
             text-align: center;
-            width: 40%;
-            margin: 0 auto;
-            margin-top: 70px;
+            width: 60%;
+            margin: 70px auto 0;
             padding-bottom:50px;
 
         }
+
+
 
         .footer{height:50px;position:fixed;bottom:0px;left:0px;}
     </style>
@@ -39,9 +40,9 @@
     <div class="logo"><img src="pic/shuwa.jpg" alt="树蛙一下，你就知道"/></div>
 
     <div class="searchForm">
-        <form action="/search" method="get">
-            <input type="text" name="queryWord"/>
-            <input type="submit" value="树蛙一下"/>
+        <form action="/search" method="get" class="form-inline">
+            <input class="form-control" type="text" name="queryWord" style="width: 55%;"/>
+            <input class="form-control btn btn-primary" type="submit"  value="树蛙一下"/>
         </form>
     </div>
 
