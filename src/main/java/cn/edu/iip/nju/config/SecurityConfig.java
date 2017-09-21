@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll()
                 .invalidateHttpSession(true)
                 .and()
-                .rememberMe()//登录后记住用户，下次自动登录,数据库中必须存在名为persistent_logins的表
+                .rememberMe()//登录后记住用户，下次自动登录
                 .tokenValiditySeconds(1209600)
                 .and().csrf().disable();
     }

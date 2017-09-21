@@ -21,6 +21,7 @@ public class SolrDocumentService {
         this.solrDocumentDao = solrDocumentDao;
     }
 
+
     public Page<Document> findBySearchText(String searchText, Pageable pageable) {
         int i = 0;
         HighlightPage<Document> documents = solrDocumentDao.findBySearchText(searchText.trim(), pageable);

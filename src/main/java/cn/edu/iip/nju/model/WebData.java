@@ -26,12 +26,8 @@ public class WebData implements Serializable {
     @Column(name = "crawler_time")
     private Date crawlTime;
     private String sourceName;
-    private String keyword;
     //下面4个属性就是标签
-    private String productName;
-    private String areaName;
-    private String paperType;
-    private String injureType;
+
 
     public Integer getId() {
         return id;
@@ -97,46 +93,6 @@ public class WebData implements Serializable {
         this.sourceName = sourceName;
     }
 
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getAreaName() {
-        return areaName;
-    }
-
-    public void setAreaName(String areaName) {
-        this.areaName = areaName;
-    }
-
-    public String getPaperType() {
-        return paperType;
-    }
-
-    public void setPaperType(String paperType) {
-        this.paperType = paperType;
-    }
-
-    public String getInjureType() {
-        return injureType;
-    }
-
-    public void setInjureType(String injureType) {
-        this.injureType = injureType;
-    }
-
     @Override
     public String toString() {
         return "WebData{" +
@@ -148,13 +104,6 @@ public class WebData implements Serializable {
                 ", postTime=" + postTime +
                 ", crawlTime=" + crawlTime +
                 ", sourceName='" + sourceName + '\'' +
-                ", keyword='" + keyword + '\'' +
-                ", productName='" + productName + '\'' +
-                ", areaName='" + areaName + '\'' +
-                ", paperType='" + paperType + '\'' +
-                ", injureType='" + injureType + '\'' +
                 '}';
     }
-
-
 }

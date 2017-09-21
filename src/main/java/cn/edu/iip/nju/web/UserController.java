@@ -103,7 +103,6 @@ public class UserController {
         }
         Page<UserSearchHistory> history = userSearchHistoryService.getRecentHistory(id, new PageRequest(page, size));
         model.addAttribute("history",history);
-        System.out.println(history.getTotalElements());
         return "/u/searchHistory";
     }
 
