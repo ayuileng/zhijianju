@@ -30,15 +30,17 @@ import java.util.*;
  * http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/jdcc/  监督抽查
  * http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/fxjk/   风险监控
  * http://cpzljds.aqsiq.gov.cn/dfxx/  地方新闻
+ * http://www.aqsiq.gov.cn/xxgk_13386/ywxx/cpzljd/ 产品质量监督
  * 同一个数据源的不同的版块，页面结构都一样
  * 包含附件
  */
 @Component
 public class CPZLJDS  {
     @Autowired
-    private WebDataDao dao;
+    private WebDataDao webDataDao;
+
     private static final Logger logger = LoggerFactory.getLogger(CPZLJDS.class);
-    private static final String[] basicURLs = {"http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/jggz/",
+    private  final String[] basicURLs = {"http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/jggz/",
             "http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/jdcc/",
             "http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/fxjk/",
             "http://cpzljds.aqsiq.gov.cn/dfxx/"};
@@ -115,7 +117,6 @@ public class CPZLJDS  {
         downloadURLs.put("zip", new HashSet<>());
         downloadURLs.put("pdf", new HashSet<>());
         ArrayList<String> pageURLs = pageURLs();
-
         for (String pageURL : pageURLs) {
             logger.info(pageURL);
             Document document = Jsoup.connect(pageURL)
@@ -135,7 +136,7 @@ public class CPZLJDS  {
             if (content != null) {
                 webData.setContent(content.text());
             }
-            dao.save(webData);
+            webDataDao.save(webData);
             AttachmentUtil.downloadURLs(document, downloadURLs);
             Thread.sleep(500);
         }

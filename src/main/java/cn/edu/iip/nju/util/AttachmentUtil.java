@@ -54,7 +54,7 @@ public class AttachmentUtil {
                 downloadURLs.get("rar").add(rarUrl.attr("abs:href"));
             }
         }
-
+        
         Elements zipUrls = document.select("a[href$=.zip]");
         if (zipUrls != null) {
             for (Element zipUrl : zipUrls) {

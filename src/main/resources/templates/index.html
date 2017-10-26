@@ -26,16 +26,7 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
-<!--<div sec:authorize="isAuthenticated()">-->
-<!--<div><span sec:authentication="name">someone</span>,您已经登录!</div>-->
 
-<!--<div><a th:href="@{'/u/' + ${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}}">查看个人信息</a></div>-->
-<!--<div><a href="/logout">退出！</a></div>-->
-<!--</div>-->
-<!--<div sec:authorize="isAnonymous()">-->
-<!--<a href="/login">请登录：</a>-->
-<!--<a href="/signup">没有账号？点这儿注册！</a>-->
-<!--</div>-->
 <div class="wrapper">
     <div class="logo"><img src="pic/shuwa.jpg" alt="树蛙一下，你就知道"/></div>
 
@@ -44,6 +35,13 @@
             <input class="form-control" type="text" name="queryWord" style="width: 55%;"/>
             <input class="form-control btn btn-primary" type="submit"  value="树蛙一下"/>
         </form>
+    </div>
+
+    <div class="tab-page">
+        <a href="/injurecase">伤害事件案例库</a>
+        <a href="#">产品负面清单</a>
+        <a href="#">企业负面清单</a>
+        <a href="#">医院数据入口</a>
     </div>
 
 </div>
