@@ -5,6 +5,8 @@ import cn.edu.iip.nju.model.InjureCase;
 import cn.edu.iip.nju.service.CompanyNegativeListService;
 import cn.edu.iip.nju.service.HospitalDataService;
 import cn.edu.iip.nju.service.InjureCaseService;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by xu on 2017/10/24.
@@ -56,7 +58,7 @@ public class InjureCaseController {
         }
         if (!type.isEmpty()) {
             sql.append("injure_type='").append(type).append("' and ");
-        }else {
+        } else {
             sql.append("injure_type!='' and ");
         }
         if (!area.isEmpty()) {
@@ -77,7 +79,7 @@ public class InjureCaseController {
         String realSQL;
         if (sql.toString().trim().length() > 0) {
             realSQL = baseSql + "where " + sql.toString().trim();
-        }else {
+        } else {
             realSQL = baseSql;
         }
         if (realSQL.endsWith("and")) {
@@ -89,7 +91,7 @@ public class InjureCaseController {
         } else {
             realSQL += " ORDER BY injure_time DESC ";
         }
-        PageHelper<InjureCase> injureCases = injureCaseService.getByCondition(realSQL + " limit "+(page-1)*30+","+30+";", page);
+        PageHelper<InjureCase> injureCases = injureCaseService.getByCondition(realSQL + " limit " + (page - 1) * 30 + "," + 30 + ";", page);
         model.addAttribute("injureCases", injureCases);
 
         return "injureCase";
@@ -122,8 +124,60 @@ public class InjureCaseController {
         return "hospital";
     }
 
-//    @GetMapping("/comChart")
-//    public String comChart(Model model){
-//
-//    }
+    @GetMapping("/comChart")
+    public String comChart(Model model) {
+        ArrayList<String> provs = Lists.newArrayList("北京市", "天津市", "河北省"
+                , "山西省", "内蒙古自治区", "辽宁省", "吉林省", "黑龙江省"
+                , "江苏省", "浙江省", "安徽省", "福建省", "江西省", "山东省"
+                , "河南省", "湖北省", "湖南省", "广东省", "广西壮族自治区"
+                , "海南省", "重庆市", "四川省", "贵州省", "云南省", "陕西省"
+                , "甘肃省", "青海省", "宁夏回族自治区");
+
+        TreeMap<String, Long> treeMap = Maps.newTreeMap();
+        for (String prov : provs) {
+            Long count = companyNegativeListService.countByProvinceName(prov);
+            treeMap.put(prov, count);
+        }
+        model.addAttribute("provs", treeMap);
+        Collection<Long> values = treeMap.values();
+        long max = findMax(values);
+        model.addAttribute("max", max);
+        return "/chart/company";
+
+    }
+
+    private long findMax(Collection<Long> nums) {
+        return Collections.max(nums);
+    }
+
+    @GetMapping("/comProv")
+    public String comPov(Model model,
+                         @RequestParam(name = "pro") String pro) {
+        long good = companyNegativeListService.countAllByProvinceAndPassPercentBetween(pro, 0.8, 1.0);
+        long pass = companyNegativeListService.countAllByProvinceAndPassPercentBetween(pro, 0.6, 0.8);
+        long common = companyNegativeListService.countAllByProvinceAndPassPercentBetween(pro, 0.4, 0.6);
+        long bad = companyNegativeListService.countAllByProvinceAndPassPercentBetween(pro, 0.0, 0.4);
+        long[] percent = {good, pass, common, bad};
+        model.addAttribute("pro", pro);
+        model.addAttribute("percent", percent);
+        return "/chart/provCom";
+    }
+
+
+    @GetMapping("/hosChart")
+    public String hosChart(Model model) {
+        Set<String> allLocations = hospitalDataService.getLocations();
+        Map<String ,Long> map = Maps.newHashMap();
+        for (String location : allLocations) {
+            Long count = hospitalDataService.countByLocation(location);
+            map.put(location,count);
+        }
+        model.addAttribute("map",map);
+        List<Integer> list = Lists.newArrayList();
+        for (int i = 1; i <= 12; i++) {
+            list.add(hospitalDataService.countByMonth(i));
+        }
+        model.addAttribute("list",list);
+        return "/chart/hos";
+    }
 }

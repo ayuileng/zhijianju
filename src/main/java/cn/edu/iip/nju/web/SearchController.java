@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,8 @@ public class SearchController {
 
     @GetMapping
     public String processQuery(@RequestParam(name = "queryWord") String queryWord, Model model,
-                               @RequestParam(name = "page", defaultValue = "0") Integer page) {
+                               @RequestParam(name = "page", defaultValue = "0") Integer page,
+                               @RequestParam(name = "sort",defaultValue = "keyWord") String sort) {
         //空查询则返回首页
         if (StringUtils.isBlank(queryWord)) {
             return "/index";
@@ -48,10 +50,20 @@ public class SearchController {
                 userSearchHistoryService.saveSearchHistory(history);
             }
         }
-        Page<Document> results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 10));
-        //TODO 快照，content略所
+        Sort s ;
+        Page<Document> results;
+        if(sort.equals("posttime")){
+            s = new Sort(Sort.Direction.DESC,"post_time");
+            results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 10,s));
+        }else {
+            results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 10));
+        }
         model.addAttribute("queryWord", queryWord);
         model.addAttribute("results", results);
+        model.addAttribute("sort",sort);
+
+        //TODO 分页时保留原有的查询参数
+
         return "/s/result";
 
     }

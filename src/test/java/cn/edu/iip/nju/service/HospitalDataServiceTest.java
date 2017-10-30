@@ -13,6 +13,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ZhijianjuApplication.class)
 public class HospitalDataServiceTest {
+    @Test
+    public void countByLocation() throws Exception {
+        for (String s : hospitalDataService.getLocations()) {
+            System.out.println(s);
+            System.out.println(hospitalDataService.countByLocation(s));
+        }
+    }
+
+    @Test
+    public void countByMonth() throws Exception {
+        System.out.println(hospitalDataService.countByMonth(9));
+    }
+
     @Autowired
     private HospitalDataService hospitalDataService;
 

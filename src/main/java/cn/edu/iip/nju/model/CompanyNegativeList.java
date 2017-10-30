@@ -26,15 +26,13 @@ public class CompanyNegativeList implements Serializable{
 
     private Double passPercent;     //抽查合格率
 
-    public CompanyNegativeList() {
-    }
+    private String province;        //企业所在省份
 
-    public CompanyNegativeList(String companyName, Integer caseNum, String injureDegree, Integer callbackNum, Double passPercent) {
-        this.companyName = companyName;
-        this.caseNum = caseNum;
-        this.injureDegree = injureDegree;
-        this.callbackNum = callbackNum;
-        this.passPercent = passPercent;
+    public String getProvince() {
+        return province;
+    }
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public Integer getId() {
@@ -85,15 +83,4 @@ public class CompanyNegativeList implements Serializable{
         this.passPercent = passPercent;
     }
 
-    @Override
-    public String toString() {
-        return "CompanyNegativeList{" +
-                "id=" + id +
-                ", companyName='" + companyName + '\'' +
-                ", caseNum=" + caseNum +
-                ", injureDegree='" + injureDegree + '\'' +
-                ", callbackNum=" + callbackNum +
-                ", passPercent=" + passPercent +
-                '}';
-    }
 }

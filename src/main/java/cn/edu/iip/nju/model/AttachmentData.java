@@ -31,6 +31,16 @@ public class AttachmentData implements Serializable{
     //    承建机构
     private String chengjianjigou;
 
+    private String province;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -116,21 +126,7 @@ public class AttachmentData implements Serializable{
     public AttachmentData() {
     }
 
-    public AttachmentData(String name, String shangbiao,
-                          String guigexinghao, String birthday,
-                          String factoryName, String factoryAddress,
-                          String result, String errorReason,
-                          String chengjianjigou) {
-        this.name = name;
-        this.shangbiao = shangbiao;
-        this.guigexinghao = guigexinghao;
-        this.birthday = birthday;
-        this.factoryName = factoryName;
-        this.factoryAddress = factoryAddress;
-        this.result = result;
-        this.errorReason = errorReason;
-        this.chengjianjigou = chengjianjigou;
-    }
+
 
     @Override
     public String toString() {
@@ -149,39 +145,39 @@ public class AttachmentData implements Serializable{
     }
 
 
-    public boolean isFilled(){
-        int i=0;
-        if(getErrorReason() == null || getErrorReason().isEmpty()){
-            i++;
-        }
-        if(getBirthday() == null || getBirthday().isEmpty()){
-            i++;
-        }
-        if(getChengjianjigou() == null || getChengjianjigou().isEmpty()){
-            i++;
-        }
-        if(getFactoryAddress() == null || getFactoryAddress().isEmpty()){
-            i++;
-        }
-        if(getFactoryName() == null || getFactoryName().isEmpty()){
-            i++;
-        }
-        if(getGuigexinghao() == null || getGuigexinghao().isEmpty()){
-            i++;
-        }
-        if(getName() == null || getName().isEmpty()){
-            i++;
-        }
-        if(getResult() == null || getResult().isEmpty()){
-            i++;
-        }
-        if(getShangbiao() == null || getShangbiao().isEmpty()){
-            i++;
-        }
-        if(i>=5){
-            return false;
-        }else {
-            return true;
-        }
-    }
+//    public boolean isFilled(){
+//        int i=0;
+//        if(getErrorReason() == null || getErrorReason().isEmpty()){
+//            i++;
+//        }
+//        if(getBirthday() == null || getBirthday().isEmpty()){
+//            i++;
+//        }
+//        if(getChengjianjigou() == null || getChengjianjigou().isEmpty()){
+//            i++;
+//        }
+//        if(getFactoryAddress() == null || getFactoryAddress().isEmpty()){
+//            i++;
+//        }
+//        if(getFactoryName() == null || getFactoryName().isEmpty()){
+//            i++;
+//        }
+//        if(getGuigexinghao() == null || getGuigexinghao().isEmpty()){
+//            i++;
+//        }
+//        if(getName() == null || getName().isEmpty()){
+//            i++;
+//        }
+//        if(getResult() == null || getResult().isEmpty()){
+//            i++;
+//        }
+//        if(getShangbiao() == null || getShangbiao().isEmpty()){
+//            i++;
+//        }
+//        if(i>=5){
+//            return false;
+//        }else {
+//            return true;
+//        }
+//    }
 }

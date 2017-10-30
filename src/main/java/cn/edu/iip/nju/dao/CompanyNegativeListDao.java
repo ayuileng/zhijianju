@@ -12,5 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyNegativeListDao extends JpaRepository<CompanyNegativeList,Integer>{
     Page<CompanyNegativeList> findAllByPassPercentGreaterThan(Pageable pageable, Double low);
+    Long countAllByProvince(String province);
+    Long countAllByProvinceStartingWithAndPassPercentBetween(String prov, Double from, Double to);
 
 }

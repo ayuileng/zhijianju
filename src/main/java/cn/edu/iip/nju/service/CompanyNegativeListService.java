@@ -3,11 +3,13 @@ package cn.edu.iip.nju.service;
 import cn.edu.iip.nju.dao.AttachmentDataDao;
 import cn.edu.iip.nju.dao.CompanyNegativeListDao;
 import cn.edu.iip.nju.model.CompanyNegativeList;
+import cn.edu.iip.nju.util.CityProvince;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Random;
  * 完成产品负面清单的创建，以及字段封装，向controller返回分页结果
  */
 @Service
+@Transactional
 public class CompanyNegativeListService {
     @Autowired
     private CompanyNegativeListDao companyNegativeListDao;
@@ -57,7 +60,24 @@ public class CompanyNegativeListService {
 
     }
 
+    public void setProvince(Page<CompanyNegativeList> pg) throws Exception {
+        for (CompanyNegativeList companyNegativeList : pg.getContent()) {
+            String companyName = companyNegativeList.getCompanyName();
+            String province = CityProvince.chooseProvinceOfCompany(companyName);
+            companyNegativeList.setProvince(province);
+            companyNegativeListDao.save(companyNegativeList);
+        }
 
+    }
+
+
+    public Long countByProvinceName(String proName){
+        return companyNegativeListDao.countAllByProvince(proName);
+    }
+
+    public long countAllByProvinceAndPassPercentBetween(String prov,Double from,Double to){
+        return companyNegativeListDao.countAllByProvinceStartingWithAndPassPercentBetween(prov,from,to);
+    }
 
 
 }

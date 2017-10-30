@@ -28,8 +28,11 @@
 <div class="wrapper container">
     <div class="form-group">
         <form action="/search" method="get"  class="form-inline">
-            <input class="form-control" type="text" name="queryWord" th:value="${queryWord}" style="width: 40%;"/>
-            <button class="form-control btn btn-primary" type="submit" >树蛙一下</button>
+            <input class="form-control" type="text" name="queryWord" th:value="${queryWord}" style="width: 50%;"/>
+            <button class="form-control btn btn-primary" type="submit" >树蛙一下</button><br/>
+            <label>按照关键字权重<input class="form-control" type="radio" name="sort" value="keyWord" th:checked="${sort} eq 'keyWord'"/></label>
+            <label>按照发布时间权重<input class="form-control" type="radio" name="sort" value="posttime" th:checked="${sort} eq 'posttime'"/></label>
+
         </form>
     </div>
 

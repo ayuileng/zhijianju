@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 
@@ -273,5 +274,20 @@ public class HospitalDataService {
             e.printStackTrace();
         }
         return new Date(0);
+    }
+
+    public Set<String> getLocations(){
+        Set<String> set = Sets.newHashSet();
+        List<Object> location = hospitalDataDao.getLocation();
+        location.forEach(s->set.add((String)s));
+        return set;
+
+    }
+    public Long countByLocation(String location){
+        return hospitalDataDao.countAllByInjureLocation(location);
+    }
+
+    public int countByMonth(int month){
+        return Math.toIntExact(hospitalDataDao.countByMonth(month));
     }
 }

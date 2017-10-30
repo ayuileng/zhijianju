@@ -34,7 +34,7 @@
             <th>伤害指标</th>
         </tr>
         <tr th:each="i : ${injureCases.content}">
-            <td ><a th:href="${i.url}" th:text="${i.productName}"></a></td>
+            <td ><a target="_blank" th:href="${i.url}" th:text="${i.productName}"></a></td>
             <td th:text="${#dates.format(i.injureTime, 'yyyy-MM-dd')}">1</td>
             <td th:text="${i.injureArea}">1</td>
             <td th:text="${i.injureType}">1</td>

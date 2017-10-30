@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
+import java.util.Date;
+
 /**
  * 封装了solr的查询结果
  * Created by xu on 2017/9/7.
@@ -18,6 +20,8 @@ public class Document {
     private String title;
     @Indexed
     private String content;
+    @Indexed
+    private Date postTime;
     @Indexed
     private String html;
     @Indexed
@@ -82,15 +86,13 @@ public class Document {
         this.source = source;
     }
 
-    @Override
-    public String toString() {
-        return "Document{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", html='" + html + '\'' +
-                ", url='" + url + '\'' +
-                ", source='" + source + '\'' +
-                '}';
+    public Date getPostTime() {
+        return postTime;
     }
+
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
+    }
+
+
 }

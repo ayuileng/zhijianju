@@ -15,15 +15,18 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
-    <a href="/com?sort=1">按照通过率降序排列</a>
-    <a href="/com?sort=2">按照通过率升序排列</a>
-    <a href="/com?sort=4">按照案例数降序排列</a>
-    <a href="/com?sort=3">按照案例数升序排列</a>
+    <div class="container"><a href="/com?sort=1"><button type="button" class="btn btn-info">按照通过率降序排列</button></a>
+        <a href="/com?sort=2"><button type="button" class="btn btn-info">按照通过率升序排列</button></a>
+        <a href="/com?sort=4"><button type="button" class="btn btn-info">按照案例数降序排列</button></a>
+        <a href="/com?sort=3"><button type="button" class="btn btn-info">按照案例数升序排列</button></a></div>
 
-    <div><a href="/comChart">查看统计图表</a></div>
+
+    <div class="container"><a href="/comChart"><button type="button" class="btn btn-primary">查看统计图表</button></a></div>
     <table class="table table-hover">
         <tr>
             <th>企业名称</th>
+            <th>用百度搜索企业</th>
+            <th>用悉知搜索企业</th>
             <th>案例数</th>
             <th>召回次数</th>
             <th>抽检合格率</th>
@@ -31,6 +34,8 @@
         </tr>
         <tr th:each="i : ${pnl.content}" th:if="${i.companyName}!=null and ${#strings.length(i.companyName)} gt 2">
             <td th:text="${i.companyName}">1</td>
+            <td><a target="_blank" th:href="'https://www.baidu.com/s?wd='+${i.companyName}"><span class="label label-success">百度一下</span></a></td>
+            <td><a target="_blank" th:href="'http://www.xizhi.com/search?wd='+${i.companyName}"><span class="label label-success">悉知搜索</span></a></td>
             <td th:text="${i.caseNum}">1</td>
             <td th:text="${i.callbackNum}">1</td>
             <td th:text="${i.passPercent}">1</td>
