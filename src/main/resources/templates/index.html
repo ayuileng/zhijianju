@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
     <title>树蛙搜索</title>
     <style>
 
@@ -15,13 +16,20 @@
             text-align: center;
             width: 60%;
             margin: 70px auto 0;
-            padding-bottom:50px;
+            padding-bottom: 50px;
 
         }
 
-
-
-        .footer{height:50px;position:fixed;bottom:0px;left:0px;}
+        .footer {
+            height: 50px;
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+        }
+        .chart{
+            margin: auto;
+            width: 70%;
+        }
     </style>
 </head>
 <body>
@@ -33,18 +41,178 @@
     <div class="searchForm">
         <form action="/search" method="get" class="form-inline">
             <input class="form-control" type="text" name="queryWord" style="width: 55%;"/>
-            <input class="form-control btn btn-primary" type="submit"  value="树蛙一下"/>
+            <input class="form-control btn btn-primary" type="submit" value="树蛙一下"/>
         </form>
     </div>
 
     <div class="tab-page">
         <a href="/injurecase">伤害事件案例库</a>
         <a href="#">产品负面清单</a>
-        <a href="#">企业负面清单</a>
-        <a href="#">医院数据入口</a>
+        <a href="/com">企业负面清单</a>
+        <a href="/hospital">医院数据入口</a>
     </div>
 
 </div>
+<div class="chart">
+    <div class="col-md-6" id="main1" style="width: 500px;height:400px;float:left; display:inline"></div>
+    <div class="col-md-6" id="main2" style="width: 500px;height:400px;float:right; display:inline"></div>
+</div>
+
 <div th:replace="fragments/footer :: footer">...</div>
 </body>
+<script src="https://cdn.bootcss.com/echarts/3.7.2/echarts.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    // 指定图表的配置项和数据
+    var option1 = {
+
+        title: {
+            text: '当前数据源,共' + [[${total[0]}]],
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#000'
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+//        visualMap: {
+//            show: false,
+//            min: 80,
+//            max: 600,
+//            inRange: {
+//                colorLightness: [0, 1]
+//            }
+//        },
+        series: [
+            {
+                name: '数据来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: [
+                    {value: [[${total[1]}]], name: '政府网站'},
+                    {value: [[${total[2]}]], name: '新闻网站'},
+                    {value: [[${total[3]}]], name: '微博'},
+                    {value: [[${total[4]}]], name: '其他'},
+                ].sort(function (a, b) {
+                    return a.value - b.value;
+                }),
+                roseType: 'radius',
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(0, 0, 0, 1)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgba(0, 0, 0, 1)'
+                        },
+
+                        length: 10,
+                        length2: 20
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#c23531',
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                    }
+                },
+
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            }
+        ]
+    };
+    myChart1.setOption(option1);
+
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart2 = echarts.init(document.getElementById('main2'));
+    // 指定图表的配置项和数据
+    var option2 = {
+
+        title: {
+            text: '昨日新增数据源,共' + [[${last[0]}]],
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#000'
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+//
+//        visualMap: {
+//            show: false,
+//            min: 80,
+//            max: 600,
+//            inRange: {
+//                colorLightness: [0, 1]
+//            }
+//        },
+        series: [
+            {
+                name: '数据来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: [
+                    {value: [[${last[1]}]], name: '政府网站'},
+                    {value: [[${last[2]}]], name: '新闻网站'},
+                    {value: [[${last[3]}]], name: '微博'},
+                    {value: [[${last[4]}]], name: '其他'},
+                ].sort(function (a, b) {
+                    return a.value - b.value;
+                }),
+                roseType: 'radius',
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(0, 0, 0, 1)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgba(0, 0, 0, 1)'
+                        },
+
+                        length: 10,
+                        length2: 20
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#c23531',
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                    }
+                },
+
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            }
+        ]
+    };
+    myChart2.setOption(option2);
+</script>
 </html>

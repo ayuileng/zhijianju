@@ -21,7 +21,7 @@ import java.util.Date;
  * div id    #
  */
 @Component
-public class SuwangZhijian {
+public class SuwangZhijian{
 
     @Autowired
     private WebDataDao dao;
@@ -100,18 +100,6 @@ public class SuwangZhijian {
                     data.setHtml(doc.toString());
                     data.setCrawlTime(new Date());
 
-                    //直接打标签
-//   	    		   String title=p.select("h2#title").text();
-//   	    		   if(title!=null){
-//   	        		   String porductName=productTag.extractProductName(title);
-//   	    				temp.setProductName(porductName);
-//   	    				String areaName=areaTag.extractArea(title);
-//   	    				temp.setAreaName(areaName);
-//   	    				String paperType=typeTag.typeofPaper(title);
-//   	    				temp.setPaperType(paperType);
-//   	    				String injuretype=injureType.typeofInjure(texttemp);
-//   	    				temp.setInjureType(injuretype);
-//   	    		   }
                     dao.save(data);
 
                 }
@@ -121,7 +109,6 @@ public class SuwangZhijian {
         }
 
     }
-
 
 }
 

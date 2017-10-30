@@ -9,7 +9,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
  * 封装了solr的查询结果
  * Created by xu on 2017/9/7.
  */
-@SolrDocument(solrCoreName = "alldateCore")
+@SolrDocument(solrCoreName = "webdatacore")
 public class Document {
     @Id
     @Indexed("uuid")

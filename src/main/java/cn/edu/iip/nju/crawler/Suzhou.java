@@ -12,6 +12,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,7 +27,7 @@ import java.util.Set;
  * 的附件（本页面只需要爬附件）
  */
 @Component
-public class Suzhou{
+public class Suzhou implements Crawler {
     private static final Logger logger = LoggerFactory.getLogger(Suzhou.class);
     private static String baseURL = "http://www.szqts.gov.cn/zhiliangchoucha.html";
 
@@ -99,7 +101,8 @@ public class Suzhou{
      */
     private void downloadAttachment() throws Exception {
         Map<String, Set<String>> stringSetMap = downloadURLs();
-        String destinationDirectory = "files/suzhou";
+        Resource resource = new FileSystemResource("C:\\Users\\63117\\IdeaProjects\\zhijianju\\src\\main\\resources\\files\\attachment");
+        String destinationDirectory = resource.getFile().getAbsolutePath();
         //分类保存（便于之后读取，因为07前的版本和之后的不一样）（丑）
         Set<String> doc = stringSetMap.get("doc");
         for (String s : doc) {
@@ -119,11 +122,14 @@ public class Suzhou{
         }
 
     }
-    public void start() throws Exception {
-        downloadAttachment();
+
+    @Override
+    public void start() {
+        try {
+            downloadAttachment();
+        } catch (Exception e) {
+            logger.error("error", e);
+        }
     }
-
-
-
 
 }

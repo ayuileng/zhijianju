@@ -15,9 +15,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class CPZLJDSTest {
     @Autowired
     private CPZLJDS cpzljds;
+    @Autowired
+    private GJZLJDJYJYZJ gjzljdjyjyzj;
+    @Autowired
+    private JiangSu jiangSu;
+    @Autowired
+    private Suzhou suzhou;
     @Test
     public void start() throws Exception {
+
         cpzljds.start();
+        gjzljdjyjyzj.start();
+        jiangSu.start();
     }
 
 }

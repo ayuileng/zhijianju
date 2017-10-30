@@ -1,5 +1,6 @@
 package cn.edu.iip.nju.dao;
 
+import cn.edu.iip.nju.dao.SQL.InjureCaseDaoSQL;
 import cn.edu.iip.nju.model.InjureCase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,5 +12,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface InjureCaseDao extends JpaRepository<InjureCase,Integer>,InjureCaseDaoSQL {
-    Page<InjureCase> findAll(Pageable pageable);
+    Page<InjureCase> findAllByInjureTypeNotNullAndAndInjureTypeNot(Pageable pageable,String not);
+    InjureCase findFirstByProductName(String productName);
+
+
 }

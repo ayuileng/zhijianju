@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -47,7 +49,9 @@ public class HospitalDataService {
         Resource resource = new ClassPathResource("hospital");
         return resource.getFile().listFiles();
     }
-
+    public Page<HospitalData> getByPage(Pageable pageable){
+        return hospitalDataDao.findAll(pageable);
+    }
     private Set[] getSheets() throws IOException {
         Set<XSSFSheet> xssfSheets = Sets.newHashSet();
         Set<HSSFSheet> hssfSheets = Sets.newHashSet();

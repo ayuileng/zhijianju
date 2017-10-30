@@ -38,6 +38,7 @@ public class DownLoadUtil {
             File f = new File(dir + fileName);
             try {
                 FileUtils.copyURLToFile(httpurl, f);
+                logger.info(f.getAbsolutePath());
             } catch (IOException e) {
                 e.printStackTrace();
             }

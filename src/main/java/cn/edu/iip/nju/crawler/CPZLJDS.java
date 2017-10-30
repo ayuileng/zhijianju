@@ -19,6 +19,9 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -35,12 +38,12 @@ import java.util.*;
  * 包含附件
  */
 @Component
-public class CPZLJDS  {
+public class CPZLJDS implements Crawler {
     @Autowired
     private WebDataDao webDataDao;
 
     private static final Logger logger = LoggerFactory.getLogger(CPZLJDS.class);
-    private  final String[] basicURLs = {"http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/jggz/",
+    private final String[] basicURLs = {"http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/jggz/",
             "http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/jdcc/",
             "http://cpzljds.aqsiq.gov.cn/xfpzlaqjg/fxjk/",
             "http://cpzljds.aqsiq.gov.cn/dfxx/"};
@@ -136,19 +139,21 @@ public class CPZLJDS  {
             if (content != null) {
                 webData.setContent(content.text());
             }
-            webDataDao.save(webData);
+            //webDataDao.save(webData);
             AttachmentUtil.downloadURLs(document, downloadURLs);
             Thread.sleep(500);
         }
         return downloadURLs;
     }
+
     /**
      * 下载附件
      * http://cpzljds.aqsiq.gov.cn/fwfh/zxgg/201704/P020170420590189495451.xls
      */
     private void downloadAttachment() throws Exception {
         Map<String, Set<String>> stringSetMap = process_each_url();
-        String destinationDirectory = "files/CPZLJDS";
+        Resource resource = new FileSystemResource("C:\\Users\\63117\\IdeaProjects\\zhijianju\\src\\main\\resources\\files\\attachment");
+        String destinationDirectory = resource.getFile().getAbsolutePath();
         //分类保存（便于之后读取，因为07前的版本和之后的不一样）（丑）
         Set<String> doc = stringSetMap.get("doc");
         for (String s : doc) {
@@ -177,12 +182,12 @@ public class CPZLJDS  {
 
     }
 
-
+    @Override
     public void start() {
         try {
             downloadAttachment();
         } catch (Exception e) {
-            logger.error("save failed!",e);
+            logger.error("save failed!", e);
 
         }
 

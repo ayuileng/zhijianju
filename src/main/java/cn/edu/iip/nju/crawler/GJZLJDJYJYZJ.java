@@ -20,6 +20,8 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ import java.util.*;
  * Created by xu on 2017/5/3.
  */
 @Component
-public class GJZLJDJYJYZJ {
+public class GJZLJDJYJYZJ implements Crawler {
     @Autowired
     private WebDataDao dao;
     private static final Logger logger = LoggerFactory.getLogger(GJZLJDJYJYZJ.class);
@@ -88,27 +90,6 @@ public class GJZLJDJYJYZJ {
             }
         }
         return urls;
-//        String url = "http://www.aqsiq.gov.cn/zjsj/zhxx/2012/index.htm";
-//        WebClient  webClient = new WebClient(BrowserVersion.CHROME);
-//        //设置webClient的相关参数
-//        webClient.getOptions().setJavaScriptEnabled(true);
-//        webClient.getOptions().setCssEnabled(false);
-//        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-//        webClient.getOptions().setTimeout(50000);
-//        webClient.getOptions().setThrowExceptionOnScriptError(false);
-//        //模拟浏览器打开一个目标网址
-//        HtmlPage rootPage = webClient.getPage(url);
-//        logger.info("为了获取js执行的数据 线程开始沉睡等待");
-//        Thread.sleep(1000);//主要是这个线程的等待 因为js加载也是需要时间的
-//        logger.info("线程结束沉睡");
-//        String xml = rootPage.asXml();
-//        Document document = Jsoup.parse(xml, "http://www.315.gov.cn/spzljd/");
-//        System.out.println(document.html());
-//        Elements as = document.select("div.quotes > a[href]");
-//        for (Element a : as) {
-//            System.out.println(a.text());
-//        }
-//        return null;
     }
 
     public Set<String> getPageUrls() throws IOException, InterruptedException {
@@ -167,17 +148,18 @@ public class GJZLJDJYJYZJ {
                 Date d = sdf.parse(date);
                 webdata.setPostTime(d);
             }
-            dao.save(webdata);
+            //dao.save(webdata);
             AttachmentUtil.downloadURLs(document, downloadURLs);
         }
         return downloadURLs;
     }
 
-
+    @Override
     public void start() {
         try {
             Map<String, Set<String>> downUrls = process_each_url();
-            String destinationDirectory = "files/GJZLJDJYJYZJ";
+            Resource resource = new FileSystemResource("C:\\Users\\63117\\IdeaProjects\\zhijianju\\src\\main\\resources\\files\\attachment");
+            String destinationDirectory = resource.getFile().getAbsolutePath();
             //分类保存（便于之后读取，因为07前的版本和之后的不一样）（丑）
             Set<String> doc = downUrls.get("doc");
             for (String s : doc) {
@@ -207,5 +189,6 @@ public class GJZLJDJYJYZJ {
             e.printStackTrace();
         }
     }
+
 }
 

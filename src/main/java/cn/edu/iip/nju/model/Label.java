@@ -1,9 +1,6 @@
 package cn.edu.iip.nju.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by xu on 2017/9/21.
@@ -15,17 +12,16 @@ public class Label {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer documentId;
+    @Lob
+    @Column(name = "product_name", columnDefinition = "LONGTEXT")
     private String productName;
-    private String productType;
     private String area;
     private String injureType;
     private String injureCount;
-    private String brand;//商标
-    private String size;//型号
     private Boolean isPass;//是否合格
     private String company;
-    private String label1;//未定
-    private String label2;
+    private String posttime;//post_time
+    private String zhaohui;//是否召回
     private String label3;
 
     public Integer getId() {
@@ -52,14 +48,6 @@ public class Label {
         this.productName = productName;
     }
 
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
     public String getArea() {
         return area;
     }
@@ -84,22 +72,6 @@ public class Label {
         this.injureCount = injureCount;
     }
 
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
     public Boolean getPass() {
         return isPass;
     }
@@ -116,20 +88,20 @@ public class Label {
         this.company = company;
     }
 
-    public String getLabel1() {
-        return label1;
+    public String getPosttime() {
+        return posttime;
     }
 
-    public void setLabel1(String label1) {
-        this.label1 = label1;
+    public void setPosttime(String posttime) {
+        this.posttime = posttime;
     }
 
-    public String getLabel2() {
-        return label2;
+    public String getZhaohui() {
+        return zhaohui;
     }
 
-    public void setLabel2(String label2) {
-        this.label2 = label2;
+    public void setZhaohui(String zhaohui) {
+        this.zhaohui = zhaohui;
     }
 
     public String getLabel3() {
@@ -146,16 +118,13 @@ public class Label {
                 "id=" + id +
                 ", documentId=" + documentId +
                 ", productName='" + productName + '\'' +
-                ", productType='" + productType + '\'' +
                 ", area='" + area + '\'' +
                 ", injureType='" + injureType + '\'' +
                 ", injureCount='" + injureCount + '\'' +
-                ", brand='" + brand + '\'' +
-                ", size='" + size + '\'' +
                 ", isPass=" + isPass +
                 ", company='" + company + '\'' +
-                ", label1='" + label1 + '\'' +
-                ", label2='" + label2 + '\'' +
+                ", posttime='" + posttime + '\'' +
+                ", zhaohui='" + zhaohui + '\'' +
                 ", label3='" + label3 + '\'' +
                 '}';
     }

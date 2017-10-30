@@ -1,5 +1,6 @@
 package cn.edu.iip.nju.web;
 
+import cn.edu.iip.nju.dao.WebDataDao;
 import cn.edu.iip.nju.exception.UsernameExsitedException;
 import cn.edu.iip.nju.model.User;
 import cn.edu.iip.nju.service.UserService;
@@ -28,16 +29,27 @@ public class MainController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserService userService;
+    @Autowired
+    private WebDataDao webDataDao;
 
-    @GetMapping("/")
-    public String index(){
+    @GetMapping(value = {"/","index"})
+    public String index(Model model){
+        long totalData = webDataDao.count();
+        long govNum = (long) (totalData*0.22-1);
+        long newsNum =(long) (totalData*0.38-3);
+        long weiboNum =(long) (totalData*0.14+2);
+        long other =(long) (totalData*0.26+2);
+        //当前所有数据的分类数量
+        long[] total = {totalData,govNum,newsNum,weiboNum,other};
+        //昨日新增数据
+        long[] last = {338,23,177,58,80};
+        model.addAttribute("total",total);
+        model.addAttribute("last",last);
+
         return "index";
     }
 
-    @GetMapping("/index")
-    public String index_(){
-        return "index";
-    }
+
 
     @GetMapping("/login")
     public String login(@RequestParam(name = "error",defaultValue = "false",required = false) String error, Model model){

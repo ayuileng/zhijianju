@@ -18,13 +18,22 @@ public class InjureCase implements Serializable{
     private Integer id;
 
     private String productName;//产品名
-    private String productType;//产品类别
-    private String brand;//商标
+//    private String productType;//产品类别
+//    private String brand;//商标
     private Date injureTime;//伤害发生时间
     private String injureArea;//伤害发生地点
     private String injureType;//伤害类别
-    private String injureDegree;//伤害严重程度
+//    private String injureDegree;//伤害严重程度
     private Integer injureIndex;//伤害指标
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public Integer getId() {
         return id;
@@ -42,21 +51,7 @@ public class InjureCase implements Serializable{
         this.productName = productName;
     }
 
-    public String getProductType() {
-        return productType;
-    }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
 
     public Date getInjureTime() {
         return injureTime;
@@ -82,13 +77,6 @@ public class InjureCase implements Serializable{
         this.injureType = injureType;
     }
 
-    public String getInjureDegree() {
-        return injureDegree;
-    }
-
-    public void setInjureDegree(String injureDegree) {
-        this.injureDegree = injureDegree;
-    }
 
     public Integer getInjureIndex() {
         return injureIndex;
@@ -98,15 +86,13 @@ public class InjureCase implements Serializable{
         this.injureIndex = injureIndex;
     }
 
-    public InjureCase(String productName, String productType, String brand, Date injureTime, String injureArea, String injureType, String injureDegree, Integer injureIndex) {
+    public InjureCase(String productName, Date injureTime, String injureArea, String injureType,Integer injureIndex, String url) {
         this.productName = productName;
-        this.productType = productType;
-        this.brand = brand;
         this.injureTime = injureTime;
         this.injureArea = injureArea;
         this.injureType = injureType;
-        this.injureDegree = injureDegree;
         this.injureIndex = injureIndex;
+        this.url = url;
     }
 
     public InjureCase() {
@@ -117,13 +103,12 @@ public class InjureCase implements Serializable{
         return "InjureCase{" +
                 "id=" + id +
                 ", productName='" + productName + '\'' +
-                ", productType='" + productType + '\'' +
-                ", brand='" + brand + '\'' +
+
                 ", injureTime=" + injureTime +
                 ", injureArea='" + injureArea + '\'' +
                 ", injureType='" + injureType + '\'' +
-                ", injureDegree='" + injureDegree + '\'' +
                 ", injureIndex=" + injureIndex +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

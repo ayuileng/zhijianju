@@ -23,6 +23,9 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -36,18 +39,19 @@ import java.util.*;
  * Created by xu on 2017/4/30.
  */
 @Component
-public class JiangSu {
+public class JiangSu implements Crawler {
     private static final Logger logger = LoggerFactory.getLogger(JiangSu.class);
     @Autowired
     private WebDataDao dao;
     private static String baseURL = "http://www.jsqts.gov.cn/zjxx/GovInfoPub/Department/moreinfo.aspx?categoryNum=001010";
 
-
+    @Override
     public void start() {
         Map<String, Set<String>> downUrls;
         try {
             downUrls = process_each_url();
-            String destinationDirectory = "files/jiangsu";
+            Resource resource = new FileSystemResource("C:\\Users\\63117\\IdeaProjects\\zhijianju\\src\\main\\resources\\files\\attachment");
+            String destinationDirectory = resource.getFile().getAbsolutePath();
             //分类保存（便于之后读取，因为07前的版本和之后的不一样）（丑）
             Set<String> doc = downUrls.get("doc");
             for (String s : doc) {
@@ -172,7 +176,7 @@ public class JiangSu {
                 String title = doc.select("span#InfoDetail1_lblTitle").first().text();
                 webdata.setTitle(title);
             }
-            if(doc.select("span#InfoDetail1_lbl_Date").first()!=null){
+            if (doc.select("span#InfoDetail1_lbl_Date").first() != null) {
                 String date = doc.select("span#InfoDetail1_lbl_Date").first().text();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
                 Date d = sdf.parse(date);
@@ -190,7 +194,7 @@ public class JiangSu {
                         .get();
                 webdata.setHtml(document.html());
                 webdata.setContent(doc.text());
-                dao.save(webdata);
+                //dao.save(webdata);
                 AttachmentUtil.downloadURLs(document, downloadURLs);
                 Thread.sleep(1000);
             }
