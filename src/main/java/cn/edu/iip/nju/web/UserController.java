@@ -69,11 +69,11 @@ public class UserController {
             return "error/accessError";
         }
         if (errors.hasErrors()) {
-            return "/u/edit";
+            return "u/edit";
         }
         if(password_new.length()>15||password_new.length()<6){
             model.addAttribute("pwsNewError","密码的长度为6~15!");
-            return "/u/edit";
+            return "u/edit";
         }
         if (userService.isPasswordRight(user, password_ori)) {
             try {
@@ -85,11 +85,11 @@ public class UserController {
             } catch (UsernameExsitedException e) {
                 user.setPassword(password_ori);
                 model.addAttribute("msg", "usernameExsit");
-                return "/u/edit";
+                return "u/edit";
             }
         } else {
             model.addAttribute("oriPwdError", "原始密码输入错误！！！");
-            return "/u/edit";
+            return "u/edit";
         }
     }
 
@@ -103,14 +103,14 @@ public class UserController {
         }
         Page<UserSearchHistory> history = userSearchHistoryService.getRecentHistory(id, new PageRequest(page, size));
         model.addAttribute("history",history);
-        return "/u/searchHistory";
+        return "u/searchHistory";
     }
 
     @GetMapping("/{id}/searchHistory/delete")
     public String deleteHistory(@PathVariable Integer id,Model model){
         userSearchHistoryService.deleteAllHistoryByUserId(id);
         model.addAttribute("deleteSuccess","删除用户搜索记录成功");
-        return "/u/searchHistory";
+        return "u/searchHistory";
     }
 
     private boolean noAccess(@PathVariable Integer id, Model model) {

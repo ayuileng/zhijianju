@@ -14,6 +14,7 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
+    <div><a href="/injureChart">统计图表</a></div>
     <div>
         <form action="/injurecase">
             产品名称：<input type="text" name="name" />
@@ -21,7 +22,7 @@
             地区：<input type="text" name="area" /><br/>
             起始时间：<input type="date" name="datefrom" />
             截止时间：<input type="date" name="dateto" /><br/>
-            伤害程度：<input type="text" name="degree" /><br/>
+            <!--伤害程度：<input type="text" name="degree" /><br/>-->
             <input type="submit" value="搜索"/>
         </form>
     </div>

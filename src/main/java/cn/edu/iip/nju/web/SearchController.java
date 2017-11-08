@@ -64,7 +64,7 @@ public class SearchController {
 
         //TODO 分页时保留原有的查询参数
 
-        return "/s/result";
+        return "s/result";
 
     }
 

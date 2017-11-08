@@ -22,6 +22,11 @@ import java.util.List;
 @Rollback(value = false)
 @SpringBootTest(classes = ZhijianjuApplication.class)
 public class InjureCaseServiceTest {
+    @Test
+    public void setIndex() throws Exception {
+        System.out.println(injureCaseService.countByProv("%贵%"));
+    }
+
     @Autowired
     InjureCaseService injureCaseService;
     @Autowired

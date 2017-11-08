@@ -18,14 +18,21 @@ public class InjureCase implements Serializable{
     private Integer id;
 
     private String productName;//产品名
-//    private String productType;//产品类别
-//    private String brand;//商标
+
     private Date injureTime;//伤害发生时间
     private String injureArea;//伤害发生地点
     private String injureType;//伤害类别
-//    private String injureDegree;//伤害严重程度
+    private String province;
     private Integer injureIndex;//伤害指标
     private String url;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
     public String getUrl() {
         return url;
@@ -86,29 +93,4 @@ public class InjureCase implements Serializable{
         this.injureIndex = injureIndex;
     }
 
-    public InjureCase(String productName, Date injureTime, String injureArea, String injureType,Integer injureIndex, String url) {
-        this.productName = productName;
-        this.injureTime = injureTime;
-        this.injureArea = injureArea;
-        this.injureType = injureType;
-        this.injureIndex = injureIndex;
-        this.url = url;
-    }
-
-    public InjureCase() {
-    }
-
-    @Override
-    public String toString() {
-        return "InjureCase{" +
-                "id=" + id +
-                ", productName='" + productName + '\'' +
-
-                ", injureTime=" + injureTime +
-                ", injureArea='" + injureArea + '\'' +
-                ", injureType='" + injureType + '\'' +
-                ", injureIndex=" + injureIndex +
-                ", url='" + url + '\'' +
-                '}';
-    }
 }

@@ -15,5 +15,7 @@ public interface InjureCaseDao extends JpaRepository<InjureCase,Integer>,InjureC
     Page<InjureCase> findAllByInjureTypeNotNullAndAndInjureTypeNot(Pageable pageable,String not);
     InjureCase findFirstByProductName(String productName);
 
+    long countAllByProvinceLike(String prov);
+
 
 }

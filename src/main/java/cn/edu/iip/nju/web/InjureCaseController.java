@@ -29,7 +29,7 @@ public class InjureCaseController {
     private final HospitalDataService hospitalDataService;
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    private final String baseSql = "SELECT * FROM injure_case ";
+    private final String baseInjurecaseSql = "SELECT * FROM injure_case ";
 
     @Autowired
     public InjureCaseController(InjureCaseService injureCaseService,
@@ -78,9 +78,9 @@ public class InjureCaseController {
         }
         String realSQL;
         if (sql.toString().trim().length() > 0) {
-            realSQL = baseSql + "where " + sql.toString().trim();
+            realSQL = baseInjurecaseSql + "where " + sql.toString().trim();
         } else {
-            realSQL = baseSql;
+            realSQL = baseInjurecaseSql;
         }
         if (realSQL.endsWith("and")) {
             realSQL = realSQL.substring(0, realSQL.length() - 3);
@@ -142,7 +142,7 @@ public class InjureCaseController {
         Collection<Long> values = treeMap.values();
         long max = findMax(values);
         model.addAttribute("max", max);
-        return "/chart/company";
+        return "chart/company";
 
     }
 
@@ -160,24 +160,65 @@ public class InjureCaseController {
         long[] percent = {good, pass, common, bad};
         model.addAttribute("pro", pro);
         model.addAttribute("percent", percent);
-        return "/chart/provCom";
+        return "chart/provCom";
     }
 
 
     @GetMapping("/hosChart")
     public String hosChart(Model model) {
         Set<String> allLocations = hospitalDataService.getLocations();
-        Map<String ,Long> map = Maps.newHashMap();
+        Map<String, Long> map = Maps.newHashMap();
         for (String location : allLocations) {
             Long count = hospitalDataService.countByLocation(location);
-            map.put(location,count);
+            map.put(location, count);
         }
-        model.addAttribute("map",map);
+        model.addAttribute("map", map);
         List<Integer> list = Lists.newArrayList();
         for (int i = 1; i <= 12; i++) {
             list.add(hospitalDataService.countByMonth(i));
         }
-        model.addAttribute("list",list);
-        return "/chart/hos";
+        model.addAttribute("list", list);
+        return "chart/hos";
     }
+
+
+
+    @GetMapping("/injureChart")
+    public String injureChart(Model model){
+        ArrayList<String> provs = Lists.newArrayList("北京市", "天津市", "河北省"
+                , "山西省", "内蒙古自治区", "辽宁省", "吉林省", "黑龙江省"
+                , "江苏省", "浙江省", "安徽省", "福建省", "江西省", "山东省"
+                , "河南省", "湖北省", "湖南省", "广东省", "广西壮族自治区"
+                , "海南省", "重庆市", "四川省", "贵州省", "云南省", "陕西省"
+                , "甘肃省", "青海省", "宁夏回族自治区","上海市","新疆维吾尔自治区");
+        TreeMap<String, Long> treeMap = Maps.newTreeMap();
+        for (String prov : provs) {
+            long count = injureCaseService.countByProv("%" + prov + "%");
+            treeMap.put(prov,count);
+        }
+        Collection<Long> values = treeMap.values();
+        long max = findMax(values);
+        model.addAttribute("max", max);
+        model.addAttribute("treemap",treeMap);
+        return "chart/injurecase";
+    }
+
+
+//    @ResponseBody
+//    @GetMapping("/injureChart")
+//    public Map<String, Integer> injureChart() {
+//
+//        int pageNum = injureCaseService.totalPages();
+//        for (int i = 0; i < pageNum; i++) {
+//            Page<InjureCase> page = injureCaseService.findAll(new PageRequest(i, 1000));
+//            injureCaseService.countByProv(page);
+//        }
+//        Map<String, Integer> map = injureCaseService.getMap();
+//        for (Map.Entry<String, Integer> stringIntegerEntry : map.entrySet()) {
+//            System.out.println(stringIntegerEntry.getKey()+"----"+stringIntegerEntry.getValue());
+//        }
+//        return map;
+//    }
+
+
 }
