@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PageHelper<T> {
 
-    private int pageSize = 15;      //默认一页的大小
+    private int pageSize = 40;      //默认一页的大小
     private int totalRows;          //总的记录数
     private int totalPages;         //总页数
     private int current;            //当前页码(从1开始！！！！！)

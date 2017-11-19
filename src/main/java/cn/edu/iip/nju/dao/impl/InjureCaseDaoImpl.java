@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -21,6 +22,12 @@ public class InjureCaseDaoImpl implements InjureCaseDaoSQL {
         Query query = em.createNativeQuery(sql,InjureCase.class);
         List<InjureCase> resultList = query.getResultList();
         return resultList;
+    }
+
+    @Override
+    public long cousql(String sql) {
+        BigInteger result = (BigInteger) em.createNativeQuery(sql).getSingleResult();
+        return result.longValue();
     }
 
 }

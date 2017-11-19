@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <style type="text/css">
-        .main{
+        .main {
             width: 90%;
             margin-top: 60px;
         }
@@ -18,43 +18,112 @@
 
 <div class="container main">
     <div><a href="/hosChart">统计图表</a></div>
-    <table class="table table-hover">
-        <tr>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>年龄</th>
-            <th>伤害发生时间</th>
-            <th>就诊时间</th>
-            <th>伤害发生原因</th>
-            <th>伤害涉及物品</th>
-            <th>伤害发生地点</th>
-            <th>伤害发生时活动</th>
-            <th>伤害部位</th>
-            <th>伤害临床诊断</th>
-            <th>伤害严重程度</th>
-            <th>伤害结局</th>
-            <th>是否饮酒</th>
-            <th>产品质量是否有关</th>
-        </tr>
-        <tr th:each="i : ${hos.content}" >
-            <td th:text="${i.name}">1</td>
-            <td th:text="${i.gender}">1</td>
-            <td th:text="${i.age}">1</td>
-            <td th:text="${#dates.format(i.injureDate, 'yyyy-MM-dd')}">1</td>
-            <td th:text="${#dates.format(i.visDate, 'yyyy-MM-dd')}">1</td>
-            <td th:text="${i.injureReason}">1</td>
-            <td th:text="${i.product}">1</td>
-            <td th:text="${i.injureLocation}">1</td>
-            <td th:text="${i.activityWhenInjure}">1</td>
-            <td th:text="${i.injureSite}">1</td>
-            <td th:text="${i.injurejudge}">1</td>
-            <td th:text="${i.injureDegree}">1</td>
-            <td th:text="${i.injureResult}">1</td>
-            <td th:text="${i.alcohol}">1</td>
-            <td th:text="${i.howGetInjure}">1</td>
-        </tr>
-    </table>
+    <form action="/hospital" method="get" class="form-inline" th:object="${hospitalDataForm}">
+        <div class="form-group">
+            <label for="productType">产品类别</label>
+            <input type="text" class="form-control" name="productType" id="productType" th:value="*{productType}"/>
+        </div>
+        <div class="form-group">
+            <label for="injureDegree">伤害程度</label>
+            <select class="form-control" id="injureDegree" name="injureDegree" th:value="*{injureDegree}">
+                <option value="" th:selected="${hospitalDataForm.injureDegree} == ''">无</option>
+                <option value="轻度" th:selected="${hospitalDataForm.injureDegree} == '轻度'">轻度</option>
+                <option value="中度" th:selected="${hospitalDataForm.injureDegree} == '中度'">中度</option>
+                <option value="重度" th:selected="${hospitalDataForm.injureDegree} == '重度'">重度</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dateFrom">起始日期</label>
+            <input type="date" class="form-control" id="dateFrom" name="datefrom" th:value="*{datefrom}"/>
+        </div>
+        <div class="form-group">
+            <label for="dateTo">截至日期</label>
+            <input type="date" class="form-control" id="dateTo" name="dateto" th:value="*{dateto}"/>
+        </div>
+        <div class="form-group">
+            <label for="ifIntention">是否与产品相关</label>
+            <select class="form-control" id="ifIntention" name="ifIntention" th:value="*{ifIntention}">
+                <option value="" th:selected="${hospitalDataForm.ifIntention} == ''">无</option>
+                <option value="使用不当" th:selected="${hospitalDataForm.ifIntention} == '使用不当'">使用不当</option>
+                <option value="与产品质量有关" th:selected="${hospitalDataForm.ifIntention} == '与产品质量有关'">与产品质量有关</option>
+                <option value="像往常一样使用却突发事故" th:selected="${hospitalDataForm.ifIntention} == '像往常一样使用却突发事故'">像往常一样使用却突发事故</option>
+                <option value="不确定" th:selected="${hospitalDataForm.ifIntention} == '不确定'">不确定</option>
+                <option value="其他" th:selected="${hospitalDataForm.ifIntention} == '其他'">其他</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default">搜索</button>
+        <div th:inline="text">共检索到[[${{count}}]]条案例！</div>
+        <table class="table table-hover">
+            <tr>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>伤害发生时间</th>
+                <th>就诊时间</th>
+                <th>伤害发生原因</th>
+                <th>伤害涉及物品</th>
+                <th>伤害发生地点</th>
+                <th>伤害发生时活动</th>
+                <th>伤害部位</th>
+                <th>伤害临床诊断</th>
+                <th>伤害严重程度</th>
+                <th>伤害结局</th>
+                <th>是否饮酒</th>
+                <th>产品质量是否有关</th>
+            </tr>
+            <tr th:each="i : ${hos.content}">
+                <td th:text="${i.name}">1</td>
+                <td><span th:if="${i.gender}==1" th:text="男"></span><span th:if="${i.gender}==2" th:text="女"></span></td>
+                <td th:text="${i.age}">1</td>
+                <td th:text="${#dates.format(i.injureDate, 'yyyy-MM-dd')}">1</td>
+                <td th:text="${#dates.format(i.visDate, 'yyyy-MM-dd')}">1</td>
+                <td th:text="${i.injureReason}">1</td>
+                <td th:text="${i.product}">1</td>
+                <td th:text="${i.injureLocation}">1</td>
+                <td th:text="${i.activityWhenInjure}">1</td>
+                <td th:text="${i.injureSite}">1</td>
+                <td th:text="${i.injurejudge}">1</td>
+                <td th:text="${i.injureDegree}">1</td>
+                <td th:text="${i.injureResult}">1</td>
+                <td th:text="${i.alcohol}">1</td>
+                <td th:text="${i.howGetInjure}">1</td>
+            </tr>
+        </table>
+        <div class="container paging">
+            <!--分页组件-->
+            <nav aria-label="Page navigation" th:object="${hos}">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <span>共<span th:text="${hos.totalPages}">1</span>页</span>
+                    </li>
+                    <!--当前页-->
+                    <li class="page-item disabled">
+                        <span th:inline="text">当前页码：[[${hos.current}]]</span>
+                    </li>
+                    <!--前往-->
+                    <li class="page-item">
+                        输入页码：<input type="text" name="page" th:value="${hospitalDataForm.page}"/>
+                        <input type="submit" value="前往"/>
+                    </li>
+                    <!--上一页-->
+                    <li class="page-item" th:classappend="*{first} ? 'disabled' : ''">
+                        <a class="page-link" th:href="${params} + ${hos.current - 1}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">←</span>
+                        </a>
+                    </li>
 
+                    <!--下一页-->
+                    <li class="page-item" th:classappend="*{last} ? 'disabled' : ''">
+                        <a class="page-link" th:href="${params} + ${hos.current + 1}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </form>
 </div>
 
 <div th:replace="fragments/footer :: footer">...</div>

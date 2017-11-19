@@ -105,36 +105,22 @@ public class InjureCaseService {
 
     //service层分页
     public PageHelper<InjureCase> getByCondition(String sql, Integer page) {
-        long count = injureCaseDao.count();
+
+        String tmp = sql.split("limit")[0] + ";";
+        String countSql = "select count(1) " + tmp.split("\\*")[1];
+        long count = injureCaseDao.cousql(countSql);
+        System.out.println(count);
         List<InjureCase> pg = injureCaseDao.search(sql);
         PageHelper<InjureCase> pageData = new PageHelper<>(page, (int) count);
         pageData.setContent(pg);
         return pageData;
 
     }
-
-    public void setIndex(Page<InjureCase> pg) {
+    public void setDegree(Page<InjureCase> pg) {
         for (InjureCase injureCase : pg.getContent()) {
-//            injureCase.setInjureIndex(InjureLevelUtil.checkInjureLevel(injureCase.getInjureType()));
-            double injureLevel = InjureLevelUtil.checkInjureLevel(injureCase.getInjureType());
-            String injureArea = injureCase.getInjureArea();
-            int provNum = provNum(injureArea);
-            switch (provNum) {
-                case 0:
-                    injureLevel += 2;
-                    break;
-                case 1:
-                    injureLevel += 2;
-                    break;
-                case 2:
-                    injureLevel += 4;
-                    break;
-                default:
-                    injureLevel += 6;
-                    break;
-            }
-            injureLevel += 18 + 1 + 1 + 1 + 2;
-            injureCase.setInjureIndex((int) injureLevel);
+
+            String degree = InjureLevelUtil.checkInjureLevel(injureCase.getInjureType());
+            injureCase.setInjureDegree(degree);
             injureCaseDao.save(injureCase);
         }
 
@@ -193,6 +179,10 @@ public class InjureCaseService {
 
     public long countByProv(String  prov){
         return injureCaseDao.countAllByProvinceLike(prov);
+    }
+
+    public long countByProvAndInjureDegree(String  prov,String injureDrgree){
+        return injureCaseDao.countAllByProvinceLikeAndAndInjureDegreeEquals(prov,injureDrgree);
     }
 
 

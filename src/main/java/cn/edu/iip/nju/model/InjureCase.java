@@ -24,6 +24,16 @@ public class InjureCase implements Serializable{
     private String injureType;//伤害类别
     private String province;
     private Integer injureIndex;//伤害指标
+    private String injureDegree;
+
+    public String getInjureDegree() {
+        return injureDegree;
+    }
+
+    public void setInjureDegree(String injureDegree) {
+        this.injureDegree = injureDegree;
+    }
+
     private String url;
 
     public String getProvince() {

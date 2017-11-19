@@ -24,7 +24,10 @@ import java.util.List;
 public class InjureCaseServiceTest {
     @Test
     public void setIndex() throws Exception {
-        System.out.println(injureCaseService.countByProv("%贵%"));
+        System.out.println(injureCaseService.countByProvAndInjureDegree("%江苏%", "1"));
+        System.out.println(injureCaseService.countByProvAndInjureDegree("%江苏%", "2"));
+        System.out.println(injureCaseService.countByProvAndInjureDegree("%江苏%", "3"));
+        System.out.println(injureCaseService.countByProv("%江苏%"));
     }
 
     @Autowired

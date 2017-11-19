@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface InjureCaseDaoSQL {
     List<InjureCase> search(String sql);
+    long cousql(String sql);
 }

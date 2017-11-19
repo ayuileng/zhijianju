@@ -36,7 +36,7 @@
         legend: {
             orient: 'vertical',
             x: 'left',
-            data: ['事件数']
+            data: ['事件数','一级伤害事件数','二级伤害事件数','三级伤害事件数']
         },
         dataRange: {
             min: 0,
@@ -111,6 +111,138 @@
 
                 ]
             },
+            {
+                name: '一级伤害事件数',
+                type: 'map',
+                mapType: 'china',
+                roam: false,
+                itemStyle: {
+                    normal: {label: {show: true}},
+                    emphasis: {label: {show: true}}
+                },
+                data: [
+                    {name: '北京', value: [[${treemapd1.get("北京市")}]]},
+                    {name: '天津', value: [[${treemapd1.get("天津市")}]]},
+                    {name: '上海', value: [[${treemapd1.get("上海市")}]]},
+                    {name: '重庆', value: [[${treemapd1.get("重庆市")}]]},
+                    {name: '河北', value: [[${treemapd1.get("河北省")}]]},
+                    {name: '河南', value: [[${treemapd1.get("河南省")}]]},
+                    {name: '云南', value: [[${treemapd1.get("云南省")}]]},
+                    {name: '辽宁', value: [[${treemapd1.get("辽宁省")}]]},
+                    {name: '黑龙江', value: [[${treemapd1.get("黑龙江省")}]]},
+                    {name: '湖南', value: [[${treemapd1.get("湖南省")}]]},
+                    {name: '安徽', value: [[${treemapd1.get("安徽省")}]]},
+                    {name: '山东', value: [[${treemapd1.get("山东省")}]]},
+                    {name: '新疆', value: [[${treemapd1.get("新疆省")}]]},
+                    {name: '江苏', value: [[${treemapd1.get("江苏省")}]]},
+                    {name: '浙江', value: [[${treemapd1.get("浙江省")}]]},
+                    {name: '江西', value: [[${treemapd1.get("江西省")}]]},
+                    {name: '湖北', value: [[${treemapd1.get("湖北省")}]]},
+                    {name: '广西', value: [[${treemapd1.get("广西壮族自治区")}]]},
+                    {name: '甘肃', value: [[${treemapd1.get("甘肃省")}]]},
+                    {name: '山西', value: [[${treemapd1.get("山西省")}]]},
+                    {name: '内蒙古', value: [[${treemapd1.get("内蒙古自治区")}]]},
+                    {name: '陕西', value: [[${treemapd1.get("陕西省")}]]},
+                    {name: '吉林', value: [[${treemapd1.get("吉林省")}]]},
+                    {name: '福建', value: [[${treemapd1.get("福建省")}]]},
+                    {name: '贵州', value: [[${treemapd1.get("贵州省")}]]},
+                    {name: '广东', value: [[${treemapd1.get("广东省")}]]},
+                    {name: '青海', value: [[${treemapd1.get("青海省")}]]},
+                    {name: '西藏', value: [[${treemapd1.get("西藏")}]]},
+                    {name: '四川', value: [[${treemapd1.get("四川省")}]]},
+                    {name: '宁夏', value: [[${treemapd1.get("宁夏回族自治区")}]]},
+                    {name: '海南', value: [[${treemapd1.get("海南省")}]]}
+
+                ]
+            },
+            {
+                name: '二级伤害事件数',
+                type: 'map',
+                mapType: 'china',
+                roam: false,
+                itemStyle: {
+                    normal: {label: {show: true}},
+                    emphasis: {label: {show: true}}
+                },
+                data: [
+                    {name: '北京', value: [[${treemapd2.get("北京市")}]]},
+                    {name: '天津', value: [[${treemapd2.get("天津市")}]]},
+                    {name: '上海', value: [[${treemapd2.get("上海市")}]]},
+                    {name: '重庆', value: [[${treemapd2.get("重庆市")}]]},
+                    {name: '河北', value: [[${treemapd2.get("河北省")}]]},
+                    {name: '河南', value: [[${treemapd2.get("河南省")}]]},
+                    {name: '云南', value: [[${treemapd2.get("云南省")}]]},
+                    {name: '辽宁', value: [[${treemapd2.get("辽宁省")}]]},
+                    {name: '黑龙江', value: [[${treemapd2.get("黑龙江省")}]]},
+                    {name: '湖南', value: [[${treemapd2.get("湖南省")}]]},
+                    {name: '安徽', value: [[${treemapd2.get("安徽省")}]]},
+                    {name: '山东', value: [[${treemapd2.get("山东省")}]]},
+                    {name: '新疆', value: [[${treemapd2.get("新疆省")}]]},
+                    {name: '江苏', value: [[${treemapd2.get("江苏省")}]]},
+                    {name: '浙江', value: [[${treemapd2.get("浙江省")}]]},
+                    {name: '江西', value: [[${treemapd2.get("江西省")}]]},
+                    {name: '湖北', value: [[${treemapd2.get("湖北省")}]]},
+                    {name: '广西', value: [[${treemapd2.get("广西壮族自治区")}]]},
+                    {name: '甘肃', value: [[${treemapd2.get("甘肃省")}]]},
+                    {name: '山西', value: [[${treemapd2.get("山西省")}]]},
+                    {name: '内蒙古', value: [[${treemapd2.get("内蒙古自治区")}]]},
+                    {name: '陕西', value: [[${treemapd2.get("陕西省")}]]},
+                    {name: '吉林', value: [[${treemapd2.get("吉林省")}]]},
+                    {name: '福建', value: [[${treemapd2.get("福建省")}]]},
+                    {name: '贵州', value: [[${treemapd2.get("贵州省")}]]},
+                    {name: '广东', value: [[${treemapd2.get("广东省")}]]},
+                    {name: '青海', value: [[${treemapd2.get("青海省")}]]},
+                    {name: '西藏', value: [[${treemapd2.get("西藏")}]]},
+                    {name: '四川', value: [[${treemapd2.get("四川省")}]]},
+                    {name: '宁夏', value: [[${treemapd2.get("宁夏回族自治区")}]]},
+                    {name: '海南', value: [[${treemapd2.get("海南省")}]]}
+
+                ]
+            },
+            {
+                name: '三级伤害事件数',
+                type: 'map',
+                mapType: 'china',
+                roam: false,
+                itemStyle: {
+                    normal: {label: {show: true}},
+                    emphasis: {label: {show: true}}
+                },
+                data: [
+                    {name: '北京', value: [[${treemapd3.get("北京市")}]]},
+                    {name: '天津', value: [[${treemapd3.get("天津市")}]]},
+                    {name: '上海', value: [[${treemapd3.get("上海市")}]]},
+                    {name: '重庆', value: [[${treemapd3.get("重庆市")}]]},
+                    {name: '河北', value: [[${treemapd3.get("河北省")}]]},
+                    {name: '河南', value: [[${treemapd3.get("河南省")}]]},
+                    {name: '云南', value: [[${treemapd3.get("云南省")}]]},
+                    {name: '辽宁', value: [[${treemapd3.get("辽宁省")}]]},
+                    {name: '黑龙江', value: [[${treemapd3.get("黑龙江省")}]]},
+                    {name: '湖南', value: [[${treemapd3.get("湖南省")}]]},
+                    {name: '安徽', value: [[${treemapd3.get("安徽省")}]]},
+                    {name: '山东', value: [[${treemapd3.get("山东省")}]]},
+                    {name: '新疆', value: [[${treemapd3.get("新疆省")}]]},
+                    {name: '江苏', value: [[${treemapd3.get("江苏省")}]]},
+                    {name: '浙江', value: [[${treemapd3.get("浙江省")}]]},
+                    {name: '江西', value: [[${treemapd3.get("江西省")}]]},
+                    {name: '湖北', value: [[${treemapd3.get("湖北省")}]]},
+                    {name: '广西', value: [[${treemapd3.get("广西壮族自治区")}]]},
+                    {name: '甘肃', value: [[${treemapd3.get("甘肃省")}]]},
+                    {name: '山西', value: [[${treemapd3.get("山西省")}]]},
+                    {name: '内蒙古', value: [[${treemapd3.get("内蒙古自治区")}]]},
+                    {name: '陕西', value: [[${treemapd3.get("陕西省")}]]},
+                    {name: '吉林', value: [[${treemapd3.get("吉林省")}]]},
+                    {name: '福建', value: [[${treemapd3.get("福建省")}]]},
+                    {name: '贵州', value: [[${treemapd3.get("贵州省")}]]},
+                    {name: '广东', value: [[${treemapd3.get("广东省")}]]},
+                    {name: '青海', value: [[${treemapd3.get("青海省")}]]},
+                    {name: '西藏', value: [[${treemapd3.get("西藏")}]]},
+                    {name: '四川', value: [[${treemapd3.get("四川省")}]]},
+                    {name: '宁夏', value: [[${treemapd3.get("宁夏回族自治区")}]]},
+                    {name: '海南', value: [[${treemapd3.get("海南省")}]]}
+
+                ]
+            }
 
         ]
     };

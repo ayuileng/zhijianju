@@ -13,9 +13,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InjureCaseDao extends JpaRepository<InjureCase,Integer>,InjureCaseDaoSQL {
     Page<InjureCase> findAllByInjureTypeNotNullAndAndInjureTypeNot(Pageable pageable,String not);
-    InjureCase findFirstByProductName(String productName);
+    Page<InjureCase> findAllByProductName(Pageable pageable,String productName);
 
     long countAllByProvinceLike(String prov);
+
+    long countAllByProvinceLikeAndAndInjureDegreeEquals(String prov,String injureDegree);
+
+    InjureCase findFirstByProductNameOrderByInjureTimeAsc(String productName);
+
+    InjureCase findFirstByProductNameOrderByInjureTimeDesc(String productName);
+
+    long countAllByProductNameAndInjureTypeNot(String productName,String not);
 
 
 }

@@ -39,7 +39,7 @@ public class InjureLevelUtil {
 			,"割伤","擦伤","磨破","戳","磨","刺","挫","割","裂","勒伤","缠","绕","绞"
 			,"勒","毒","塑化剂","重金属","PH超标","拖拽","扭伤","电磁伤害"};
 	
-	public static double checkInjureLevel(String str) {
+	public static String  checkInjureLevel(String str) {
 		String[] strArr = str.split(" ");
 		
 		List<String> injureLevelOneList = Arrays.asList(injureLevelOneArray);
@@ -59,11 +59,11 @@ public class InjureLevelUtil {
 			}
 		}
 		if(labelInjureOne) {
-			return 41;
+			return "1";
 		} else if(labelInjureTwo) {
-			return 41*0.8;
+			return "2";
 		} else {
-			return 41*0.5;
+			return "3";
 		}
 		
 	}

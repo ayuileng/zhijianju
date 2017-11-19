@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <style type="text/css">
-        .wrapper{
+        .wrapper {
             margin-top: 60px;
         }
     </style>
@@ -16,53 +16,80 @@
 <div class="container wrapper">
     <div><a href="/injureChart">统计图表</a></div>
     <div>
-        <form action="/injurecase">
-            产品名称：<input type="text" name="name" />
-            伤害类型：<input type="text" name="type" />
-            地区：<input type="text" name="area" /><br/>
-            起始时间：<input type="date" name="datefrom" />
-            截止时间：<input type="date" name="dateto" /><br/>
-            <!--伤害程度：<input type="text" name="degree" /><br/>-->
+        <form action="/injurecase" th:object="${injureCaseForm}">
+            产品名称：<input type="text" th:value="*{name}" name="name"/>
+            伤害类别：<input type="text" th:value="*{type}" name="type"/><br/>
+            地区：<input type="text" th:value="*{area}" name="area"/>
+            伤害程度：<input type="text" th:value="*{degree}" name="degree"/><br/>
+            起始时间：<input type="date" th:value="*{datefrom}" name="datefrom"/>
+            截止时间：<input type="date" th:value="*{dateto}" name="dateto"/><br/>
+            排序方式：<label>时间升序<input name="sort" type="radio" th:field="*{sort}" value="time1"/></label>
+            <label>时间降序<input name="sort" type="radio" th:field="*{sort}" value="time2"/></label>
+            <label>伤害程度升序<input name="sort" type="radio" th:field="*{sort}" value="degree1"/></label>
+            <label>伤害程度降序<input name="sort" type="radio" th:field="*{sort}" value="degree2"/></label>
+            <br/>
+
             <input type="submit" value="搜索"/>
+
+            <table class="table table-hover">
+                <tr>
+                    <th>产品名称</th>
+                    <th>伤害发生时间</th>
+                    <th>伤害发生地点</th>
+                    <th>伤害类别</th>
+                    <th>伤害程度</th>
+                </tr>
+                <tr th:each="i : ${injureCases.content}">
+                    <td><a target="_blank" th:href="${i.url}" th:text="${i.productName}"></a></td>
+                    <td th:text="${#dates.format(i.injureTime, 'yyyy-MM-dd')}">1</td>
+                    <td th:text="${i.injureArea}">1</td>
+                    <td th:text="${i.injureType}">1</td>
+                    <td>
+                        <span th:if="${i.injureDegree} eq '1'" th:text="一级伤害"></span>
+                        <span th:if="${i.injureDegree} eq '2'" th:text="二级伤害"></span>
+                        <span th:if="${i.injureDegree} eq '3'" th:text="三级伤害"></span>
+                    </td>
+                </tr>
+            </table>
+
+
+            <!--todo pagingnation-->
+            <div class="container paging">
+                <!--分页组件-->
+                <nav aria-label="Page navigation" th:object="${injureCases}">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <span>共<span th:text="${injureCases.totalPages}">1</span>页</span>
+                        </li>
+                        <!--当前页-->
+                        <li class="page-item disabled">
+                            <span th:inline="text">当前页码：[[${injureCases.current}]]</span>
+                        </li>
+                        <!--前往-->
+                        <li class="page-item">
+                            输入页码：<input type="text" name="page" th:value="${injureCaseForm.page}"/>
+                            <input type="submit" value="前往"/>
+                        </li>
+                        <!--上一页-->
+                        <li class="page-item" th:classappend="*{first} ? 'disabled' : ''">
+                            <a class="page-link" th:href="@{'/injurecase?page=' + @{${injureCases.current - 1}}}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">←</span>
+                            </a>
+                        </li>
+
+                        <!--下一页-->
+                        <li class="page-item" th:classappend="*{last} ? 'disabled' : ''">
+                            <a class="page-link" th:href="'/injurecase?page=' + @{${injureCases.current + 1}}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </form>
     </div>
-    <table class="table table-hover">
-        <tr>
-            <th>产品名称</th>
-            <th>伤害发生时间</th>
-            <th>伤害发生地点</th>
-            <th>伤害类别</th>
-            <th>伤害指标</th>
-        </tr>
-        <tr th:each="i : ${injureCases.content}">
-            <td ><a target="_blank" th:href="${i.url}" th:text="${i.productName}"></a></td>
-            <td th:text="${#dates.format(i.injureTime, 'yyyy-MM-dd')}">1</td>
-            <td th:text="${i.injureArea}">1</td>
-            <td th:text="${i.injureType}">1</td>
-            <td th:text="${i.injureIndex}">1</td>
-        </tr>
-    </table>
-
-
-    <!--<div class="paging">-->
-        <!--<nav aria-label="Page navigation" th:object="${injureCases}">-->
-            <!--<ul class="pagination" th:if="${injureCases.totalPages gt 7}">-->
-                <!--&lt;!&ndash;上一页&ndash;&gt;-->
-                <!--<li class="page-item" th:classappend="*{isFirst} ? 'disabled' : ''">-->
-                    <!--<a  class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number - 1}}}" aria-label="Previous">-->
-                        <!--<span aria-hidden="true">←</span>-->
-                    <!--</a>-->
-                <!--</li>-->
-                <!--&lt;!&ndash;首页&ndash;&gt;-->
-                <!--<li th:classappend="*{isFirst} ? 'disabled' : ''">-->
-                    <!--<a th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=0'} "-->
-                       <!--aria-label="Previous">-->
-                        <!--<span aria-hidden="true">&laquo;</span>-->
-                    <!--</a>-->
-                <!--</li>-->
-            <!--</ul>-->
-        <!--</nav>-->
-    <!--</div>-->
 </div>
 
 <div th:replace="fragments/footer :: footer">...</div>
