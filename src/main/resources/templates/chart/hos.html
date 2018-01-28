@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th='http://www.thymeleaf.org'
+      xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'>
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset='UTF-8'/>
     <title>医院数据统计图</title>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-    <style type="text/css">
+    <link rel='stylesheet' href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css'
+          integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'/>
+    <style type='text/css'>
         .wrapper {
             margin-top: 60px;
         }
@@ -14,18 +14,19 @@
 
 </head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+<div th:replace='fragments/header :: header'></div>
 
-<div class="wrapper container">
-    <div id="main1" style="width: 70%;height:500px;"></div>
-    <div id="main2" style="width: 80%;height:600px;"></div>
+<div class='wrapper container'>
+    <div id='main1' style='width: 80%;height:600px;'></div>
+    <div id='main2' style='width: 80%;height:600px;'></div>
+    <div id='main3' style='width: 80%;height:600px;'></div>
 </div>
-<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<div th:replace="fragments/footer :: footer">...</div>
+<script src='http://echarts.baidu.com/build/dist/echarts-all.js'></script>
+<div th:replace='fragments/footer :: footer'>...</div>
 </body>
 
-<script type="text/javascript" th:inline="javascript">
-    var myChart1 = echarts.init(document.getElementById('main1'));
+<script type='text/javascript' th:inline='javascript'>
+    var myChart1 = echarts.init(document.getElementById('main3'));
     var option1 = {
         title : {
             text: '受伤地点统计图',
@@ -33,7 +34,7 @@
         },
         tooltip : {
             trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
             orient : 'vertical',
@@ -69,15 +70,15 @@
                 radius : '55%',
                 center: ['50%', '60%'],
                 data:[
-                    {name:'体育和运动场所', value:[[${map.get("体育和运动场所")}]]},
-                    {name:'公共居住场所', value:[[${map.get("公共居住场所")}]]},
-                    {name:'公路/街道', value:[[${map.get("公路/街道")}]]},
-                    {name:'其他/不清楚', value:[[${map.get("其他/不清楚")}]]},
-                    {name:'农田/农场', value:[[${map.get("农田/农场")}]]},
-                    {name:'学校与公共场所', value:[[${map.get("学校与公共场所")}]]},
-                    {name:'家中', value:[[${map.get("家中")}]]},
-                    {name:'工业和建筑场所', value:[[${map.get("工业和建筑场所")}]]},
-                    {name:'贸易和服务场所', value:[[${map.get("贸易和服务场所")}]]}
+                    {name:'体育和运动场所', value:[[${map.get('体育和运动场所')}]]},
+                    {name:'公共居住场所', value:[[${map.get('公共居住场所')}]]},
+                    {name:'公路/街道', value:[[${map.get('公路/街道')}]]},
+                    {name:'其他/不清楚', value:[[${map.get('其他/不清楚')}]]},
+                    {name:'农田/农场', value:[[${map.get('农田/农场')}]]},
+                    {name:'学校与公共场所', value:[[${map.get('学校与公共场所')}]]},
+                    {name:'家中', value:[[${map.get('家中')}]]},
+                    {name:'工业和建筑场所', value:[[${map.get('工业和建筑场所')}]]},
+                    {name:'贸易和服务场所', value:[[${map.get('贸易和服务场所')}]]}
                 ]
             }
         ]
@@ -140,6 +141,48 @@
     };
     myChart2.setOption(option2);
 
+    var myChart3 = echarts.init(document.getElementById('main1'));
+    var option3 = {
+        title : {
+            text: '主成分分析预警指数',
 
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['预警程度']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                data : [[${pcakey}]]
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'伤害事件数',
+                type:'bar',
+                data:[[${pcavalue}]]
+            }
+        ]
+    };
+    myChart3.setOption(option3);
 </script>
 </html>

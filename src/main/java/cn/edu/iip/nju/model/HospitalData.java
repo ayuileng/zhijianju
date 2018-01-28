@@ -40,6 +40,15 @@ public class HospitalData implements Serializable{
     private String alcohol;//饮酒状况
     private String injureSystem;//伤害累及系统
     private String howGetInjure;//产品质量是否有关
+    private String productCat;
+
+    public String getProductCat() {
+        return productCat;
+    }
+
+    public void setProductCat(String productCat) {
+        this.productCat = productCat;
+    }
 
     public Integer getId() {
         return id;

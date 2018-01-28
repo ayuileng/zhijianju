@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,10 +14,21 @@ import java.util.List;
  */
 @Repository
 public interface HospitalDataDao extends JpaRepository<HospitalData,Integer> ,HospitalDataDaoSQL {
+
     @Query("select distinct h.injureLocation from HospitalData h")
-    List<Object> getLocation();
+    List<String> getLocation();
+
     Long countAllByInjureLocation(String location);
-    @Query(value = "select count(1) from hospital_data_old where month(injure_date) = ?1",nativeQuery = true)
+
+    @Query(value = "select count(1) from hospital_data where month(injure_date) = ?1",nativeQuery = true)
     Long countByMonth(int month);
 
+    @Query(value = "select count(1) from hospital_data where year(injure_date) = ?1 and product_cat = ?2",nativeQuery = true)
+    Long countAllByProductCat(int year,String productCat);
+
+    @Query(value = "SELECT count(1) from hospital_data WHERE year(injure_date) = ?1 and injure_degree = ?2 and product_cat = ?3",nativeQuery = true)
+    Long countAllByInjureDegreeAndProductCat(int year,String injureDegree,String productCat);
+
+    @Query(value = "SELECT injure_date FROM hospital_data WHERE product_cat = ?1 ORDER BY injure_date DESC  LIMIT 1",nativeQuery = true)
+    Date findLastDateByProductCat(String productCat);
 }

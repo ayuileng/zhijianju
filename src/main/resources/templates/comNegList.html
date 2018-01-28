@@ -25,19 +25,21 @@
     <table class="table table-hover">
         <tr>
             <th>企业名称</th>
-            <th>用百度搜索企业</th>
-            <th>用悉知搜索企业</th>
+            <th>在案例库中搜索</th>
+            <th>百度搜索</th>
+            <th>悉知搜索</th>
             <th>案例数</th>
-            <th>召回次数</th>
+            <th>召回次数(未实现)</th>
             <th>抽检合格率</th>
 
         </tr>
         <tr th:each="i : ${pnl.content}" th:if="${i.companyName}!=null and ${#strings.length(i.companyName)} gt 2">
-            <td th:text="${i.companyName}">1</td>
+            <td><a th:href="@{'/com/detail?name='+${i.companyName} }"><span th:text="${i.companyName}">name</span></a></td>
+            <td><a target="_blank" th:href="@{'/search?queryWord='}+${i.companyName}"><span class="label label-success">搜索</span></a></td>
             <td><a target="_blank" th:href="'https://www.baidu.com/s?wd='+${i.companyName}"><span class="label label-success">百度一下</span></a></td>
             <td><a target="_blank" th:href="'http://www.xizhi.com/search?wd='+${i.companyName}"><span class="label label-success">悉知搜索</span></a></td>
             <td th:text="${i.caseNum}">1</td>
-            <td th:text="${i.callbackNum}">1</td>
+            <td>0</td>
             <td th:text="${i.passPercent}">1</td>
         </tr>
     </table>

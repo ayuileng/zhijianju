@@ -17,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,10 +48,7 @@ public class SentenceService {
         return webDataDao.findAll(pageable);
     }
 
-    /**
-     * 1. 拼接title和content,分句之后存储
-     */
-
+    //1. 拼接title和content,分句之后存储
     public void sentence() {
         int defaultSize = 1000;
         Page<WebData> firstPage = getAllData(new PageRequest(0, defaultSize));
@@ -63,7 +59,6 @@ public class SentenceService {
                 String[] sentence = content.split("[。？！]");
                 //用set来去重
                 HashSet<String> set = Sets.newHashSet(sentence);
-
                 for (String s : set) {
                     Sentence sen = new Sentence();
                     sen.setDocumentId(webData.getId());
@@ -86,9 +81,7 @@ public class SentenceService {
 
     }
 
-    @Transactional()
     public void getLabel(List<Integer> list) {
-//        list = Lists.newArrayList(1,2,3,4,5,6,7,8,9,10);
         for (Integer documentId : list) {
             List<Label> labels = labelExtract(documentId);
             labelDao.save(labels);
@@ -97,7 +90,6 @@ public class SentenceService {
 
 
     //每一句话抽取出Label
-    @Transactional()
     public List<Label> labelExtract(Integer documentId) {
         List<Label> labels = Lists.newArrayList();
         List<Sentence> allSens = sentenceDao.getAllByDocumentId(documentId);
@@ -170,6 +162,8 @@ public class SentenceService {
         }
         return sb.toString().trim();
     }
+
+
 
 
 }

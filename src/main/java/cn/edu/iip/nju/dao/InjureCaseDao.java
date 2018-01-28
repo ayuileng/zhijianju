@@ -17,7 +17,7 @@ public interface InjureCaseDao extends JpaRepository<InjureCase,Integer>,InjureC
 
     long countAllByProvinceLike(String prov);
 
-    long countAllByProvinceLikeAndAndInjureDegreeEquals(String prov,String injureDegree);
+    long countAllByProvinceLikeAndInjureDegreeEquals(String prov,String injureDegree);
 
     InjureCase findFirstByProductNameOrderByInjureTimeAsc(String productName);
 

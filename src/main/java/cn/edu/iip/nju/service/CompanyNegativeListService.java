@@ -2,10 +2,12 @@ package cn.edu.iip.nju.service;
 
 import cn.edu.iip.nju.dao.AttachmentDataDao;
 import cn.edu.iip.nju.dao.CompanyNegativeListDao;
+import cn.edu.iip.nju.model.AttachmentData;
 import cn.edu.iip.nju.model.CompanyNegativeList;
 import cn.edu.iip.nju.util.CityProvince;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -70,13 +72,17 @@ public class CompanyNegativeListService {
 
     }
 
-
+    @Cacheable(value = "companyProvCount",key = "#proName")
     public Long countByProvinceName(String proName){
         return companyNegativeListDao.countAllByProvince(proName);
     }
-
+    @Cacheable(value = "companyProvCountByPassPercent",key = "#prov+#from+#to")
     public long countAllByProvinceAndPassPercentBetween(String prov,Double from,Double to){
         return companyNegativeListDao.countAllByProvinceStartingWithAndPassPercentBetween(prov,from,to);
+    }
+
+    public List<AttachmentData> getCompanyDetail(String name){
+        return attachmentDataDao.getAllByFactoryName(name);
     }
 
 

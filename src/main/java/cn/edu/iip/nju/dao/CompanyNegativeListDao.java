@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by xu on 2017/10/26.
  */
@@ -14,5 +16,5 @@ public interface CompanyNegativeListDao extends JpaRepository<CompanyNegativeLis
     Page<CompanyNegativeList> findAllByPassPercentGreaterThan(Pageable pageable, Double low);
     Long countAllByProvince(String province);
     Long countAllByProvinceStartingWithAndPassPercentBetween(String prov, Double from, Double to);
-
+    List<CompanyNegativeList> getAllByCompanyName(String companyName);
 }

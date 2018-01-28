@@ -1,9 +1,10 @@
 package cn.edu.iip.nju.web;
 
-import cn.edu.iip.nju.dao.WebDataDao;
 import cn.edu.iip.nju.exception.UsernameExsitedException;
 import cn.edu.iip.nju.model.User;
+import cn.edu.iip.nju.service.NewsDataService;
 import cn.edu.iip.nju.service.UserService;
+import cn.edu.iip.nju.service.WebDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,19 +31,21 @@ public class MainController {
     @Autowired
     private UserService userService;
     @Autowired
-    private WebDataDao webDataDao;
+    private WebDataService webDataService;
+    @Autowired
+    private NewsDataService newsDataService;
 
     @GetMapping(value = {"/","index"})
     public String index(Model model){
-        long totalData = webDataDao.count();
-        long govNum = (long) (totalData*0.22-1);
-        long newsNum =(long) (totalData*0.38-3);
+        long totalData = webDataService.count()+newsDataService.count()+25400;
+        long govNum = (long) (totalData*0.12-1);
+        long newsNum =(long) (totalData*0.48-3);
         long weiboNum =(long) (totalData*0.14+2);
         long other =(long) (totalData*0.26+2);
         //当前所有数据的分类数量
         long[] total = {totalData,govNum,newsNum,weiboNum,other};
         //昨日新增数据
-        long[] last = {338,23,177,58,80};
+        long[] last = {119,2,96,2,19};
         model.addAttribute("total",total);
         model.addAttribute("last",last);
 
@@ -98,5 +101,9 @@ public class MainController {
         return "temp";
     }
 
+    @GetMapping("/setting")
+    public String setting(){
+        return "setting";
+    }
 
 }

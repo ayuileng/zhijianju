@@ -1,6 +1,7 @@
 package cn.edu.iip.nju.web;
 
 import cn.edu.iip.nju.common.PageHelper;
+import cn.edu.iip.nju.model.AttachmentData;
 import cn.edu.iip.nju.model.HospitalData;
 import cn.edu.iip.nju.model.InjureCase;
 import cn.edu.iip.nju.model.form.HospitalForm;
@@ -47,23 +48,22 @@ public class InjureCaseController {
     }
 
 
-
     @GetMapping("/injurecase")
-    public String injureCase(Model model,InjureCaseForm injureCaseForm) {
+    public String injureCase(Model model, InjureCaseForm injureCaseForm) {
         //sql模板："select * from xxx where d1=1 and d2=2 ... and time between t1 and t2 order by dx"
         StringBuilder sql = new StringBuilder();
         if (!Strings.isNullOrEmpty(injureCaseForm.getName())) {
-            sql.append("product_name='").append(injureCaseForm.getName()).append("' and ");
-        }else{
+            sql.append("product_name like '%").append(injureCaseForm.getName()).append("%' and ");
+        } else {
             sql.append("product_name!='").append("' and ");
         }
         if (!Strings.isNullOrEmpty(injureCaseForm.getType())) {
-            sql.append("injure_type='").append(injureCaseForm.getType()).append("' and ");
-        }else{
+            sql.append("injure_type like '%").append(injureCaseForm.getType()).append("%' and ");
+        } else {
             sql.append("injure_type!='").append("' and ");
         }
         if (!Strings.isNullOrEmpty(injureCaseForm.getArea())) {
-            sql.append("injure_area='").append(injureCaseForm.getArea()).append("' and ");
+            sql.append("injure_area like '%").append(injureCaseForm.getArea()).append("%' and ");
         }
         if (!Strings.isNullOrEmpty(injureCaseForm.getDegree())) {
             sql.append("injure_degree='").append(injureCaseForm.getDegree()).append("' and ");
@@ -89,16 +89,16 @@ public class InjureCaseController {
         if ("time1".equals(injureCaseForm.getSort())) {
 
             realSQL += " ORDER BY injure_time ASC ";
-        } else if("time2".equals(injureCaseForm.getSort())){
+        } else if ("time2".equals(injureCaseForm.getSort())) {
             realSQL += " ORDER BY injure_time DESC ";
-        }else if("degree2".equals(injureCaseForm.getSort())){
+        } else if ("degree2".equals(injureCaseForm.getSort())) {
             realSQL += " ORDER BY injure_degree ASC ";
-        }else if("degree1".equals(injureCaseForm.getSort())){
+        } else if ("degree1".equals(injureCaseForm.getSort())) {
             realSQL += " ORDER BY injure_degree DESC ";
-        }else {
+        } else {
             realSQL += " ORDER BY injure_time ASC ";
         }
-        PageHelper<InjureCase> injureCases = injureCaseService.getByCondition(realSQL + " limit " + (injureCaseForm.getPage() - 1) * 40 + "," + 40 + ";", injureCaseForm.getPage());
+        PageHelper<InjureCase> injureCases = injureCaseService.getByCondition(realSQL + " limit " + (injureCaseForm.getPage() - 1) * 50 + "," + 50 + ";", injureCaseForm.getPage());
         model.addAttribute("injureCases", injureCases);
         model.addAttribute("injureCaseForm", injureCaseForm);
 
@@ -125,19 +125,41 @@ public class InjureCaseController {
         return "comNegList";
     }
 
+    @GetMapping("/com/detail")
+    public String getComDetail(@RequestParam("name") String name, Model model) {
+        List<AttachmentData> company = companyNegativeListService.getCompanyDetail(name);
+        for (AttachmentData attachmentData : company) {
+            if (Strings.isNullOrEmpty(attachmentData.getBirthday())) {
+                attachmentData.setBirthday("未知");
+            }
+            if (Strings.isNullOrEmpty(attachmentData.getShangbiao())) {
+                attachmentData.setShangbiao("未知");
+            }
+            if (Strings.isNullOrEmpty(attachmentData.getErrorReason())) {
+                attachmentData.setErrorReason("未知");
+            }
+            if (Strings.isNullOrEmpty(attachmentData.getChengjianjigou())) {
+                attachmentData.setChengjianjigou("未知");
+            }
+        }
+        model.addAttribute("companyDetail", company);
+        System.out.println(company);
+        return "comDetail";
+    }
+
     //根据时间、产品类别、伤害程度、与产品是否相关 4字段组合查询
     @GetMapping("/hospital")
     public String hospotal(Model model,
                            HospitalForm hospitalDataForm) {
-        String realSQL,realCountSQL;
+        String realSQL, realCountSQL;
         StringBuilder sql = new StringBuilder();
         if (!Strings.isNullOrEmpty(hospitalDataForm.getProductType())) {
             sql.append("product='").append(hospitalDataForm.getProductType()).append("' and ");
         }
-        if(!Strings.isNullOrEmpty(hospitalDataForm.getInjureDegree())){
+        if (!Strings.isNullOrEmpty(hospitalDataForm.getInjureDegree())) {
             sql.append("injure_degree='").append(hospitalDataForm.getInjureDegree()).append("' and ");
         }
-        if(!Strings.isNullOrEmpty(hospitalDataForm.getIfIntention())){
+        if (!Strings.isNullOrEmpty(hospitalDataForm.getIfIntention())) {
             sql.append("how_get_injure='").append(hospitalDataForm.getIfIntention()).append("' and ");
         }
         if (!Strings.isNullOrEmpty(hospitalDataForm.getDatefrom()) || !Strings.isNullOrEmpty(hospitalDataForm.getDateto())) {
@@ -149,10 +171,10 @@ public class InjureCaseController {
             }
             sql.append("injure_date BETWEEN '").append(hospitalDataForm.getDatefrom()).append("' and '").append(hospitalDataForm.getDateto()).append("' and ");
         }
-        if(sql.toString().trim().length()>0){
-            realSQL = hospitalSQL+" where "+sql.toString().trim();
-            realCountSQL = hospitalCountSQL+" where "+sql.toString().trim();
-        }else{
+        if (sql.toString().trim().length() > 0) {
+            realSQL = hospitalSQL + " where " + sql.toString().trim();
+            realCountSQL = hospitalCountSQL + " where " + sql.toString().trim();
+        } else {
             realSQL = hospitalSQL;
             realCountSQL = hospitalCountSQL;
         }
@@ -164,13 +186,13 @@ public class InjureCaseController {
         model.addAttribute("hos", pageData);
         model.addAttribute("hospitalDataForm", hospitalDataForm);
         model.addAttribute("count", pageData.getTotalRows());
-        String params = "/hospital?injure_degree="+hospitalDataForm.getInjureDegree()
-                +"&productType="+hospitalDataForm.getProductType()
-                +"&ifIntention="+hospitalDataForm.getIfIntention()
-                +"&datefrom="+hospitalDataForm.getDatefrom()
-                +"&dateto="+hospitalDataForm.getDateto()
-                +"&page=";
-        model.addAttribute("params",params);
+        String params = "/hospital?injure_degree=" + hospitalDataForm.getInjureDegree()
+                + "&productType=" + hospitalDataForm.getProductType()
+                + "&ifIntention=" + hospitalDataForm.getIfIntention()
+                + "&datefrom=" + hospitalDataForm.getDatefrom()
+                + "&dateto=" + hospitalDataForm.getDateto()
+                + "&page=";
+        model.addAttribute("params", params);
         System.out.println(hospitalDataForm);
         System.out.println(params);
         return "hospital";
@@ -221,8 +243,10 @@ public class InjureCaseController {
         Set<String> allLocations = hospitalDataService.getLocations();
         Map<String, Long> map = Maps.newHashMap();
         for (String location : allLocations) {
-            Long count = hospitalDataService.countByLocation(location);
-            map.put(location, count);
+            if (!Strings.isNullOrEmpty(location)) {
+                Long count = hospitalDataService.countByLocation(location);
+                map.put(location, count);
+            }
         }
         model.addAttribute("map", map);
         List<Integer> list = Lists.newArrayList();
@@ -230,6 +254,10 @@ public class InjureCaseController {
             list.add(hospitalDataService.countByMonth(i));
         }
         model.addAttribute("list", list);
+        String[] pcakey = {"服装", "家庭生活用品", "文体用品", "锐器", "玩具", "家用电器"};
+        String[] pcavalue = {"40.39", "67.18", "42.93", "66.34", "40.22", "41.92"};
+        model.addAttribute("pcakey", pcakey);
+        model.addAttribute("pcavalue", pcavalue);
         return "chart/hos";
     }
 
@@ -251,11 +279,11 @@ public class InjureCaseController {
             long count = injureCaseService.countByProv(tmp);
             treeMap.put(prov, count);
             long count1 = injureCaseService.countByProvAndInjureDegree(tmp, "1");
-            treeMapd1.put(prov,count1);
+            treeMapd1.put(prov, count1);
             long count2 = injureCaseService.countByProvAndInjureDegree(tmp, "2");
-            treeMapd2.put(prov,count2);
+            treeMapd2.put(prov, count2);
             long count3 = injureCaseService.countByProvAndInjureDegree(tmp, "3");
-            treeMapd3.put(prov,count3);
+            treeMapd3.put(prov, count3);
         }
         long max = findMax(treeMap.values());
         long maxd1 = findMax(treeMapd1.values());
@@ -271,7 +299,6 @@ public class InjureCaseController {
         model.addAttribute("treemapd3", treeMapd3);
         return "chart/injurecase";
     }
-
 
 
 }

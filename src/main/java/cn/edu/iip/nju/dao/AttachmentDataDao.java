@@ -19,5 +19,5 @@ public interface AttachmentDataDao extends JpaRepository<AttachmentData,Integer>
     Integer countAllByFactoryName(String factoryName);
 
     Integer countAllByFactoryNameAndResult(String factoryName, String result);
-
+    List<AttachmentData> getAllByFactoryName(String factoryName);
 }

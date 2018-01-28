@@ -11,6 +11,7 @@ import cn.edu.iip.nju.util.InjureLevelUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,17 +46,17 @@ public class InjureCaseService {
     }
 
 
-    public void generateInjureCase() {
-        int defaultSize = 500;
-
-        Page<Label> all = labelDao.findAll(new PageRequest(0, defaultSize));
-        for (int i = 0; i < all.getTotalPages(); i++) {
-            Page<Label> page = labelDao.findAll(new PageRequest(i, defaultSize));
-            List<InjureCase> list = saveInjureCases(page.getContent());
-            injureCaseDao.save(list);
-        }
-
-    }
+//    public void generateInjureCase() {
+//        int defaultSize = 500;
+//
+//        Page<Label> all = labelDao.findAll(new PageRequest(0, defaultSize));
+//        for (int i = 0; i < all.getTotalPages(); i++) {
+//            Page<Label> page = labelDao.findAll(new PageRequest(i, defaultSize));
+//            List<InjureCase> list = saveInjureCases(page.getContent());
+//            injureCaseDao.save(list);
+//        }
+//
+//    }
 
     public List<InjureCase> saveInjureCases(List<Label> content) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -176,13 +177,13 @@ public class InjureCaseService {
         }
         return sb.toString().trim();
     }
-
+    @Cacheable(value = "proInjureCaseCount",key = "#prov")
     public long countByProv(String  prov){
         return injureCaseDao.countAllByProvinceLike(prov);
     }
-
+    @Cacheable(value = "companyProvAndDegreeCount",key = "#prov+#injureDrgree")
     public long countByProvAndInjureDegree(String  prov,String injureDrgree){
-        return injureCaseDao.countAllByProvinceLikeAndAndInjureDegreeEquals(prov,injureDrgree);
+        return injureCaseDao.countAllByProvinceLikeAndInjureDegreeEquals(prov,injureDrgree);
     }
 
 

@@ -1,29 +1,31 @@
 package cn.edu.iip.nju.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by xu on 2017/10/24.
  * 伤害案例库
+ * 使用了jpa建立索引
  */
 @Entity
+@Table(indexes = {@Index(name = "injure_case_product_name_index",columnList ="product_name"),
+        @Index(name = "injure_case_injure_type_index",columnList ="injure_type"),
+        @Index(name = "injure_case_injure_degree_index",columnList ="injure_degree")})
 public class InjureCase implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @Column(name = "product_name")
     private String productName;//产品名
 
     private Date injureTime;//伤害发生时间
     private String injureArea;//伤害发生地点
+    @Column(name = "injure_type")
     private String injureType;//伤害类别
     private String province;
-    private Integer injureIndex;//伤害指标
+    @Column(name = "injure_degree")
     private String injureDegree;
 
     public String getInjureDegree() {
@@ -33,7 +35,7 @@ public class InjureCase implements Serializable{
     public void setInjureDegree(String injureDegree) {
         this.injureDegree = injureDegree;
     }
-
+    @Column(name = "url",unique = true)
     private String url;
 
     public String getProvince() {
@@ -95,12 +97,18 @@ public class InjureCase implements Serializable{
     }
 
 
-    public Integer getInjureIndex() {
-        return injureIndex;
-    }
 
-    public void setInjureIndex(Integer injureIndex) {
-        this.injureIndex = injureIndex;
+    @Override
+    public String toString() {
+        return "InjureCase{" +
+                "id=" + id +
+                ", productName='" + productName + '\'' +
+                ", injureTime=" + injureTime +
+                ", injureArea='" + injureArea + '\'' +
+                ", injureType='" + injureType + '\'' +
+                ", province='" + province + '\'' +
+                ", injureDegree='" + injureDegree + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
-
 }
