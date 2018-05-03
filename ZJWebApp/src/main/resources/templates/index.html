@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+    <title>树蛙搜索</title>
+    <style>
+
+        .wrapper {
+            position: relative;
+            text-align: center;
+            width: 60%;
+            margin: 70px auto 0;
+            padding-bottom: 50px;
+
+        }
+
+        .footer {
+            height: 50px;
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+        }
+        .chart{
+            margin: auto;
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="wrapper">
+    <div class="logo"><img src="pic/logo.png" alt="树蛙一下，你就知道"/></div>
+
+    <div class="searchForm">
+        <form action="/search" method="get" class="form-inline">
+            <input class="form-control" type="text" name="queryWord" style="width: 55%;"/>
+            <input class="form-control btn btn-primary" type="submit" value="树蛙一下"/>
+        </form>
+    </div>
+
+    <div class="tab-page">
+        <a href="/injurecase">伤害事件案例库</a>
+        <a href="#">产品信息清单</a>
+        <a href="/com">企业信息清单</a>
+        <a href="/hospital">医院数据入口</a>
+    </div>
+
+</div>
+<div class="chart">
+    <div class="col-md-6" id="main1" style="width: 450px;height:400px;float:left; display:inline"></div>
+    <div class="col-md-6" id="main2" style="width: 450px;height:400px;float:right; display:inline"></div>
+</div>
+
+<div th:replace="fragments/footer :: footer">...</div>
+</body>
+<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    // 指定图表的配置项和数据
+    var option1 = {
+
+        title: {
+            text: '当前数据量,共' + [[${total[0]}]],
+            x: 'center'
+
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+        legend: {
+            orient : 'vertical',
+            x : 'left',
+            data:['政府网站','新闻网站','社交平台','其他']
+        },
+        toolbox: {
+            show : false,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'left',
+                            max: 1548
+                        }
+                    }
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        series: [
+            {
+                name: '数据来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: [
+                    {value: [[${total[1]}]], name: '政府网站'},
+                    {value: [[${total[2]}]], name: '新闻网站'},
+                    {value: [[${total[3]}]], name: '社交平台'},
+                    {value: [[${total[4]}]], name: '其他'},
+                ]
+            }
+        ]
+    };
+    myChart1.setOption(option1);
+
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart2 = echarts.init(document.getElementById('main2'));
+    // 指定图表的配置项和数据
+    var option2 = {
+
+        title: {
+            text: '近期新增数据量,共' + [[${last[0]}]],
+            x: 'center',
+
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },legend: {
+            orient : 'vertical',
+            x : 'right',
+            data:['政府网站','新闻网站','社交平台','其他']
+        },
+//
+//        visualMap: {
+//            show: false,
+//            min: 80,
+//            max: 600,
+//            inRange: {
+//                colorLightness: [0, 1]
+//            }
+//        },
+        series: [
+            {
+                name: '数据来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: [
+                    {value: [[${last[1]}]], name: '政府网站'},
+                    {value: [[${last[2]}]], name: '新闻网站'},
+                    {value: [[${last[3]}]], name: '社交平台'},
+                    {value: [[${last[4]}]], name: '其他'},
+                ]
+            }
+        ]
+    };
+    myChart2.setOption(option2);
+</script>
+</html>

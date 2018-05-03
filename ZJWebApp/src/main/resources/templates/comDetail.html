@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>企业详细信息</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <style type="text/css">
+        .wrapper{
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container wrapper">
+    <table class="table table-striped">
+        <tr >
+            <th>企业名</th>
+            <th>产品名</th>
+            <th>商标</th>
+            <th>规格型号</th>
+            <th>生产日期/批号</th>
+            <th>企业所在地</th>
+            <th>检验结果</th>
+            <th>不合格原因</th>
+            <th>承建机构</th>
+        </tr>
+        <tr th:each="i : ${companyDetail} " th:inline="text">
+            <td>[[${i.factoryName} != null ? ${i.factoryName} : '未知']]</td>
+            <td>[[${i.name} != null ? ${i.name} : '未知']]</td>
+            <td>[[${i.shangbiao} != null ? ${i.shangbiao} : '未知']]</td>
+            <td>[[${i.guigexinghao} != null ? ${i.guigexinghao} : '未知']]</td>
+            <td>[[${i.birthday} != null ? ${i.birthday} : '未知']]</td>
+            <td>[[${i.factoryAddress} != null ? ${i.factoryAddress} : '未知']]</td>
+            <td th:style="${i.result} == '合格' ? 'color:black;' : 'color:red;'">[[${i.result}]]</td>
+            <td th:style="${i.result} == '合格' ? 'color:black;' : 'color:red;'">[[${i.errorReason}]]</td>
+            <td>[[${i.chengjianjigou} != null ? ${i.chengjianjigou} : '未知']]</td>
+        </tr>
+    </table>
+
+</div>
+
+<div th:replace="fragments/footer :: footer">...</div>
+</body>
+</html>

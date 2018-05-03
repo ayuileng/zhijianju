@@ -14,9 +14,12 @@ target/
 *.iws
 *.iml
 *.ipr
-files/
-target/
-logs/
+*.xlx
+*.xlsx
+*.doc
+*.docx
+*.rar
+*.zip
 
 ### NetBeans ###
 nbproject/private/
