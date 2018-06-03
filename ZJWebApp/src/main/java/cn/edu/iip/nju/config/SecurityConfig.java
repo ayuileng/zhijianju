@@ -15,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/login","/signup","/pic/*").permitAll()//只有访问/页面是不需要认证的
+        http.authorizeRequests().antMatchers("/*","/login","/signup","/pic/*").permitAll()//只有访问/页面是不需要认证的
                 .anyRequest().authenticated()//其余所有页面都需要认证
                 .and()
                 .formLogin()

@@ -78,4 +78,17 @@ public class NewsData {
     public void setInjureNews(Boolean injureNews) {
         isInjureNews = injureNews;
     }
+
+    @Override
+    public String toString() {
+        return "NewsData{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", postTime=" + postTime +
+                ", crawlerTime=" + crawlerTime +
+                ", url='" + url + '\'' +
+                ", isInjureNews=" + isInjureNews +
+                '}';
+    }
 }

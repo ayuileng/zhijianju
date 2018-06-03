@@ -15,10 +15,24 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
-    <div class="container"><a href="/com?sort=1"><button type="button" class="btn btn-info">按照通过率降序排列</button></a>
-        <a href="/com?sort=2"><button type="button" class="btn btn-info">按照通过率升序排列</button></a>
-        <a href="/com?sort=4"><button type="button" class="btn btn-info">按照案例数降序排列</button></a>
-        <a href="/com?sort=3"><button type="button" class="btn btn-info">按照案例数升序排列</button></a></div>
+
+    <!--<div class="container"><a href="/com?sort=1"><button type="button" class="btn btn-info">按照通过率降序排列</button></a>-->
+        <!--<a href="/com?sort=2"><button type="button" class="btn btn-info">按照通过率升序排列</button></a>-->
+        <!--<a href="/com?sort=4"><button type="button" class="btn btn-info">按照案例数降序排列</button></a>-->
+        <!--<a href="/com?sort=3"><button type="button" class="btn btn-info">按照案例数升序排列</button></a>-->
+    <!--</div>-->
+        <div>
+            <form action="/com" th:object="${companyForm}" method="get">
+                <label for="factory">企业名称</label><input type="text" id="factory" th:value="*{factory}" name="factory"/>
+                <label for="province">企业所在省份</label><input type="text"  id="province" th:value="*{province}" name="province"/><br/>
+                <label for="sort">排序方式</label>
+                <select th:value="*{sort}" name="sort" id="sort">
+                    <option value="1" th:selected="${sort=='1'}">按照召回次数降序</option>
+                    <option value="0" th:selected="${sort=='0'}">按照案例数降序</option>
+                </select>
+                <input type="submit" value="搜索"/>
+            </form>
+    </div>
 
 
     <div class="container"><a href="/comChart"><button type="button" class="btn btn-primary">查看统计图表</button></a></div>
@@ -29,17 +43,19 @@
             <th>百度搜索</th>
             <th>悉知搜索</th>
             <th>案例数</th>
-            <th>召回次数(未实现)</th>
+            <th>召回次数</th>
+            <th>所在省份</th>
             <th>抽检合格率</th>
 
         </tr>
-        <tr th:each="i : ${pnl.content}" th:if="${i.companyName}!=null and ${#strings.length(i.companyName)} gt 2">
+        <tr th:each="i : ${pnl}" th:if="${i.companyName}!=null and ${#strings.length(i.companyName)} gt 2">
             <td><a th:href="@{'/com/detail?name='+${i.companyName} }"><span th:text="${i.companyName}">name</span></a></td>
             <td><a target="_blank" th:href="@{'/search?queryWord='}+${i.companyName}"><span class="label label-success">搜索</span></a></td>
             <td><a target="_blank" th:href="'https://www.baidu.com/s?wd='+${i.companyName}"><span class="label label-success">百度一下</span></a></td>
             <td><a target="_blank" th:href="'http://www.xizhi.com/search?wd='+${i.companyName}"><span class="label label-success">悉知搜索</span></a></td>
             <td th:text="${i.caseNum}">1</td>
-            <td>0</td>
+            <td th:text="${i.callbackNum}">1</td>
+            <td th:text="${i.province}">江苏</td>
             <td th:text="${i.passPercent}">1</td>
         </tr>
     </table>

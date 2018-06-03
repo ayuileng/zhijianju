@@ -32,6 +32,6 @@ public class TagProcessApplication implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        injureCaseService.saveInjureCase();
+        companyNegativeListService.fixProvinceMissing();
     }
 }

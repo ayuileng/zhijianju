@@ -1,5 +1,6 @@
 package cn.edu.iip.nju.service;
 
+import cn.edu.iip.nju.util.ReadFileUtil;
 import com.google.common.io.Files;
 import org.apache.commons.io.Charsets;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,6 +149,20 @@ public class RedisService {
             e.printStackTrace();
         }
         return product;
+    }
+
+
+
+   public void saveKeyWordToRedis(){
+        Set<String> strings = ReadFileUtil.readKeyWords();
+        for (String string : strings) {
+            template.opsForSet().add("kwNews",string);
+        }
+    }
+
+    public Set<String> getKWNEWS(){
+        Set<String> kwNews = template.opsForSet().members("kwNews");
+        return kwNews;
     }
 
 

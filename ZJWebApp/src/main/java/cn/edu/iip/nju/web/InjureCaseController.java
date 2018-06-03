@@ -4,6 +4,7 @@ import cn.edu.iip.nju.common.PageHelper;
 import cn.edu.iip.nju.model.AttachmentData;
 import cn.edu.iip.nju.model.HospitalData;
 import cn.edu.iip.nju.model.InjureCase;
+import cn.edu.iip.nju.model.form.CompanyForm;
 import cn.edu.iip.nju.model.form.HospitalForm;
 import cn.edu.iip.nju.model.form.InjureCaseForm;
 import cn.edu.iip.nju.service.CompanyNegativeListService;
@@ -107,21 +108,10 @@ public class InjureCaseController {
 
 
     @GetMapping("/com")
-    public String productNegativeList(Model model,
-                                      @RequestParam(name = "page", defaultValue = "0", required = false) Integer page,
-                                      @RequestParam(name = "sort", defaultValue = "1", required = false) String sort) {
-        Sort s;
-        if (sort.equals("1")) {
-            s = new Sort(Sort.Direction.DESC, "passPercent");
-        } else if (sort.equals("2")) {
-            s = new Sort(Sort.Direction.ASC, "passPercent");
-        } else if (sort.equals("3")) {
-            s = new Sort(Sort.Direction.DESC, "caseNum");
-        } else {
-            s = new Sort(Sort.Direction.ASC, "caseNum");
-        }
+    public String CompanyNegativeList(Model model,CompanyForm companyForm) {
 
-        model.addAttribute("pnl", companyNegativeListService.getAll(new PageRequest(page, 40, s)));
+        model.addAttribute("pnl", companyNegativeListService.getByCondition(companyForm));
+        model.addAttribute("companyForm", companyForm);
         return "comNegList";
     }
 

@@ -2,6 +2,12 @@ package cn.edu.iip.nju;
 
 import cn.edu.iip.nju.crawler.*;
 import cn.edu.iip.nju.crawler.fujian.ExcelProcess;
+import cn.edu.iip.nju.dao.NewsDataDao;
+import cn.edu.iip.nju.model.NewsData;
+import cn.edu.iip.nju.service.NewsDataService;
+import cn.edu.iip.nju.service.RedisService;
+import cn.edu.iip.nju.util.ReadFileUtil;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -58,27 +65,37 @@ public class ZhijianjuCrawlerApplication implements CommandLineRunner {
     Chinanews chinanews;
 
 
+    @Autowired
+    RedisService redisService;
+
+    @Autowired
+    NewsDataService newsDataService;
+
     //    @Autowired
 //    CPZLJDS cpzljds;//问题很大，网页变了，而且附件也没了
     @Override
     public void run(String... strings) throws Exception {
-
+//        pool.submit(() -> {
+//            newsCrawler.startSougouNewsCrawler();
+//            logger.info("sougou finish");
+//        });
+//        pool.submit(() -> {
+//            newsCrawler.startBaiduNewsCrawler();
+//            logger.info("baidu finish");
+//        });
+//        pool.submit(() -> {
+//            newsCrawler.start360NewsCrawler();
+//            logger.info("360 finish");
+//        });
 //
-//        pool.submit(() -> zhaoHui.start());
-//        pool.submit(() -> suwangZhijian.start());
-//        pool.submit(() -> xiaoxie.start());
-//        pool.submit(() -> jiangSu.start());
-//        pool.submit(() -> gjzljdjyjyzj.start());
-//        pool.submit(() -> bjxfzxh.start());
-//        pool.submit(() -> lnxfzxh.start());
-//        pool.submit(() -> zhilianganquan.start());
-//        pool.submit(() -> zhiliangxinwenwang.start());
-//        newsCrawler.start360NewsCrawler();
-//        logger.info("360 wancheng!");
-//        newsCrawler.startBaiduNewsCrawler();
-//        logger.info("baidu wancheng ");
-//        newsCrawler.startSougouNewsCrawler();
-//        logger.info("ssougou wancheng!");
+//        pool.shutdown();
+//        List<Integer> ids = Lists.newArrayList(1,3,5,7,9);
+//        List<NewsData> news = newsDataDao.getAllByIdIn(ids);
+//        for (NewsData newsData : news) {
+//            System.out.println(newsData);
+//        }
+        newsDataService.transfer();
+
     }
 
 

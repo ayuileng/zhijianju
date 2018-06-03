@@ -83,4 +83,16 @@ public class CompanyNegativeList implements Serializable{
         this.passPercent = passPercent;
     }
 
+    @Override
+    public String toString() {
+        return "CompanyNegativeList{" +
+                "id=" + id +
+                ", companyName='" + companyName + '\'' +
+                ", caseNum=" + caseNum +
+                ", injureDegree='" + injureDegree + '\'' +
+                ", callbackNum=" + callbackNum +
+                ", passPercent=" + passPercent +
+                ", province='" + province + '\'' +
+                '}';
+    }
 }

@@ -1,16 +1,14 @@
 package cn.edu.iip.nju.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by xu on 2017/10/26.
- * 负面产品
+ * 企业负面信息
  */
 @Entity
+@Table(indexes = {@Index(name = "com_neg_pro_inx",columnList ="province")})
 public class CompanyNegativeList implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

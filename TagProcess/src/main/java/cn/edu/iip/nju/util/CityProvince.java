@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
+import org.assertj.core.util.Strings;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -44,7 +45,7 @@ public class CityProvince {
     //读取文件进行公司名称分词
     private static ArrayList<String> getCompanyProvince(String comName) {
         ArrayList<String> list = Lists.newArrayList();
-        if (comName==null){
+        if (comName == null) {
             return list;
         }
         List<Term> termList = StandardTokenizer.segment(comName);
@@ -56,12 +57,20 @@ public class CityProvince {
 
 
     //输入分词后的公司名称，返回相应省份，若没有返回null
-    public static String chooseProvinceOfCompany(String comName) throws IOException {
+    public static String chooseProvinceOfCompany(String comName)  {
         ArrayList<String> companyName = getCompanyProvince(comName);
-        HashMap<String, String> cityProvince = getCityProvince();
+        HashMap<String, String> cityProvince = null;
+        try {
+            cityProvince = getCityProvince();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         for (String companySegment : companyName) {
-            if (cityProvince.get(companySegment) != null) {
+            if (!Strings.isNullOrEmpty(cityProvince.get(companySegment)) ) {
                 return cityProvince.get(companySegment);
+            } else if (cityProvince.get(companySegment + "省") != null) {
+                return cityProvince.get(companySegment + "省");
             } else if (cityProvince.get(companySegment + "市") != null) {
                 return cityProvince.get(companySegment + "市");
             } else if (cityProvince.get(companySegment + "县") != null) {
@@ -75,7 +84,8 @@ public class CityProvince {
         return null;
     }
 
-    public static void main(String[] args) throws Exception {
-        System.out.println(CityProvince.chooseProvinceOfCompany(null));
+    public static void main(String[] args) throws IOException {
+        System.out.println(getCompanyProvince("郑州宇晨电缆电线有限公司"));
+        System.out.println(chooseProvinceOfCompany("郑州宇晨电缆电线有限公司"));
     }
 }

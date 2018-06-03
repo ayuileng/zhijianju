@@ -4,13 +4,12 @@ import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
 import cn.edu.hfut.dmic.contentextractor.News;
 import cn.edu.iip.nju.dao.NewsDataDao;
 import cn.edu.iip.nju.model.NewsData;
+import cn.edu.iip.nju.service.RedisService;
+import cn.edu.iip.nju.util.DateUtil;
 import cn.edu.iip.nju.util.ReadFileUtil;
-import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
-import com.google.common.io.Files;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,20 +17,12 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -98,10 +89,12 @@ public class NewsCrawler {
                     Element url = result.select("a[href]").first();
                     if (url == null) break;
                     String u = url.attr("abs:href");
-                    if (!bf.mightContain(u)) {
-                        //bf中不存在
-                        set.add(u);
-                        bf.put(u);
+                    synchronized (NewsCrawler.class) {
+                        if (!bf.mightContain(u)) {
+                            //bf中不存在
+                            set.add(u);
+                            bf.put(u);
+                        }
                     }
                 }
             }
@@ -127,11 +120,12 @@ public class NewsCrawler {
                 for (Element li : lis) {
                     Element a = li.select("h3 > a[href]").first();
                     String aurl = a.attr("abs:href");
-
-                    if (!bf.mightContain(aurl)) {
-                        //bf中不存在
-                        set.add(aurl);
-                        bf.put(aurl);
+                    synchronized (NewsCrawler.class) {
+                        if (!bf.mightContain(aurl)) {
+                            //bf中不存在
+                            set.add(aurl);
+                            bf.put(aurl);
+                        }
                     }
 
                 }
@@ -178,12 +172,13 @@ public class NewsCrawler {
         //System.out.println(as.size());
         for (Element a : as) {
             String uu = a.attr("abs:href");
-
-            if (!bf.mightContain(uu)) {
-                //bf中不存在
-                bf.put(uu);
-                if (!uu.contains("news.sogou")) {
-                    set.add(uu);
+            synchronized (NewsCrawler.class) {
+                if (!bf.mightContain(uu)) {
+                    //bf中不存在
+                    bf.put(uu);
+                    if (!uu.contains("news.sogou")) {
+                        set.add(uu);
+                    }
                 }
             }
         }
@@ -237,7 +232,6 @@ public class NewsCrawler {
     }
 
 
-
     private void saveNews(Set<String> crawler) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (String s : crawler) {
@@ -246,29 +240,35 @@ public class NewsCrawler {
                 news = ContentExtractor.getNewsByUrl(s);
                 NewsData newsData = new NewsData();
                 String title = news.getTitle();
+                if(title.contains("快视频")){
+                    continue;
+                }
                 String url = news.getUrl();
-                String time = news.getTime();
                 String content = news.getContent();
                 newsData.setCrawlerTime(new Date());
                 newsData.setTitle(title);
                 newsData.setContent(content);
                 newsData.setUrl(url);
-                Date parse;
-                if (Strings.isNullOrEmpty(time)) {
-                    parse = new Date();
-                } else if (!time.startsWith("20")) {
-                    parse = new Date();
-                } else {
-                    try {
-                        parse = sdf.parse(time);
-                    } catch (ParseException e) {
-                        parse = new Date();
+                Document htmlDoc = getHtmlDoc(s);
+                String htmlContent = htmlDoc.text();
+                Date date = DateUtil.getDate(htmlContent);
+                if (date == null) {
+                    String time = news.getTime();
+                    Date dateFromParse = sdf.parse(time);
+                    Calendar current = Calendar.getInstance();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateFromParse);
+                    if (current.compareTo(calendar) >= 0) {
+                        date = dateFromParse;
+                    }
+                    if (date == null) {
+                        date = new Date();
                     }
                 }
-                newsData.setPostTime(parse);
+                newsData.setPostTime(date);
                 //save
                 newsDataDao.save(newsData);
-                logger.info("saving news done1");
+                logger.info("saving news done");
                 //System.out.println("title: " + title + "url: " + url + " time: " + time);
             } catch (Exception e) {
                 logger.error("save news error", e);
