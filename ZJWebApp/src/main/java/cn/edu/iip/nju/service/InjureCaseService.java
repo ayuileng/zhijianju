@@ -1,26 +1,23 @@
 package cn.edu.iip.nju.service;
 
-import cn.edu.iip.nju.common.PageHelper;
 import cn.edu.iip.nju.dao.InjureCaseDao;
-import cn.edu.iip.nju.dao.LabelDao;
-import cn.edu.iip.nju.dao.WebDataDao;
 import cn.edu.iip.nju.model.InjureCase;
-import cn.edu.iip.nju.model.Label;
-import cn.edu.iip.nju.util.CityProvince;
-import cn.edu.iip.nju.util.InjureLevelUtil;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import cn.edu.iip.nju.model.vo.InjureCaseForm;
+import cn.edu.iip.nju.model.vo.ProductNegListForm;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
+import javax.persistence.criteria.Predicate;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xu on 2017/10/24.
@@ -29,162 +26,122 @@ import java.util.*;
 @Transactional
 public class InjureCaseService {
     private final InjureCaseDao injureCaseDao;
-    private final LabelDao labelDao;
-    private final WebDataDao webDataDao;
+    public static final int PAGESIZE = 50;
 
     @Autowired
-    public InjureCaseService(InjureCaseDao injureCaseDao, LabelDao labelDao, WebDataDao webDataDao) {
+    public InjureCaseService(InjureCaseDao injureCaseDao) {
         this.injureCaseDao = injureCaseDao;
-        this.labelDao = labelDao;
-        this.webDataDao = webDataDao;
     }
 
 
-    public Page<InjureCase> getInjureCases(Pageable pageable) {
-        //saveTestData();
-        return injureCaseDao.findAllByInjureTypeNotNullAndAndInjureTypeNot(pageable, "");
-    }
-
-
-//    public void generateInjureCase() {
-//        int defaultSize = 500;
-//
-//        Page<Label> all = labelDao.findAll(new PageRequest(0, defaultSize));
-//        for (int i = 0; i < all.getTotalPages(); i++) {
-//            Page<Label> page = labelDao.findAll(new PageRequest(i, defaultSize));
-//            List<InjureCase> list = saveInjureCases(page.getContent());
-//            injureCaseDao.save(list);
-//        }
-//
-//    }
-
-    public List<InjureCase> saveInjureCases(List<Label> content) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        List<InjureCase> list = Lists.newArrayList();
-        for (Label label : content) {
-            String pros = label.getProductName();
-            String area = label.getArea();
-            String injureType = label.getInjureType();
-            if (isNull(pros) && isNull(injureType)) {
-                continue;
-            }
-            String[] split = pros.split(" ");
-            //每个product都是一个伤害案例
-            for (String s : split) {
-                InjureCase injureCase = new InjureCase();
-                injureCase.setInjureType(label.getInjureType());
-                injureCase.setProductName(s);
-                if (label.getPosttime() == null) {
-                    injureCase.setInjureTime(new Date());
-                } else {
-                    try {
-                        injureCase.setInjureTime(sdf.parse(label.getPosttime()));
-                    } catch (ParseException e) {
-                        injureCase.setInjureTime(new Date());
-                    }
-                }
-                injureCase.setInjureArea(area);
-                injureCase.setUrl(webDataDao.findOne(label.getDocumentId()).getUrl());
-                list.add(injureCase);
-            }
-
-        }
-        return list;
-    }
-
-    public void save(List<InjureCase> list) {
-        injureCaseDao.save(list);
-    }
-
-    private boolean isNull(String string) {
-        if (string == null || string.isEmpty()) {
-            return true;
-        }
-        return false;
-    }
-
-
-    //service层分页
-    public PageHelper<InjureCase> getByCondition(String sql, Integer page) {
-
-        String tmp = sql.split("limit")[0] + ";";
-        String countSql = "select count(1) " + tmp.split("\\*")[1];
-        long count = injureCaseDao.cousql(countSql);
-        System.out.println(count);
-        List<InjureCase> pg = injureCaseDao.search(sql);
-        PageHelper<InjureCase> pageData = new PageHelper<>(page, (int) count);
-        pageData.setContent(pg);
-        return pageData;
-
-    }
-    public void setDegree(Page<InjureCase> pg) {
-        for (InjureCase injureCase : pg.getContent()) {
-
-            String degree = InjureLevelUtil.checkInjureLevel(injureCase.getInjureType());
-            injureCase.setInjureDegree(degree);
-            injureCaseDao.save(injureCase);
-        }
-
-    }
-
-    public int provNum(String injureArea) {
-        HashSet<String> set = Sets.newHashSet();
-        getProvince(injureArea, set);
-        return set.size();
-
-    }
-
-    public Page<InjureCase> findAll(Pageable pageable) {
-        return injureCaseDao.findAll(pageable);
-    }
-
-    public int totalPages() {
-        int size = 1000;
-        Page<InjureCase> p = injureCaseDao.findAll(new PageRequest(0, size));
-        return p.getTotalPages();
-    }
-
-    public void setProv(Page<InjureCase> pg) {
-        for (InjureCase injureCase : pg.getContent()) {
-            String injureArea = injureCase.getInjureArea();
-            Set<String> set = Sets.newHashSet();
-            getProvince(injureArea, set);
-            injureCase.setProvince(joinToString(set));
-            injureCaseDao.save(injureCase);
-        }
-    }
-
-    private void getProvince(String injureArea, Set<String> set) {
-        for (String s : injureArea.split(" ")) {
-            try {
-                String province = CityProvince.chooseProvinceOfCompany(s);
-                set.add(province);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    private String joinToString(Collection<String> collection) {
-        if (collection.size() > 20) {
-            return "";
-        }
-        StringBuffer sb = new StringBuffer();
-        for (String s : collection) {
-            sb.append(s);
-            sb.append(" ");
-        }
-        return sb.toString().trim();
-    }
-    @Cacheable(value = "proInjureCaseCount",key = "#prov")
-    public long countByProv(String  prov){
+    @Cacheable(value = "proInjureCaseCount", key = "#prov")
+    public long countByProv(String prov) {
         return injureCaseDao.countAllByProvinceLike(prov);
     }
-    @Cacheable(value = "companyProvAndDegreeCount",key = "#prov+#injureDrgree")
-    public long countByProvAndInjureDegree(String  prov,String injureDrgree){
-        return injureCaseDao.countAllByProvinceLikeAndInjureDegreeEquals(prov,injureDrgree);
+
+    @Cacheable(value = "companyProvAndDegreeCount", key = "#prov+#injureDrgree")
+    public long countByProvAndInjureDegree(String prov, String injureDrgree) {
+        return injureCaseDao.countAllByProvinceLikeAndInjureDegreeEquals(prov, injureDrgree);
     }
 
 
+    public List<InjureCase> getProductListByCondition(ProductNegListForm form) {
+        Date from = form.getDatefrom();
+        Date to = form.getDateto();
+        String injureDegree = form.getInjureDegree();
+        String productName = form.getProductName();
+        String province = form.getProvince();
+        String injureType = form.getInjureType();
+
+        Date start = getDate();
+
+        return injureCaseDao.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = com.google.common.collect.Lists.newArrayList();
+            if (from == null) {
+                predicateList.add(criteriaBuilder.between(root.get("injureTime"), start, to));
+            } else {
+                predicateList.add(criteriaBuilder.between(root.get("injureTime"), from, to));
+            }
+            if (!Strings.isNullOrEmpty(injureDegree)) {
+                predicateList.add(criteriaBuilder.equal(root.get("injureDegree"), injureDegree));
+            }
+            if (!Strings.isNullOrEmpty(productName)) {
+                predicateList.add(criteriaBuilder.like(root.get("productName"), "%" + productName + "%"));
+            }
+            if (!Strings.isNullOrEmpty(province)) {
+                predicateList.add(criteriaBuilder.like(root.get("province"), "%" + province + "%"));
+            }
+            if (!Strings.isNullOrEmpty(injureType)) {
+                predicateList.add(criteriaBuilder.like(root.get("injureType"), "%" + injureType + "%"));
+            }
+            Predicate[] result = new Predicate[predicateList.size()];
+            return criteriaBuilder.and(predicateList.toArray(result));
+        });
+    }
+
+    private Date getDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2010, 1, 1);
+        return new Date(calendar.getTimeInMillis());
+    }
+
+    public Page<InjureCase> getByCondition(InjureCaseForm injureCaseForm) {
+
+        Date from = injureCaseForm.getDatefrom();
+        Date to = injureCaseForm.getDateto();
+        String productName = injureCaseForm.getProductName();
+        String injureDegree = injureCaseForm.getInjureDegree();
+        String injureType = injureCaseForm.getInjureType();
+        String area = injureCaseForm.getArea();
+        String province = injureCaseForm.getProvince();
+        int page = injureCaseForm.getPage();
+        int sort = injureCaseForm.getSort();//1时间升序 2时间降序 3伤害程度升序 4伤害程度降序
+        Sort s;
+        switch (sort) {
+            case 1:
+                s = new Sort(Sort.Direction.ASC,"injureTime");
+                break;
+            case 2:
+                s = new Sort(Sort.Direction.DESC,"injureTime");
+                break;
+            case 3:
+                s = new Sort(Sort.Direction.DESC,"injureDegree");
+                break;
+            case 4:
+                s = new Sort(Sort.Direction.ASC,"injureDegree");
+                break;
+            default:
+                s = new Sort(Sort.Direction.DESC,"injureTime");
+                break;
+        }
+        Date start = getDate();
+        return injureCaseDao.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = com.google.common.collect.Lists.newArrayList();
+            if (from == null) {
+                predicateList.add(criteriaBuilder.between(root.get("injureTime"), start, to));
+            } else {
+                predicateList.add(criteriaBuilder.between(root.get("injureTime"), from, to));
+            }
+            if (!Strings.isNullOrEmpty(injureDegree)) {
+                predicateList.add(criteriaBuilder.equal(root.get("injureDegree"), injureDegree));
+            }
+            if (!Strings.isNullOrEmpty(productName)) {
+                predicateList.add(criteriaBuilder.like(root.get("productName"), "%" + productName + "%"));
+            }
+            if (!Strings.isNullOrEmpty(area)) {
+                predicateList.add(criteriaBuilder.like(root.get("injureArea"), "%" + area + "%"));
+            }
+            if (!Strings.isNullOrEmpty(area)) {
+                predicateList.add(criteriaBuilder.like(root.get("province"), "%" + province + "%"));
+            }
+            if (!Strings.isNullOrEmpty(injureType)) {
+                predicateList.add(criteriaBuilder.like(root.get("injureType"), "%" + injureType + "%"));
+            }
+            Predicate[] result = new Predicate[predicateList.size()];
+            return criteriaBuilder.and(predicateList.toArray(result));
+        }, new PageRequest(page-1, PAGESIZE,s));
+
+
+    }
 }

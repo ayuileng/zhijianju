@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <meta charset="UTF-8"/>
-    <title>医院数据展示</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <title>医院数据检索库</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <style type="text/css">
@@ -17,19 +17,19 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container main">
-    <div><a href="/hosChart">统计图表</a></div>
+    <div><a href="/chart/hosChart">统计图表</a></div>
     <form action="/hospital" method="get" class="form-inline" th:object="${hospitalDataForm}">
         <div class="form-group">
             <label for="productType">产品类别</label>
-            <input type="text" class="form-control" name="productType" id="productType" th:value="*{productType}"/>
+            <input type="text" class="form-control" name="productType" id="productType"/>
         </div>
         <div class="form-group">
             <label for="injureDegree">伤害程度</label>
-            <select class="form-control" id="injureDegree" name="injureDegree" th:value="*{injureDegree}">
-                <option value="" th:selected="${hospitalDataForm.injureDegree} == ''">无</option>
-                <option value="轻度" th:selected="${hospitalDataForm.injureDegree} == '轻度'">轻度</option>
-                <option value="中度" th:selected="${hospitalDataForm.injureDegree} == '中度'">中度</option>
-                <option value="重度" th:selected="${hospitalDataForm.injureDegree} == '重度'">重度</option>
+            <select class="form-control" id="injureDegree" name="injureDegree"  >
+                <option value=""    th:selected="${hospitalDataForm.injureDegree} == ''" >无</option>
+                <option value="轻度" th:selected="${hospitalDataForm.injureDegree} == '轻度'" >轻度</option>
+                <option value="中度" th:selected="${hospitalDataForm.injureDegree} == '中度'" >中度</option>
+                <option value="重度" th:selected="${hospitalDataForm.injureDegree} == '重度'" >重度</option>
             </select>
         </div>
         <div class="form-group">
@@ -41,18 +41,20 @@
             <input type="date" class="form-control" id="dateTo" name="dateto" th:value="*{dateto}"/>
         </div>
         <div class="form-group">
-            <label for="ifIntention">是否与产品相关</label>
-            <select class="form-control" id="ifIntention" name="ifIntention" th:value="*{ifIntention}">
-                <option value="" th:selected="${hospitalDataForm.ifIntention} == ''">无</option>
-                <option value="使用不当" th:selected="${hospitalDataForm.ifIntention} == '使用不当'">使用不当</option>
-                <option value="与产品质量有关" th:selected="${hospitalDataForm.ifIntention} == '与产品质量有关'">与产品质量有关</option>
-                <option value="像往常一样使用却突发事故" th:selected="${hospitalDataForm.ifIntention} == '像往常一样使用却突发事故'">像往常一样使用却突发事故</option>
-                <option value="不确定" th:selected="${hospitalDataForm.ifIntention} == '不确定'">不确定</option>
-                <option value="其他" th:selected="${hospitalDataForm.ifIntention} == '其他'">其他</option>
+            <label for="howgetInjure">是否与产品相关</label>
+            <select class="form-control" id="howgetInjure" name="howgetInjure" th:value="*{howgetInjure}">
+                <option value="" th:selected="${hospitalDataForm.howgetInjure} == ''">无</option>
+                <option value="使用不当" th:selected="${hospitalDataForm.howgetInjure} == '使用不当'">使用不当</option>
+                <option value="与产品质量有关" th:selected="${hospitalDataForm.howgetInjure} == '与产品质量有关'">与产品质量有关</option>
+                <option value="像往常一样使用却突发事故" th:selected="${hospitalDataForm.howgetInjure} == '像往常一样使用却突发事故'">
+                    像往常一样使用却突发事故
+                </option>
+                <option value="不确定" th:selected="${hospitalDataForm.howgetInjure} == '不确定'">不确定</option>
+                <option value="其他" th:selected="${hospitalDataForm.howgetInjure} == '其他'">其他</option>
             </select>
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
-        <div th:inline="text">共检索到[[${{count}}]]条案例！</div>
+        <div th:inline="text">共检索到[[${{hos.totalElements}}]]条案例！</div>
         <table class="table table-hover">
             <tr>
                 <th>姓名</th>
@@ -73,7 +75,8 @@
             </tr>
             <tr th:each="i : ${hos.content}">
                 <td th:text="${i.name}">1</td>
-                <td><span th:if="${i.gender}==1" th:text="男"></span><span th:if="${i.gender}==2" th:text="女"></span></td>
+                <td><span th:if="${i.gender}==1" th:text="男"></span><span th:if="${i.gender}==2" th:text="女"></span>
+                </td>
                 <td th:text="${i.age}">1</td>
                 <td th:text="${#dates.format(i.injureDate, 'yyyy-MM-dd')}">1</td>
                 <td th:text="${#dates.format(i.visDate, 'yyyy-MM-dd')}">1</td>
@@ -98,7 +101,7 @@
                     </li>
                     <!--当前页-->
                     <li class="page-item disabled">
-                        <span th:inline="text">当前页码：[[${hos.current}]]</span>
+                        <span th:inline="text">当前页码：[[${hos.number}+1]]</span>
                     </li>
                     <!--前往-->
                     <li class="page-item">
@@ -106,17 +109,15 @@
                         <input type="submit" value="前往"/>
                     </li>
                     <!--上一页-->
-                    <li class="page-item" th:classappend="*{first} ? 'disabled' : ''">
-                        <a class="page-link" th:href="${params} + ${hos.current - 1}"
-                           aria-label="Previous">
+                    <li class="page-item" th:classappend="${hos.isFirst()} ? 'disabled' : ''">
+                        <a id="prev" class="page-link" aria-label="Previous">
                             <span aria-hidden="true">←</span>
                         </a>
                     </li>
 
                     <!--下一页-->
-                    <li class="page-item" th:classappend="*{last} ? 'disabled' : ''">
-                        <a class="page-link" th:href="${params} + ${hos.current + 1}"
-                           aria-label="Previous">
+                    <li class="page-item" th:classappend="${hos.isLast()} ? 'disabled' : ''">
+                        <a id="next" class="page-link" aria-label="Next">
                             <span aria-hidden="true">→</span>
                         </a>
                     </li>
@@ -128,4 +129,43 @@
 
 <div th:replace="fragments/footer :: footer">...</div>
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script charset="uft-8" th:inline='javascript'>//<![CDATA[
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return decodeURI(r[2]);
+    return null; //返回参数值
+}
+var datefrom = getUrlParam("datefrom");
+var dateto = getUrlParam("dateto");
+var productType = [[${hospitalDataForm.productType}]];
+var injureDegree = [[${hospitalDataForm.injureDegree}]];
+var howgetInjure = [[${hospitalDataForm.howgetInjure}]];
+var page = [[${hospitalDataForm.page}]];
+
+nextPage = Number(page) + 1;
+prevPage =Number(page) - 1
+if (productType == null || productType.length == 0) {
+    productType = "";
+}
+if (injureDegree == null || injureDegree.length == 0) {
+    injureDegree = "";
+}
+if (howgetInjure == null || howgetInjure.length == 0) {
+    howgetInjure = "";
+}
+$("#productType").val(productType)
+var path = window.location.pathname;
+var requestParam = "?injureDegree=" + injureDegree + "&productType="
+    + productType + "&howgetInjure=" + howgetInjure + "&datefrom="
+    + datefrom + "&dateto=" + dateto + "&page="
+
+$("#next").attr("href",path+requestParam+nextPage);
+if(prevPage <=0){
+    prevPage = 1;
+}
+$("#prev").attr("href",path+requestParam+prevPage);
+//]]></script>
+
 </html>

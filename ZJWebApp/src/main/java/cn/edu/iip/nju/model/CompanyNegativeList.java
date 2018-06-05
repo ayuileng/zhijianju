@@ -1,5 +1,7 @@
 package cn.edu.iip.nju.model;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,7 @@ import java.io.Serializable;
  * 负面产品
  */
 @Entity
+@Data
 public class CompanyNegativeList implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,71 +31,5 @@ public class CompanyNegativeList implements Serializable{
 
     private String province;        //企业所在省份
 
-    public String getProvince() {
-        return province;
-    }
-    public void setProvince(String province) {
-        this.province = province;
-    }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public Integer getCaseNum() {
-        return caseNum;
-    }
-
-    public void setCaseNum(Integer caseNum) {
-        this.caseNum = caseNum;
-    }
-
-    public String getInjureDegree() {
-        return injureDegree;
-    }
-
-    public void setInjureDegree(String injureDegree) {
-        this.injureDegree = injureDegree;
-    }
-
-    public Integer getCallbackNum() {
-        return callbackNum;
-    }
-
-    public void setCallbackNum(Integer callbackNum) {
-        this.callbackNum = callbackNum;
-    }
-
-    public Double getPassPercent() {
-        return passPercent;
-    }
-
-    public void setPassPercent(Double passPercent) {
-        this.passPercent = passPercent;
-    }
-
-    @Override
-    public String toString() {
-        return "CompanyNegativeList{" +
-                "id=" + id +
-                ", companyName='" + companyName + '\'' +
-                ", caseNum=" + caseNum +
-                ", injureDegree='" + injureDegree + '\'' +
-                ", callbackNum=" + callbackNum +
-                ", passPercent=" + passPercent +
-                ", province='" + province + '\'' +
-                '}';
-    }
 }

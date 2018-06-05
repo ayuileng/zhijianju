@@ -1,5 +1,7 @@
 package cn.edu.iip.nju.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -7,6 +9,7 @@ import java.util.Date;
  * Created by xu on 2017/11/29.
  */
 @Entity
+@Data
 public class NewsData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,59 +26,5 @@ public class NewsData {
     private String url;
     private Boolean isInjureNews;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getPostTime() {
-        return postTime;
-    }
-
-    public void setPostTime(Date postTime) {
-        this.postTime = postTime;
-    }
-
-    public Date getCrawlerTime() {
-        return crawlerTime;
-    }
-
-    public void setCrawlerTime(Date crawlerTime) {
-        this.crawlerTime = crawlerTime;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Boolean getInjureNews() {
-        return isInjureNews;
-    }
-
-    public void setInjureNews(Boolean injureNews) {
-        isInjureNews = injureNews;
-    }
 }

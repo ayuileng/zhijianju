@@ -64,7 +64,6 @@ public class AttachmentData implements Serializable{
     public void setShangbiao(String shangbiao) {
         this.shangbiao = shangbiao;
     }
-    //TODO 这个字段会出现Data truncation: Data too long for column 'guigexinghao' at row 1
     @Lob
     @Column(name = "guigexinghao", columnDefinition = "LONGTEXT")
     public String getGuigexinghao() {

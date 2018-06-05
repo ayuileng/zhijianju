@@ -14,23 +14,84 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
-    <div><a href="/injureChart">统计图表</a></div>
+    <div><a href="/chart/injureChart">统计图表</a></div>
     <div>
-        <form action="/injurecase" th:object="${injureCaseForm}">
-            产品名称：<input type="text" th:value="*{name}" name="name"/>
-            伤害类别：<input type="text" th:value="*{type}" name="type"/><br/>
-            地区：<input type="text" th:value="*{area}" name="area"/>
-            伤害程度：<input type="text" th:value="*{degree}" name="degree"/><br/>
-            起始时间：<input type="date" th:value="*{datefrom}" name="datefrom"/>
-            截止时间：<input type="date" th:value="*{dateto}" name="dateto"/><br/>
-            排序方式：<label>时间升序<input name="sort" type="radio" th:field="*{sort}" value="time1"/></label>
-            <label>时间降序<input name="sort" type="radio" th:field="*{sort}" value="time2"/></label>
-            <label>伤害程度升序<input name="sort" type="radio" th:field="*{sort}" value="degree1"/></label>
-            <label>伤害程度降序<input name="sort" type="radio" th:field="*{sort}" value="degree2"/></label>
-            <br/>
-
-            <input type="submit" value="搜索"/>
-
+        <form action="/injurecase" th:object="${injureCaseForm}" class="form-inline">
+            <div class="form-group">
+                <label for="productName">产品名称：</label>
+                <input id="productName" type="text" th:value="*{productName}" name="productName"/>
+            </div>
+            <div class="form-group">
+                <label for="injureType">伤害类别：</label>
+                <input id="injureType" type="text" th:value="*{injureType}" name="injureType"/>
+            </div>
+            <div class="form-group">
+                <label for="province">发生地点</label>
+                <select class="form-control" id="province" name="province">
+                    <option value="" th:selected="${injureCaseForm.province} == ''">全国</option>
+                    <option value="北京" th:selected="${injureCaseForm.province} == '北京'">北京</option>
+                    <option value="上海" th:selected="${injureCaseForm.province} == '上海'">上海</option>
+                    <option value="重庆" th:selected="${injureCaseForm.province} == '重庆'">重庆</option>
+                    <option value="天津" th:selected="${injureCaseForm.province} == '天津'">天津</option>
+                    <option value="江苏" th:selected="${injureCaseForm.province} == '江苏'">江苏</option>
+                    <option value="河北" th:selected="${injureCaseForm.province} == '河北'">河北</option>
+                    <option value="山西" th:selected="${injureCaseForm.province} == '山西'">山西</option>
+                    <option value="辽宁" th:selected="${injureCaseForm.province} == '辽宁'">辽宁</option>
+                    <option value="吉林" th:selected="${injureCaseForm.province} == '吉林'">吉林</option>
+                    <option value="黑龙江" th:selected="${injureCaseForm.province} == '黑龙江'">黑龙江</option>
+                    <option value="浙江" th:selected="${injureCaseForm.province} == '浙江'">浙江</option>
+                    <option value="安徽" th:selected="${injureCaseForm.province} == '安徽'">安徽</option>
+                    <option value="福建" th:selected="${injureCaseForm.province} == '福建'">福建</option>
+                    <option value="江西" th:selected="${injureCaseForm.province} == '江西'">江西</option>
+                    <option value="山东" th:selected="${injureCaseForm.province} == '山东'">山东</option>
+                    <option value="广东" th:selected="${injureCaseForm.province} == '广东'">广东</option>
+                    <option value="河南" th:selected="${injureCaseForm.province} == '河南'">河南</option>
+                    <option value="湖北" th:selected="${injureCaseForm.province} == '湖北'">湖北</option>
+                    <option value="湖南" th:selected="${injureCaseForm.province} == '湖南'">湖南</option>
+                    <option value="广东" th:selected="${injureCaseForm.province} == '广东'">广东</option>
+                    <option value="四川" th:selected="${injureCaseForm.province} == '四川'">四川</option>
+                    <option value="贵州" th:selected="${injureCaseForm.province} == '贵州'">贵州</option>
+                    <option value="云南" th:selected="${injureCaseForm.province} == '云南'">云南</option>
+                    <option value="陕西" th:selected="${injureCaseForm.province} == '陕西'">陕西</option>
+                    <option value="甘肃" th:selected="${injureCaseForm.province} == '甘肃'">甘肃</option>
+                    <option value="青海" th:selected="${injureCaseForm.province} == '青海'">青海</option>
+                    <option value="台湾" th:selected="${injureCaseForm.province} == '台湾'">台湾</option>
+                    <option value="内蒙" th:selected="${injureCaseForm.province} == '内蒙'">内蒙</option>
+                    <option value="广西" th:selected="${injureCaseForm.province} == '广西'">广西</option>
+                    <option value="西藏" th:selected="${injureCaseForm.province} == '西藏'">西藏</option>
+                    <option value="宁夏" th:selected="${injureCaseForm.province} == '宁夏'">宁夏</option>
+                    <option value="新疆" th:selected="${injureCaseForm.province} == '新疆'">新疆</option>
+                    <option value="香港" th:selected="${injureCaseForm.province} == '香港'">香港</option>
+                    <option value="澳门" th:selected="${injureCaseForm.province} == '澳门'">澳门</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="area">地区：</label>
+                <input id="area" type="text" th:value="*{area}" name="area"/>
+            </div>
+            <div class="form-group">
+                <label for="injureDegree">伤害程度：</label>
+                <input id="injureDegree" type="text" th:value="*{injureDegree}" name="injureDegree"/>
+            </div>
+            <div class="form-group">
+                <label for="dateFrom">起始日期：</label>
+                <input type="date" class="form-control" id="dateFrom" name="datefrom" th:value="*{datefrom}"/>
+            </div>
+            <div class="form-group">
+                <label for="dateTo">截至日期：</label>
+                <input type="date" class="form-control" id="dateTo" name="dateto" th:value="*{dateto}"/>
+            </div>
+            <div class="form-group">
+                <label for="sort">排序方式：</label>
+                <select class="form-control" id="sort" name="sort" th:value="*{sort}">
+                    <option value="1" th:selected="${injureCaseForm.sort} == 1">发生时间升序</option>
+                    <option value="2" th:selected="${injureCaseForm.sort} == 2">发生时间降序</option>
+                    <option value="3" th:selected="${injureCaseForm.sort} == 3">严重程度升序</option>
+                    <option value="4" th:selected="${injureCaseForm.sort} == 4">严重程度降序</option>
+                </select>
+            </div>
+            <input class="btn btn-default" type="submit" value="搜索"/>
+            <div th:inline="text">共检索到[[${{injureCases.totalElements}}]]条案例！</div>
             <table class="table table-hover">
                 <tr>
                     <th>产品名称</th>
@@ -39,7 +100,8 @@
                     <th>伤害类别</th>
                     <th>伤害程度</th>
                 </tr>
-                <tr th:each="i : ${injureCases.content}">
+                <tr th:each="i : ${injureCases.content}"
+                    th:if="${i.productName != null and ! #strings.isEmpty(i.productName)}">
                     <td><a target="_blank" th:href="${i.url}" th:text="${i.productName}"></a></td>
                     <td th:text="${#dates.format(i.injureTime, 'yyyy-MM-dd')}">1</td>
                     <td th:text="${i.injureArea}">1</td>
@@ -63,7 +125,7 @@
                         </li>
                         <!--当前页-->
                         <li class="page-item disabled">
-                            <span th:inline="text">当前页码：[[${injureCases.current}]]</span>
+                            <span th:inline="text">当前页码：[[${injureCases.number}+1]]</span>
                         </li>
                         <!--前往-->
                         <li class="page-item">
@@ -71,17 +133,15 @@
                             <input type="submit" value="前往"/>
                         </li>
                         <!--上一页-->
-                        <li class="page-item" th:classappend="*{first} ? 'disabled' : ''">
-                            <a class="page-link" th:href="@{'/injurecase?page=' + @{${injureCases.current - 1}}}"
-                               aria-label="Previous">
+                        <li class="page-item" th:classappend="${injureCases.isFirst()} ? 'disabled' : ''">
+                            <a id="prev" class="page-link" aria-label="Previous">
                                 <span aria-hidden="true">←</span>
                             </a>
                         </li>
 
                         <!--下一页-->
-                        <li class="page-item" th:classappend="*{last} ? 'disabled' : ''">
-                            <a class="page-link" th:href="'/injurecase?page=' + @{${injureCases.current + 1}}"
-                               aria-label="Previous">
+                        <li class="page-item" th:classappend="${injureCases.isLast()} ? 'disabled' : ''">
+                            <a id="next" class="page-link" aria-label="Next">
                                 <span aria-hidden="true">→</span>
                             </a>
                         </li>
@@ -94,4 +154,52 @@
 
 <div th:replace="fragments/footer :: footer">...</div>
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script charset="uft-8" th:inline='javascript'>//<![CDATA[
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return decodeURI(r[2]);
+    return null; //返回参数值
+}
+
+var productName = [[${injureCaseForm.productName}]];
+var province = [[${injureCaseForm.province}]];
+var injureDegree = [[${injureCaseForm.injureDegree}]];
+var area = [[${injureCaseForm.area}]];
+var injureType = [[${injureCaseForm.injureType}]];
+var sort = [[${injureCaseForm.sort}]];
+var page = [[${injureCaseForm.page}]];
+function getString(s) {
+    if(s == null||s.length == 0){
+        return ""
+    }
+};
+productName = getString(productName);
+province = getString(province);
+injureDegree = getString(injureDegree);
+area = getString(area);
+injureType = getString(injureType);
+var datefrom = getUrlParam("datefrom");
+var dateto = getUrlParam("dateto");
+
+nextPage = Number(page) + 1;
+prevPage =Number(page) - 1;
+
+var path = window.location.pathname;
+var requestParam = "?province="
+    + province + "&injureDegree=" + injureDegree + "&datefrom=" + datefrom
+    + "&dateto=" + dateto + "&productName=" + productName + "&area=" + area
+    + "&injureType=" + injureType +"&sort="+sort+"&page=";
+//productName=&injureType=&province=&area=&injureDegree=&datefrom=&dateto=&sort=2&page=0
+$(".content > td > a").each(function (index) {
+    $(this).attr("href", path + requestParam + $(this).attr("id"));
+});
+
+$("#next").attr("href", path + requestParam + nextPage);
+if (prevPage <= 0) {
+    prevPage = 1;
+}
+$("#prev").attr("href", path + requestParam + prevPage);
+//]]></script>
 </html>

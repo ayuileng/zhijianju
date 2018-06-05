@@ -1,37 +1,21 @@
 package cn.edu.iip.nju.service;
 
-import cn.edu.iip.nju.common.HospitalEnum;
-import cn.edu.iip.nju.common.PageHelper;
 import cn.edu.iip.nju.dao.HospitalDataDao;
 import cn.edu.iip.nju.model.HospitalData;
-import cn.edu.iip.nju.util.ProductCatUtil;
+import cn.edu.iip.nju.model.vo.HospitalForm;
 import cn.edu.iip.nju.util.WarningDegree;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
+import javax.persistence.criteria.Predicate;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -41,6 +25,7 @@ import java.util.*;
  */
 @Service
 public class HospitalDataService {
+    public static final int PAGESIZE = 50;
     private final HospitalDataDao hospitalDataDao;
 
     @Autowired
@@ -49,37 +34,64 @@ public class HospitalDataService {
     }
 
 
-
     //查询所有地点
     public Set<String> getLocations() {
         Set<String> set = Sets.newHashSet();
         List<String> location = hospitalDataDao.getLocation();
         location.forEach(s -> set.add(s));
         return set;
-
     }
 
     //根据location查询记录数
-    @Cacheable(value = "injureLocationCount",key = "'1'+#location")
+    @Cacheable(value = "injureLocationCount", key = "'1'+#location")
     public Long countByLocation(String location) {
         return hospitalDataDao.countAllByInjureLocation(location);
     }
 
+
     //根据月份查询记录数
-    @Cacheable(value = "monthhospitalcount",key = "'1'+#month")
+    @Cacheable(value = "monthhospitalcount", key = "'1'+#month")
     public int countByMonth(int month) {
         return Math.toIntExact(hospitalDataDao.countByMonth(month));
     }
 
-    //根据条件sql查询并封装分页结果
-    public PageHelper<HospitalData> getListData(String sql, int page, String countSQL) {
-        List<HospitalData> hospitalData = hospitalDataDao.pagingGet(sql, page);
-        long count = hospitalDataDao.conditionCount(countSQL);
-        PageHelper<HospitalData> pageData = new PageHelper(page, (int) count);
-        pageData.setContent(hospitalData);
-        return pageData;
+    /**
+     * 根据前端的条件参数返回响应的数据
+     * @param hospitalForm
+     * @return
+     */
+    public Page<HospitalData> getByCondition(HospitalForm hospitalForm) {
+        Date from = hospitalForm.getDatefrom();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2010,1,1);
+        Date start = new Date(calendar.getTimeInMillis());
+        Date to = hospitalForm.getDateto();
+        int page = hospitalForm.getPage();
+        String howGetInjure = hospitalForm.getHowgetInjure();
+        String injureDegree = hospitalForm.getInjureDegree();
+        String productType = hospitalForm.getProductType();
+        Page<HospitalData> list = hospitalDataDao.findAll((Specification<HospitalData>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = Lists.newArrayList();
+            if(from == null){
+                predicateList.add(criteriaBuilder.between(root.get("injureDate"),start,to));
+            }else{
+                predicateList.add(criteriaBuilder.between(root.get("injureDate"),from,to));
+            }
+            if(!Strings.isNullOrEmpty(howGetInjure)){
+                predicateList.add(criteriaBuilder.equal(root.get("howGetInjure"),howGetInjure));
+            }
+            if(!Strings.isNullOrEmpty(injureDegree)){
+                predicateList.add(criteriaBuilder.equal(root.get("injureDegree"),injureDegree));
+            }
+            if(!Strings.isNullOrEmpty(productType)){
+                predicateList.add(criteriaBuilder.like(root.get("product"),"%"+productType+"%"));
+            }
+            Predicate[] result = new Predicate[predicateList.size()];
+            return criteriaBuilder.and(predicateList.toArray(result));
+        }, new PageRequest(page-1, PAGESIZE));
+        return list;
     }
-
 
 
     public Map<String, Double> pca() throws Exception {

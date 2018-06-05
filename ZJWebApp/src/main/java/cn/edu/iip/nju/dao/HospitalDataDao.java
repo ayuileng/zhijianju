@@ -1,8 +1,11 @@
 package cn.edu.iip.nju.dao;
 
-import cn.edu.iip.nju.dao.SQL.HospitalDataDaoSQL;
 import cn.edu.iip.nju.model.HospitalData;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +16,7 @@ import java.util.List;
  * Created by xu on 2017/10/23.
  */
 @Repository
-public interface HospitalDataDao extends JpaRepository<HospitalData,Integer> ,HospitalDataDaoSQL {
+public interface HospitalDataDao extends JpaRepository<HospitalData,Integer> ,JpaSpecificationExecutor<HospitalData> {
 
     @Query("select distinct h.injureLocation from HospitalData h")
     List<String> getLocation();
@@ -31,4 +34,8 @@ public interface HospitalDataDao extends JpaRepository<HospitalData,Integer> ,Ho
 
     @Query(value = "SELECT injure_date FROM hospital_data WHERE product_cat = ?1 ORDER BY injure_date DESC  LIMIT 1",nativeQuery = true)
     Date findLastDateByProductCat(String productCat);
+
+    //条件查询
+    Page<HospitalData> findAll(Specification<HospitalData> specification, Pageable pageable);
+
 }
