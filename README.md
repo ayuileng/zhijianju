@@ -10,11 +10,6 @@
 
 3. 前端网页模板使用的是thymeleaf，样式框架使用的bootstrap
 ---
-#### 运行方法
-1. git clone git@github.com:ayuileng/zhijianju.git
-2. cd zhijianju
-3. 修改src/main/resources/application.properties中数据源的参
-4. mvnw spring-boot:run
----
+
 #### 项目部署实例
-http://iip.nju.edu.cn:8888/
+http://iip.nju.edu.cn:8889/
