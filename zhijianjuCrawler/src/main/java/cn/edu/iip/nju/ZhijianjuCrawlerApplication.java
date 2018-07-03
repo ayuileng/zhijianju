@@ -16,6 +16,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Set;
@@ -26,10 +27,10 @@ public class ZhijianjuCrawlerApplication implements CommandLineRunner {
     private static Logger logger = LoggerFactory.getLogger(ZhijianjuCrawlerApplication.class);
     @Autowired
     ExecutorService pool;
-//京东
+    //京东
     @Autowired
     JingDongCrawler jingDongCrawler;
-//质检网站
+    //质检网站
     @Autowired
     ZhaoHui zhaoHui;//ok 3000tiao
     @Autowired
@@ -44,25 +45,33 @@ public class ZhijianjuCrawlerApplication implements CommandLineRunner {
     BJXFZXH bjxfzxh;
     @Autowired
     LNXFZXH lnxfzxh;
+    //11111111111111111111111111
+
+
     @Autowired
     Zhiliangxinwenwang zhiliangxinwenwang;
     @Autowired
     Zhilianganquan zhilianganquan;
 
-//附件处理
+    //附件处理
     @Autowired
     ExcelProcess excelProcess;//ok
 
-//医院数据
+    //医院数据
     @Autowired
     HospotalDataService hospotalDataService;//ok
 
-//新闻网站
+    //新闻网站
     @Autowired
     NewsCrawler newsCrawler;
 
     @Autowired
     Chinanews chinanews;
+    @Autowired
+    Fenghuang fenghuang;
+
+    @Autowired
+    Suzhou suzhou;
 
 
     @Autowired
@@ -75,27 +84,22 @@ public class ZhijianjuCrawlerApplication implements CommandLineRunner {
 //    CPZLJDS cpzljds;//问题很大，网页变了，而且附件也没了
     @Override
     public void run(String... strings) throws Exception {
-//        pool.submit(() -> {
-//            newsCrawler.startSougouNewsCrawler();
-//            logger.info("sougou finish");
-//        });
-//        pool.submit(() -> {
-//            newsCrawler.startBaiduNewsCrawler();
-//            logger.info("baidu finish");
-//        });
-//        pool.submit(() -> {
-//            newsCrawler.start360NewsCrawler();
-//            logger.info("360 finish");
-//        });
-//
-//        pool.shutdown();
-//        List<Integer> ids = Lists.newArrayList(1,3,5,7,9);
-//        List<NewsData> news = newsDataDao.getAllByIdIn(ids);
-//        for (NewsData newsData : news) {
-//            System.out.println(newsData);
-//        }
-        newsDataService.transfer();
 
+
+
+        pool.submit(()->{
+            chinanews.start();
+            logger.info("chinanews finish");
+        });
+        pool.submit(()->{
+            fenghuang.start();
+            logger.info("fenghuang finish");
+        });
+
+
+
+
+        pool.shutdown();
     }
 
 

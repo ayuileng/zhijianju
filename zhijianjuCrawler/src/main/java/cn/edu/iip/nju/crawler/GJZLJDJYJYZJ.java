@@ -100,7 +100,7 @@ public class GJZLJDJYJYZJ implements Crawler {
             }
             webdata.setUrl(pageUrl);
             webdata.setHtml(document.html());
-            webdata.setCrawlTime(new Date());
+            webdata.setCrawlerTime(new Date());
             webdata.setSourceName("国家质量监督检验检疫总局");
             Element title = document.select("h1").first();
             if (title != null) {
@@ -131,9 +131,8 @@ public class GJZLJDJYJYZJ implements Crawler {
     }
     private void download() throws Exception {
         Set<String> strings = process_each_url();
-        Resource resource = new ClassPathResource("fileNew");
         for (String string : strings) {
-            DownLoadUtil.download(string,resource.getFile().getAbsolutePath());
+            DownLoadUtil.download(string,"C:\\Users\\yajima\\Desktop\\zhijianju\\zhijianjuCrawler\\src\\main\\resources\\files\\");
         }
         logger.info("download done!");
     }

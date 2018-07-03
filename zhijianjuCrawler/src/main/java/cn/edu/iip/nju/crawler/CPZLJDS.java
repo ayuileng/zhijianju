@@ -6,7 +6,6 @@ package cn.edu.iip.nju.crawler;
 
 import cn.edu.iip.nju.dao.WebDataDao;
 import cn.edu.iip.nju.model.WebData;
-import cn.edu.iip.nju.util.AttachmentUtil;
 import cn.edu.iip.nju.util.DownLoadUtil;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
@@ -19,7 +18,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -128,7 +126,7 @@ public class CPZLJDS implements Crawler {
             webData.setUrl(pageURL);
             webData.setHtml(document.html());
             webData.setSourceName("产品质量监督司");
-            webData.setCrawlTime(new Date());
+            webData.setCrawlerTime(new Date());
             Element h1 = document.select("h1").first();
             if (h1 != null) {
                 webData.setTitle(h1.text());

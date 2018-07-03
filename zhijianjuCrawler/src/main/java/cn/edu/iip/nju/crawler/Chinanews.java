@@ -1,6 +1,9 @@
 package cn.edu.iip.nju.crawler;
 
+import cn.edu.hfut.dmic.contentextractor.News;
+import cn.edu.iip.nju.dao.NewsDataDao;
 import cn.edu.iip.nju.dao.WebDataDao;
+import cn.edu.iip.nju.model.NewsData;
 import cn.edu.iip.nju.model.WebData;
 import cn.edu.iip.nju.util.ReadFileUtil;
 import org.jsoup.Jsoup;
@@ -27,7 +30,7 @@ public class Chinanews implements Crawler {
     private static Logger logger = LoggerFactory.getLogger(Chinanews.class);
 
     @Autowired
-    private WebDataDao dao;
+    private NewsDataDao dao;
     private String baseurl = "http://sou.chinanews.com.cn/search.do?q=";
     private Random ran = new Random(1000);
 
@@ -92,7 +95,7 @@ public class Chinanews implements Crawler {
                         //.timeout(5000).proxy(proxy)
                         .get();
                 //System.out.println(dd.toString());
-                WebData data = new WebData();
+                NewsData data = new NewsData();
                 Element p = dd.select("div.con_left").select("div#cont_1_1_2").first();
                 //System.out.println(p);
                 String title = p.select("h1").first().text();
@@ -104,11 +107,8 @@ public class Chinanews implements Crawler {
                 data.setPostTime(d);
                 String temp = p.select("div.left_zw").select("p").text();
                 data.setContent(temp);
-                data.setCrawlTime(new Date());
-                data.setSourceName("中国新闻网");
+                data.setCrawlerTime(new Date());
                 data.setUrl(x);
-                data.setHtml(dd.toString());
-                dao.save(data);
                 logger.info("save china news done");
 
             } catch (Exception e) {
@@ -121,14 +121,13 @@ public class Chinanews implements Crawler {
 
     @Override
     public void start() {
-
         try {
             ArrayList<String> urls = geturl();
             ArrayList<String> finalurl = getallpaperurl(urls);
             getdata(finalurl);
         } catch (Exception e) {
             logger.error("china news fail");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
 
     }

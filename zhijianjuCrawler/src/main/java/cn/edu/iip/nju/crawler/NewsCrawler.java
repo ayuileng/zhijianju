@@ -186,12 +186,6 @@ public class NewsCrawler {
     }
 
 
-    //百度新闻单个关键字抓去 参数是string，用于测试
-    public void startBaiduNewsCrawler(String keyWord) {
-        Set<String> baiduCrawler = baiduCrawler(keyWord);
-        saveNews(baiduCrawler);
-    }
-
     //百度新闻文件读取的关键字组合,参数为空
     public void startBaiduNewsCrawler() {
         Set<String> KeyWords = ReadFileUtil.readKeyWords();
@@ -200,12 +194,7 @@ public class NewsCrawler {
             saveNews(baiduCrawler);
         }
     }
-//
-//    //搜狗新闻单个关键字抓去 参数是string，用于测试
-//    public void startSougouNewsCrawler(String keyWord) {
-//        Set<String> sougouCrawler = sougouCrawler(keyWord);
-//        saveNews(sougouCrawler);
-//    }
+
 
     //搜狗新闻文件读取的关键字组合,参数为空
     public void startSougouNewsCrawler() {
@@ -216,11 +205,7 @@ public class NewsCrawler {
         }
     }
 
-//    //360新闻单个关键字抓去 参数是string，用于测试
-//    public void start360NewsCrawler(String keyWord) {
-//        Set<String> sanliuling = sanliuling(keyWord);
-//        saveNews(sanliuling);
-//    }
+
 
     //360新闻文件读取的关键字组合,参数为空
     public void start360NewsCrawler() {
@@ -252,19 +237,17 @@ public class NewsCrawler {
                 Document htmlDoc = getHtmlDoc(s);
                 String htmlContent = htmlDoc.text();
                 Date date = DateUtil.getDate(htmlContent);
-                if (date == null) {
-                    String time = news.getTime();
-                    Date dateFromParse = sdf.parse(time);
-                    Calendar current = Calendar.getInstance();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(dateFromParse);
-                    if (current.compareTo(calendar) >= 0) {
-                        date = dateFromParse;
-                    }
-                    if (date == null) {
-                        date = new Date();
-                    }
-                }
+//                if (date == null) {
+//                    String time = news.getTime();
+//                    Date dateFromParse = sdf.parse(time);
+//                    Calendar current = Calendar.getInstance();
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(dateFromParse);
+//                    if (current.compareTo(calendar) >= 0) {
+//                        date = dateFromParse;
+//                    }
+//                }
+                //TODO date可能是NULL 需要人工修正
                 newsData.setPostTime(date);
                 //save
                 newsDataDao.save(newsData);

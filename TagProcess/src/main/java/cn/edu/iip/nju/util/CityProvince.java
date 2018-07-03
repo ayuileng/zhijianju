@@ -81,7 +81,7 @@ public class CityProvince {
                 continue;
 
         }
-        return null;
+        return "";
     }
 
     public static void main(String[] args) throws IOException {

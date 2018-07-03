@@ -55,7 +55,7 @@ public class ExcelProcess {
             //大部分的表头格式都是差不多的
             //序号	企业名称	所在地	产品名称	商标	规格型号	生产日期/批号	抽查结果	主要不合格项目	承检机构
             //表头可能在第二行或者第三行，需要判断
-            List<String> title = new ArrayList<String>();
+            List<String> title = new ArrayList<>();
             if (row1 != null) {
                 int physicalNumberOfCells = row1.getPhysicalNumberOfCells();
                 int tmp = 0;
@@ -121,7 +121,12 @@ public class ExcelProcess {
                             }
                         } else if (title.get(index).contains("结果") || title.get(index).contains("结论")) {
                             if (row.getCell(index) != null) {
-                                attachment.setResult(row.getCell(index).toString());
+                                String result = row.getCell(index).toString();
+                                if(result.contains("不")){
+                                    result = "不合格";
+                                }
+                                logger.info(result);
+                                attachment.setResult(result);
                             }
                         } else if (title.get(index).contains("不合格项")) {
                             if (row.getCell(index) != null) {
@@ -164,7 +169,7 @@ public class ExcelProcess {
             }
             XSSFRow row1 = sheet.getRow(1);
             XSSFRow row2 = sheet.getRow(2);
-            List<String> title = new ArrayList<String>();
+            List<String> title = new ArrayList<>();
             if (row1 != null) {
                 int tmp = 0;
                 Iterator<Cell> cellIterator = row1.cellIterator();
@@ -228,7 +233,12 @@ public class ExcelProcess {
                             }
                         } else if (title.get(index).contains("结果") || title.get(index).contains("结论")) {
                             if (row.getCell(index) != null) {
-                                attachment.setResult(row.getCell(index).toString());
+                                String result = row.getCell(index).toString();
+                                if(result.contains("不")){
+                                    result = "不合格";
+                                }
+                                logger.info(result);
+                                attachment.setResult(result);
                             }
                         } else if (title.get(index).contains("不合格项")) {
                             if (row.getCell(index) != null) {

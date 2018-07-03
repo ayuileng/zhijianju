@@ -14,17 +14,17 @@ public class CompanyNegativeList implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String companyName;     //企业名称
+    private String companyName = "";     //企业名称
 
-    private Integer caseNum;        //案例数
+    private Integer caseNum = 0;        //案例数
 
-    private String injureDegree;    //伤害程度
+    private String injureDegree = "";    //伤害程度
 
-    private Integer callbackNum;    //召回次数
+    private Integer callbackNum = 0;    //召回次数
 
-    private Double passPercent;     //抽查合格率
+    private Double passPercent = 1.0;     //抽查合格率
 
-    private String province;        //企业所在省份
+    private String province = "";        //企业所在省份
 
     private Integer passCase;
     private Integer unPassCase;

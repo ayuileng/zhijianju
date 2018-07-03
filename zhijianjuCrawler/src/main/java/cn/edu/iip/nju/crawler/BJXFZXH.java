@@ -17,10 +17,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -127,7 +123,7 @@ public class BJXFZXH implements Crawler{
             String titleText = doc.select("div.h").first().text();
             webData.setHtml(doc.html());
             webData.setUrl(url);
-            webData.setCrawlTime(new Date());
+            webData.setCrawlerTime(new Date());
             webData.setSourceName("北京消费者协会");
             Elements posttime = doc.select("div.zj_tit").select("div.info").select("span");
             String oriDate = posttime.text();

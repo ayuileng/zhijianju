@@ -1,6 +1,8 @@
 package cn.edu.iip.nju.crawler;
 
+import cn.edu.iip.nju.dao.NewsDataDao;
 import cn.edu.iip.nju.dao.WebDataDao;
+import cn.edu.iip.nju.model.NewsData;
 import cn.edu.iip.nju.model.WebData;
 import cn.edu.iip.nju.util.ReadFileUtil;
 import org.jsoup.Jsoup;
@@ -27,7 +29,7 @@ import java.util.*;
 public class Fenghuang implements Crawler {
     private static Logger logger = LoggerFactory.getLogger(Fenghuang.class);
     @Autowired
-    private WebDataDao dao;
+    private NewsDataDao dao;
     private String baseurl = "http://search.ifeng.com/sofeng/search.action?q=";
     private Random ran = new Random(1000);
 
@@ -70,10 +72,7 @@ public class Fenghuang implements Crawler {
                 //e.getStackTrace();
             }
         }
-      /*  for(String s:finalurls){
-            System.out.println(s);
-        }*/
-        //System.out.println("最终获取页面"+finalurls.size()+"个");
+
         return finalurls;
     }
 
@@ -88,7 +87,7 @@ public class Fenghuang implements Crawler {
                         //.timeout(5000).proxy(proxy)
                         .get();
                 // System.out.println(dd.toString());
-                WebData data = new WebData();
+                NewsData data = new NewsData();
                 Element p = dd.select("div.left").select("div#artical").first();
                 //System.out.println("p:"+p);
                 Element o = p.select("h1#artical_topic").first();
@@ -104,9 +103,7 @@ public class Fenghuang implements Crawler {
                 // System.out.println("temp:"+temp);
                 data.setContent(temp);
                 data.setUrl(x);
-                data.setCrawlTime(new Date());
-                data.setSourceName("凤凰网");
-                data.setHtml(dd.toString());
+                data.setCrawlerTime(new Date());
                 dao.save(data);
                 logger.info("fenghuang wang save success");
             } catch (Exception e) {

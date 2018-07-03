@@ -4,22 +4,15 @@ import cn.edu.iip.nju.model.WebData;
 import cn.edu.iip.nju.dao.WebDataDao;
 import cn.edu.iip.nju.util.AttachmentUtil;
 import cn.edu.iip.nju.util.DownLoadUtil;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.Sets;
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.tools.ant.taskdefs.condition.Http;
 import org.assertj.core.util.Lists;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,9 +21,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -160,7 +150,7 @@ public class JiangSu implements Crawler {
                 Date d = sdf.parse(date);
                 webdata.setPostTime(d);
             }
-            webdata.setCrawlTime(new Date());
+            webdata.setCrawlerTime(new Date());
             webdata.setSourceName("江苏质监局");
             webdata.setUrl(s);
             Elements as = doc.select("iframe#navFrameContent");
@@ -190,10 +180,10 @@ public class JiangSu implements Crawler {
         logger.info("save jiangsu done!");
         //System.out.println("fileSize = "+downLoadUrl.size());
 
-//        for (String url : downLoadUrl) {
-//            DownLoadUtil.download(url,"C:\\Users\\yajima\\Desktop\\zhijianju\\zhijianju\\src\\main\\resources\\fileNew\\");
-//        }
-//        logger.info("jiangsu xiazai done!");
+        for (String url : downLoadUrl) {
+            DownLoadUtil.download(url,"C:\\Users\\yajima\\Desktop\\zhijianju\\zhijianjuCrawler\\src\\main\\resources\\files\\");
+        }
+        logger.info("jiangsu xiazai done!");
 
     }
 

@@ -23,8 +23,7 @@ public class WebData implements Serializable {
     private String html;
     @Column(name = "post_time")
     private Date postTime;
-    @Column(name = "crawler_time")
-    private Date crawlTime;
+    private Date crawlerTime;
     private String sourceName;
     //下面4个属性就是标签
 
@@ -77,12 +76,12 @@ public class WebData implements Serializable {
         this.postTime = postTime;
     }
 
-    public Date getCrawlTime() {
-        return crawlTime;
+    public Date getCrawlerTime() {
+        return crawlerTime;
     }
 
-    public void setCrawlTime(Date crawlTime) {
-        this.crawlTime = crawlTime;
+    public void setCrawlerTime(Date crawlerTime) {
+        this.crawlerTime = crawlerTime;
     }
 
     public String getSourceName() {
@@ -102,7 +101,7 @@ public class WebData implements Serializable {
                 ", url='" + url + '\'' +
                 ", html='" + html + '\'' +
                 ", postTime=" + postTime +
-                ", crawlTime=" + crawlTime +
+                ", crawlerTime=" + crawlerTime +
                 ", sourceName='" + sourceName + '\'' +
                 '}';
     }

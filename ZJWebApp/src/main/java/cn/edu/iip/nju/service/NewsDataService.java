@@ -3,7 +3,6 @@ package cn.edu.iip.nju.service;
 import cn.edu.iip.nju.dao.InjureCaseDao;
 import cn.edu.iip.nju.dao.NewsDataDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ public class NewsDataService {
     private StringRedisTemplate template;
     private final int defaultPageSize = 40;
 
-    @Cacheable(value = "newsdataCount")
     public long count(){
         return newsDataDao.count();
     }

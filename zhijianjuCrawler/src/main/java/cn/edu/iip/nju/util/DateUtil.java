@@ -63,7 +63,7 @@ public class DateUtil {
     public static Date getDate(String content){
         String dateStr = extractDateFromContent(content);
         if(Strings.isNullOrEmpty(dateStr)){
-            return new Date();
+            return null;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -82,11 +82,8 @@ public class DateUtil {
     }
     @Test
     public void test() throws Exception {
-        Document document = Jsoup.connect("http://news.163.com/11/1027/11/7HCAUC4600014AED.html")
-                .userAgent("Mozilla")
-                .timeout(0)
-                .get();
-        String content = document.text();
+
+        String content = "日期:20100517作者：记者 车少远来源";
         String s = extractDateFromContent(content);
         System.out.println(s);
     }

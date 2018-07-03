@@ -1,5 +1,4 @@
 package cn.edu.iip.nju.service;
-import java.util.Date;
 
 import cn.edu.iip.nju.dao.NewsDataDao;
 import cn.edu.iip.nju.dao.WebDataDao;
@@ -57,7 +56,7 @@ public class NewsDataService {
             newsData.setTitle(webData.getTitle());
             newsData.setContent(webData.getContent());
             newsData.setPostTime(webData.getPostTime());
-            newsData.setCrawlerTime(webData.getCrawlTime());
+            newsData.setCrawlerTime(webData.getCrawlerTime());
             newsData.setUrl(webData.getUrl());
             newsDataList.add(newsData);
         }

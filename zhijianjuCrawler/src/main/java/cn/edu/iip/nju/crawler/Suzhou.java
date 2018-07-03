@@ -6,6 +6,7 @@ package cn.edu.iip.nju.crawler;
 
 import cn.edu.iip.nju.util.AttachmentUtil;
 import cn.edu.iip.nju.util.DownLoadUtil;
+import com.google.common.collect.Sets;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -78,22 +79,22 @@ public class Suzhou implements Crawler {
     /**
      * 从每个单独的页面中提取出要下载的附件的url
      */
-    public Map<String, Set<String>> downloadURLs() throws IOException, InterruptedException {
+    public Set<String> downloadURLs() throws IOException, InterruptedException {
+        Set<String> downloadURLs = Sets.newHashSet();
         Set<String> pageURLs = pageURLs();
-        Map<String, Set<String>> downloadURLs = new HashMap<>();
-
-        downloadURLs.put("xls", new HashSet<>());
-        downloadURLs.put("xlsx", new HashSet<>());
-        downloadURLs.put("doc", new HashSet<>());
-        downloadURLs.put("docx", new HashSet<>());
         for (String url : pageURLs) {
             Document document = Jsoup.connect(url)
                     .userAgent("Mozilla")
                     .timeout(0)
                     .get();
-            AttachmentUtil.downloadURLs(document, downloadURLs);
+            Elements as = document.select("a[href]");
+            for (Element a : as) {
+                String aurl = a.attr("href");
+                if(DownLoadUtil.isFile(aurl)){
+                    downloadURLs.add(aurl);
+                }
+            }
         }
-
         return downloadURLs;
     }
 
@@ -101,25 +102,9 @@ public class Suzhou implements Crawler {
      * 下载附件
      */
     private void downloadAttachment() throws Exception {
-        Map<String, Set<String>> stringSetMap = downloadURLs();
-        Resource resource = new FileSystemResource("C:\\Users\\63117\\IdeaProjects\\zhijianju\\src\\main\\resources\\files\\attachment");
-        String destinationDirectory = resource.getFile().getAbsolutePath();
-        //分类保存（便于之后读取，因为07前的版本和之后的不一样）（丑）
-        Set<String> doc = stringSetMap.get("doc");
-        for (String s : doc) {
-            DownLoadUtil.download(s, destinationDirectory + "/doc/");
-        }
-        Set<String> docx = stringSetMap.get("docx");
-        for (String s : docx) {
-            DownLoadUtil.download(s, destinationDirectory + "/docx/");
-        }
-        Set<String> xls = stringSetMap.get("xls");
-        for (String s : xls) {
-            DownLoadUtil.download(s, destinationDirectory + "/xls/");
-        }
-        Set<String> xlsx = stringSetMap.get("xlsx");
-        for (String s : xlsx) {
-            DownLoadUtil.download(s, destinationDirectory + "/xlsx/");
+        Set<String> urls = downloadURLs();
+        for (String url : urls) {
+            DownLoadUtil.download(url, "C:\\Users\\yajima\\Desktop\\zhijianju\\zhijianjuCrawler\\src\\main\\resources\\files\\");
         }
 
     }

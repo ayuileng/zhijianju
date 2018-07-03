@@ -188,7 +188,7 @@ public class Zhiliangxinwenwang implements Crawler{
                     texttemp = texttemp + hi.text() + "/n";
                 }
                 temp.setSourceName("中国质量新闻网--民生");
-                temp.setCrawlTime(new Date());
+                temp.setCrawlerTime(new Date());
                 temp.setContent(texttemp);
                 temp.setUrl(x);
                 temp.setHtml(dd.toString());

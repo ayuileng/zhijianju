@@ -4,7 +4,6 @@ import cn.edu.iip.nju.dao.CompanyNegativeListDao;
 import cn.edu.iip.nju.model.CompanyNegativeList;
 import cn.edu.iip.nju.util.CityProvince;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import org.assertj.core.util.Lists;
 import org.assertj.core.util.Strings;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,13 +50,10 @@ public class CompanyNegativeListService {
      * //企业所在省份
      */
     public void tagProcess() {
+        Map<String, Integer> zhaohuiFactory = getZhaohuiFactory();
         Set<String> companyName = attachmentDataService.getAllCompanys();
-        HashSet<String> set = Sets.newHashSet();
-        for (String name : companyName) {
-            set.add(name);
-        }
         //每一个企业的遍历
-        for (String s : set) {
+        for (String s : companyName) {
             CompanyNegativeList companyNegativeList = new CompanyNegativeList();
             companyNegativeList.setCompanyName(s);//企业名称
             String province = "";
@@ -81,10 +76,21 @@ public class CompanyNegativeListService {
 
             companyNegativeList.setPassCase((int) pass);
             companyNegativeList.setUnPassCase((int) notPass);
+            if (zhaohuiFactory.get(companyNegativeList.getCompanyName()) != null && zhaohuiFactory.get(companyNegativeList.getCompanyName()) > 0) {
+                companyNegativeList.setCallbackNum(zhaohuiFactory.get(companyNegativeList.getCompanyName()));
+                zhaohuiFactory.remove(companyNegativeList.getCompanyName());
+            }
             //companyNegativeList.setCallbackNum(0);
-            //companyNegativeList.setInjureDegree();
             companyNegativeListDao.save(companyNegativeList);
             logger.info("saving 企业负面信息");
+        }
+        for (Map.Entry<String, Integer> entry : zhaohuiFactory.entrySet()) {
+            CompanyNegativeList companyNegativeList = new CompanyNegativeList();
+            companyNegativeList.setProvince(getProvinceFromCompanyName(entry.getKey()));
+            companyNegativeList.setCompanyName(entry.getKey());
+            companyNegativeList.setCaseNum(entry.getValue());
+            companyNegativeList.setCallbackNum(entry.getValue());
+            companyNegativeListDao.save(companyNegativeList);
         }
         logger.info("企业负面清单 save done");
 
@@ -136,6 +142,7 @@ public class CompanyNegativeListService {
         return "";
     }
 
+    @Deprecated
     public void fixProvinceMissing() {
         final int pageSize = 100;
         Page<CompanyNegativeList> pageTmp = companyNegativeListDao.findAllByProvinceEquals("", new PageRequest(0, pageSize));
@@ -164,7 +171,7 @@ public class CompanyNegativeListService {
      * http://www.dpac.gov.cn/xfpzh/xfpgnzh/
      * http://www.dpac.gov.cn/xfpzh/xfpzhgg/
      */
-    public void fixCaseNumMissing() {
+    public void fixCallBackNumMissing() {
         Map<String, Integer> zhaohuiFactory = getZhaohuiFactory();
         final int pageSize = 100;
         Page<CompanyNegativeList> pageTmp = companyNegativeListDao.findAllByProvinceIsNull(new PageRequest(0, pageSize));
@@ -198,9 +205,10 @@ public class CompanyNegativeListService {
 
     /**
      * 页数写死在编码里了，偷懒的做法
-     *
+     *  已经保存了
      * @throws IOException
      */
+    @Deprecated
     public void getCompanyZhaohui() throws IOException {
         List<String> urls = Lists.newArrayList();
         urls.add("http://www.dpac.gov.cn/xfpzh/xfpgnzh/");

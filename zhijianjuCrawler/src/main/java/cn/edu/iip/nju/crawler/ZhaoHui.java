@@ -124,7 +124,7 @@ public class ZhaoHui {
                     .timeout(0)
                     .get();
             webdata.setHtml(document.html());
-            webdata.setCrawlTime(new Date());
+            webdata.setCrawlerTime(new Date());
             webdata.setSourceName("国家质量总局缺陷产品管理中心");
             Element title = document.select("div.show_tit").first();
             String dateString = document.select("div.show_tit2").first().text();

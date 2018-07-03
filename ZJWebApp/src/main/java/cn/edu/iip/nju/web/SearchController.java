@@ -5,7 +5,8 @@ import cn.edu.iip.nju.model.User;
 import cn.edu.iip.nju.model.UserSearchHistory;
 import cn.edu.iip.nju.service.SolrDocumentService;
 import cn.edu.iip.nju.service.UserSearchHistoryService;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/search")
+@Slf4j
 public class SearchController {
     @Autowired
     private UserSearchHistoryService userSearchHistoryService;
@@ -31,12 +33,12 @@ public class SearchController {
     private SolrDocumentService solrDocumentService;
 
     @GetMapping
-    public String processQuery(@RequestParam(name = "queryWord") String queryWord, Model model,
+    public String processQuery(@RequestParam(name = "queryWord",required = false) String queryWord, Model model,
                                @RequestParam(name = "page", defaultValue = "0") Integer page,
                                @RequestParam(name = "sort",defaultValue = "keyWord") String sort) {
         //空查询则返回首页
-        if (StringUtils.isBlank(queryWord)) {
-            return "/index";
+        if (Strings.isNullOrEmpty(queryWord)) {
+            return "forward:/index";
         }
         //判断用户是否登录，如果是登录状态，则保存搜索历史
         Integer userId = isUserLogIn();

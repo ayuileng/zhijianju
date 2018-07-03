@@ -6,7 +6,6 @@ import java.util.*;
 
 import cn.edu.iip.nju.dao.WebDataDao;
 import cn.edu.iip.nju.model.WebData;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,8 +13,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 
@@ -135,7 +132,7 @@ public class LNXFZXH implements Crawler{
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date d = sdf.parse(date);
                 webData.setPostTime(d);
-                webData.setCrawlTime(new Date());
+                webData.setCrawlerTime(new Date());
                 webData.setSourceName("辽宁省消费者协会");
                 webData.setHtml(doc.html());
                 webData.setUrl(url);

@@ -144,7 +144,7 @@ public class Zhilianganquan {
                 temp.setSourceName("中国新闻网--质量安全");
                 temp.setContent(text);
                 temp.setUrl(x);
-                temp.setCrawlTime(new Date());
+                temp.setCrawlerTime(new Date());
                 temp.setHtml(dd.toString());
                 dao.save(temp);
                 //System.out.println("-------------------");
@@ -181,7 +181,7 @@ public class Zhilianganquan {
                 temp1.setContent(text);
                 temp1.setUrl(x);
                 temp1.setHtml(dd.toString());
-                temp1.setCrawlTime(new Date());
+                temp1.setCrawlerTime(new Date());
                 dao.save(temp1);
                 logger.info("zhilianganquan save success");
             } catch (Exception e) {

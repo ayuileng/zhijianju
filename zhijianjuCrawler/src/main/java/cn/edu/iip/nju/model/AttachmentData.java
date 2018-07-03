@@ -15,25 +15,25 @@ public class AttachmentData implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //    产品名称
-    private String name;
+    private String name = "";
     //    商标
-    private String shangbiao;
+    private String shangbiao = "";
     //    规格型号
-    private String guigexinghao;
+    private String guigexinghao = "";
     //    生产日期、批号
     private String birthday;
     //    企业名
-    private String factoryName;
+    private String factoryName = "";
     //    企业所在地
-    private String factoryAddress;
+    private String factoryAddress = "";
     //    检验结果
-    private String result;
+    private String result = "合格";
     //    不合格原因
-    private String errorReason;
+    private String errorReason = "";
     //    承建机构
-    private String chengjianjigou;
+    private String chengjianjigou = "";
 
-    private String province;
+    private String province = "";
 
     public String getProvince() {
         return province;

@@ -23,7 +23,7 @@ public class WebData implements Serializable {
     @Column(name = "html",columnDefinition="LONGTEXT")
     private String html;
     private Date postTime;
-    private Date crawlTime;
+    private Date crawlerTime;
     private String sourceName;
 
 
@@ -75,12 +75,12 @@ public class WebData implements Serializable {
         this.postTime = postTime;
     }
 
-    public Date getCrawlTime() {
-        return crawlTime;
+    public Date getCrawlerTime() {
+        return crawlerTime;
     }
 
-    public void setCrawlTime(Date crawlTime) {
-        this.crawlTime = crawlTime;
+    public void setCrawlerTime(Date crawlerTime) {
+        this.crawlerTime = crawlerTime;
     }
 
     public String getSourceName() {
@@ -100,7 +100,7 @@ public class WebData implements Serializable {
                 ", url='" + url + '\'' +
                 ", html='" + html + '\'' +
                 ", postTime=" + postTime +
-                ", crawlTime=" + crawlTime +
+                ", crawlerTime=" + crawlerTime +
                 ", sourceName='" + sourceName + '\'' +
                 '}';
     }

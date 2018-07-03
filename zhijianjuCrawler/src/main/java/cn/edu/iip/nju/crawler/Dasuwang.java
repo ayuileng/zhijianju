@@ -1,8 +1,6 @@
 package cn.edu.iip.nju.crawler;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -23,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -206,7 +203,7 @@ public class Dasuwang implements Crawler {
                     temp.setContent(texttemp);
                     temp.setUrl(x);
                     temp.setHtml(dd.toString());
-                    temp.setCrawlTime(new Date());
+                    temp.setCrawlerTime(new Date());
                     temp.setSourceName("大苏网");
                     dao.save(temp);
                     logger.info("dasuwang save success");

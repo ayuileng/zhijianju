@@ -10,6 +10,6 @@ import java.util.concurrent.Executors;
 public class ThreadPoolConfig {
     @Bean
     public ExecutorService getThreadPool(){
-        return Executors.newCachedThreadPool();
+        return Executors.newFixedThreadPool(4);
     }
 }

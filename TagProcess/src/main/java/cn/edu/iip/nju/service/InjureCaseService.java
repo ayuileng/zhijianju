@@ -10,14 +10,22 @@ import cn.edu.iip.nju.util.WordLizeUtil.WordFilter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.io.Files;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 
 
@@ -61,7 +69,7 @@ public class InjureCaseService {
 
 
         Set<String> products = ReadFileUtil.readProducts();
-        if(Strings.isNullOrEmpty(title)){
+        if (Strings.isNullOrEmpty(title)) {
             title = " ";
         }
         Set<String> pro = searchKeyWord(title, products);
@@ -85,7 +93,6 @@ public class InjureCaseService {
         }
 
 
-
         Set<String> injureType = ReadFileUtil.readInjureType();
         Set<String> ins = searchKeyWord(content, injureType);
         List<String> injureTypeSet = frequentWord(ins, content);
@@ -95,7 +102,7 @@ public class InjureCaseService {
         String degree = InjureLevelUtil.checkInjureLevel(joinToString(injureTypeSet));
         injureCase.setInjureDegree(degree);
         Date date = newsData.getPostTime();
-        if(date == null){
+        if (date == null) {
             date = new Date();
         }
         injureCase.setInjureTime(date);
@@ -147,7 +154,7 @@ public class InjureCaseService {
 
 
     private String joinToString(Collection<String> collection) {
-        if (collection == null || collection.size() == 0) return null;
+        if (collection == null || collection.size() == 0) return "";
         if (collection.size() > 20) {
             return null;
         }
@@ -173,4 +180,72 @@ public class InjureCaseService {
         }
     }
 
+    public void removeErrorPostTime() {
+        List<InjureCase> injureCaseList = injureCaseDao.findAllByTime();
+        System.out.println(injureCaseList.size());
+        //injureCaseDao.save(injureCaseList);
+    }
+
+
+    public void readFromCsv() throws IOException {
+        Resource resource = new FileSystemResource("C:\\Users\\yajima\\Desktop\\tmp.csv");
+        File file = resource.getFile();
+        List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
+        for (String line : lines) {
+            String[] words = line.split(",");
+            InjureCase injureCase = new InjureCase();
+            injureCase.setId(Integer.valueOf(words[0]));
+            injureCase.setInjureArea(words[1]);
+            injureCase.setInjureType(words[2]);
+            injureCase.setProductName(words[3]);
+            injureCase.setUrl(words[4]);
+            System.out.println(injureCase);
+
+
+//id,injure_area,injure_type,product_name,url
+        }
+    }
+
+    @Transactional()
+    public void modifyManually() throws IOException {
+        Resource resource = new ClassPathResource("keywords/injureCase.csv");
+        File file = resource.getFile();
+        List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
+        for (String line : lines) {
+            String[] words = line.split(",");
+            if(words.length!=6){
+                System.out.println(words[0]);
+            }
+            Integer id = Integer.valueOf(words[0]);
+            System.out.println(id);
+            InjureCase injureCase = injureCaseDao.findOne(id);
+            System.out.println(injureCase.getId());
+            injureCase.setInjureArea(words[2].replaceAll("\"", ""));
+            injureCase.setInjureType(words[3].replaceAll("\"", ""));
+            injureCase.setProductName(words[1].replaceAll("\"", ""));
+            injureCase.setUrl(words[5]);
+            injureCaseDao.save(injureCase);
+
+
+        }
+        logger.info("modify success");
+        Resource resource1 = new ClassPathResource("keywords/ids.txt");
+        File file1 = resource1.getFile();
+        lines = Files.readLines(file1, Charset.forName("utf-8"));
+        Set<Integer> ids = Sets.newHashSet();
+        for (String line : lines) {
+            Integer id = Integer.valueOf(line.trim());
+            ids.add(id);
+        }
+        List<Integer> idList = new ArrayList<>(ids);
+        injureCaseDao.deleteAllByIdIn(idList);
+        logger.info("finish");
+    }
+
+    public void test() {
+        InjureCase injureCase = injureCaseDao.findOne(1);
+        System.out.println(injureCase);
+        injureCase.setInjureDegree("2");
+        injureCaseDao.save(injureCase);
+    }
 }

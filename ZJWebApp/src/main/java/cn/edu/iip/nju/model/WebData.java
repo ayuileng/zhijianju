@@ -26,7 +26,7 @@ public class WebData implements Serializable {
     private String html;
     @Column(name = "post_time")
     private Date postTime;
-    private Date crawlTime;
+    private Date crawlerTime;
     private String sourceName;
     //下面4个属性就是标签
 

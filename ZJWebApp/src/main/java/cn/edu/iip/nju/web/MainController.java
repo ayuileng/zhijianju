@@ -5,6 +5,7 @@ import cn.edu.iip.nju.model.User;
 import cn.edu.iip.nju.service.NewsDataService;
 import cn.edu.iip.nju.service.UserService;
 import cn.edu.iip.nju.service.WebDataService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
  * Created by xu on 2017/9/3.
  */
 @Controller
+@Slf4j
 public class MainController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -40,12 +42,12 @@ public class MainController {
         long totalData = webDataService.count()+newsDataService.count();
         long govNum = (long) (totalData*0.18);
         long newsNum =(long) (totalData*0.49);
-        long weiboNum =(long) (totalData*0.9);
+        long weiboNum =(long) (totalData*0.09);
         long other =(long) (totalData*0.24);
         //当前所有数据的分类数量
         long[] total = {totalData,govNum,newsNum,weiboNum,other};
-        //昨日新增数据
-        long[] last = {291,2,177,14,98};
+        //近期新增数据
+        long[] last = {2191,5,2107,0,2191-5-2107};
         model.addAttribute("total",total);
         model.addAttribute("last",last);
 
