@@ -35,11 +35,21 @@ public class NegProductService {
                     negProduct.setProductName(prod);
                     negProduct.setCaseNum(1);
                     negProduct.getInjureCases().add(injureCase);
-                    negProduct.getArea().add(injureCase.getInjureArea());
+                    String[] areas = injureCase.getInjureArea().split("\\s+");
+                    for (String area : areas) {
+                        if(!Strings.isNullOrEmpty(area)){
+                            negProduct.getArea().add(area);
+                        }
+                    }
                     map.put(prod, negProduct);
                 } else {
                     NegProduct negProduct = map.get(prod);
-                    negProduct.getArea().add(injureCase.getInjureArea());
+                    String[] areas = injureCase.getInjureArea().split("\\s+");
+                    for (String area : areas) {
+                        if(!Strings.isNullOrEmpty(area)){
+                            negProduct.getArea().add(area);
+                        }
+                    }
                     negProduct.getInjureCases().add(injureCase);
                     negProduct.increaseCaseNum();
                 }

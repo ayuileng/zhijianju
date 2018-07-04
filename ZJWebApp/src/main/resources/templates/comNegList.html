@@ -10,6 +10,10 @@
         .wrapper {
             margin-top: 60px;
         }
+
+        .redTd {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -24,10 +28,12 @@
     <div>
         <form action="/com" th:object="${companyForm}" method="get" class="form-inline">
             <div class="form-group">
-                <label for="factory">企业名称</label><input class="form-control" type="text" id="factory" th:value="*{factory}" name="factory"/>
+                <label for="factory">企业名称</label><input class="form-control" type="text" id="factory"
+                                                        th:value="*{factory}" name="factory"/>
             </div>
             <div class="form-group">
-                <label for="province">企业所在省份</label><input class="form-control" type="text" id="province" th:value="*{province}"
+                <label for="province">企业所在省份</label><input class="form-control" type="text" id="province"
+                                                           th:value="*{province}"
                                                            name="province"/><br/>
             </div>
             <div class="form-group">
@@ -62,14 +68,18 @@
         <tr th:each="i : ${pnl}" th:if="${i.companyName}!=null and ${#strings.length(i.companyName)} gt 2">
             <td><a th:href="@{'/com/detail?name='+${i.companyName} }"><span th:text="${i.companyName}">name</span></a>
             </td>
-            <td><a target="_blank" th:href="@{'/search?queryWord='} + ${i.companyName}"><span class="label label-success">搜索</span></a>
+            <td><a target="_blank" th:href="@{'/search?queryWord='} + ${i.companyName}"><span
+                    class="label label-success">搜索</span></a>
             </td>
             <td><a target="_blank" th:href="'https://www.baidu.com/s?wd='+${i.companyName}"><span
                     class="label label-success">百度一下</span></a></td>
             <td><a target="_blank" th:href="'http://www.xizhi.com/search?wd='+${i.companyName}"><span
                     class="label label-success">悉知搜索</span></a></td>
             <td th:text="${i.caseNum}">1</td>
-            <td><b style="color: red" th:text="${i.callbackNum}">1</b></td>
+            <td><span th:text="${i.callbackNum}">0</span>
+                <a th:href="@{'/com/callbackDetail?companyName='+${i.companyName }} "
+                   th:if="${i.callbackNum>0}" target="_blank">详细信息</a>
+            </td>
             <td th:text="${i.province}">江苏</td>
             <td th:text="${#numbers.formatInteger(i.passPercent*100,2) +'%'}">1</td>
         </tr>

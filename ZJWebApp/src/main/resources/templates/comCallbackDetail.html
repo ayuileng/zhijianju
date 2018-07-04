@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>企业召回详细信息</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <style type="text/css">
+        .wrapper{
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container wrapper">
+    <table class="table table-striped">
+        <tr >
+            <th>企业名</th>
+            <th>召回信息</th>
+        </tr>
+        <tr th:each="i : ${urlList} " th:inline="text">
+            <td th:text="${conpanyName}"></td>
+            <td ><a th:href="${i}" th:text="'召回信息链接'"></a></td>
+        </tr>
+    </table>
+
+</div>
+
+<div th:replace="fragments/footer :: footer">...</div>
+</body>
+</html>
