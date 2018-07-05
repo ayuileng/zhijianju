@@ -7,7 +7,8 @@
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>树蛙搜索</title>
     <style>
 
@@ -17,18 +18,29 @@
             width: 60%;
             margin: 70px auto 0;
             padding-bottom: 50px;
+        }
 
+        .searchForm {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .secondary-wrapper {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
         }
 
         .footer {
             height: 50px;
-            position: fixed;
-            bottom: 0px;
-            left: 0px;
         }
         .chart{
             margin: auto;
             width: 70%;
+        }
+
+        .clear {
+            clear: both;
         }
     </style>
 </head>
@@ -40,22 +52,26 @@
 
     <div class="searchForm">
         <form action="/search" method="get" class="form-inline">
-            <input class="form-control" type="text" name="queryWord" style="width: 55%;"/>
-            <input class="form-control btn btn-primary" type="submit" value="在库中搜索"/>
+            <input class="form-control" type="text" name="queryWord" style="width: 55%;font-size: 16px;"/>
+            <input class="form-control btn btn-primary" style="font-size: 16px;" type="submit" value="在库中搜索"/>
         </form>
     </div>
-
-    <div class="tab-page">
-        <a href="/injurecase">伤害事件案例库</a>
-        <a href="/productList">产品信息清单</a>
-        <a href="/com">企业信息清单</a>
-        <a href="/hospital">医院数据入口</a>
+    <div class="secondary-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-2"><a href="/injurecase" data-toggle="tooltip" title="伤害事件案例库"><img src="pic/injure.png" alt="伤害事件案例库" /></a></div>
+                <div class="col-md-2"><a href="/productList" title="产品信息清单"><img src="pic/product.png" alt="产品信息清单" /></a></div>
+                <div class="col-md-2"><a href="/com" title="企业信息清单"><img src="pic/enterprise.png" alt="企业信息清单" /></a></div>
+                <div class="col-md-2"><a href="/hospital" title="医院数据入口"><img src="pic/hospital.png" alt="医院数据入口" /></a></div>
+            </div>
+        </div>
     </div>
 
 </div>
 <div class="chart">
     <div class="col-md-6" id="main1" style="width: 450px;height:400px;float:left; display:inline"></div>
     <div class="col-md-6" id="main2" style="width: 450px;height:400px;float:right; display:inline"></div>
+    <div class="clear"></div>
 </div>
 
 <div th:replace="fragments/footer :: footer">...</div>
