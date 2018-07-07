@@ -18,44 +18,55 @@
 
 <div class="container main">
     <div><a href="/chart/hosChart">统计图表</a></div>
-    <form action="/hospital" method="get" class="form-inline" th:object="${hospitalDataForm}">
+    <form action="/hospital" method="get" class="form-horizontal" th:object="${hospitalDataForm}">
         <div class="form-group">
-            <label for="productType">产品类别</label>
-            <input type="text" class="form-control" name="productType" id="productType"/>
+            <label for="productType" class="col-md-2" style="text-align: right; margin-top: 7px">产品类别</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="productType" id="productType"/>
+            </div>
+
+            <label for="injureDegree" class="col-md-2" style="text-align: right; margin-top: 7px">伤害程度</label>
+            <div class="col-md-2">
+                <select class="form-control" id="injureDegree" name="injureDegree"  >
+                    <option value=""    th:selected="${hospitalDataForm.injureDegree} == ''" >无</option>
+                    <option value="轻度" th:selected="${hospitalDataForm.injureDegree} == '轻度'" >轻度</option>
+                    <option value="中度" th:selected="${hospitalDataForm.injureDegree} == '中度'" >中度</option>
+                    <option value="重度" th:selected="${hospitalDataForm.injureDegree} == '重度'" >重度</option>
+                </select>
+            </div>
+
+            <label for="dateFrom" class="col-md-2" style="text-align: right; margin-top: 7px">起始日期</label>
+            <div class="col-md-2">
+                <input type="date" class="form-control" id="dateFrom" name="datefrom" th:value="*{datefrom}"/>
+            </div>
         </div>
         <div class="form-group">
-            <label for="injureDegree">伤害程度</label>
-            <select class="form-control" id="injureDegree" name="injureDegree"  >
-                <option value=""    th:selected="${hospitalDataForm.injureDegree} == ''" >无</option>
-                <option value="轻度" th:selected="${hospitalDataForm.injureDegree} == '轻度'" >轻度</option>
-                <option value="中度" th:selected="${hospitalDataForm.injureDegree} == '中度'" >中度</option>
-                <option value="重度" th:selected="${hospitalDataForm.injureDegree} == '重度'" >重度</option>
-            </select>
+            <label for="dateTo" class="col-md-2" style="text-align: right; margin-top: 7px">截至日期</label>
+            <div class="col-md-2">
+                <input type="date" class="form-control" id="dateTo" name="dateto" th:value="*{dateto}"/>
+            </div>
+
+            <label for="howgetInjure" class="col-md-2" style="text-align: right; margin-top: 7px">是否与产品相关</label>
+            <div class="col-md-2">
+                <select class="form-control" id="howgetInjure" name="howgetInjure" th:value="*{howgetInjure}">
+                    <option value="" th:selected="${hospitalDataForm.howgetInjure} == ''">无</option>
+                    <option value="使用不当" th:selected="${hospitalDataForm.howgetInjure} == '使用不当'">使用不当</option>
+                    <option value="与产品质量有关" th:selected="${hospitalDataForm.howgetInjure} == '与产品质量有关'">与产品质量有关</option>
+                    <option value="像往常一样使用却突发事故" th:selected="${hospitalDataForm.howgetInjure} == '像往常一样使用却突发事故'">
+                        像往常一样使用却突发事故
+                    </option>
+                    <option value="不确定" th:selected="${hospitalDataForm.howgetInjure} == '不确定'">不确定</option>
+                    <option value="其他" th:selected="${hospitalDataForm.howgetInjure} == '其他'">其他</option>
+                </select>
+            </div>
         </div>
         <div class="form-group">
-            <label for="dateFrom">起始日期</label>
-            <input type="date" class="form-control" id="dateFrom" name="datefrom" th:value="*{datefrom}"/>
+            <div class="col-md-offset-5 col-md-2">
+                <input class="btn btn-primary" type="submit" value="搜索"/>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="dateTo">截至日期</label>
-            <input type="date" class="form-control" id="dateTo" name="dateto" th:value="*{dateto}"/>
-        </div>
-        <div class="form-group">
-            <label for="howgetInjure">是否与产品相关</label>
-            <select class="form-control" id="howgetInjure" name="howgetInjure" th:value="*{howgetInjure}">
-                <option value="" th:selected="${hospitalDataForm.howgetInjure} == ''">无</option>
-                <option value="使用不当" th:selected="${hospitalDataForm.howgetInjure} == '使用不当'">使用不当</option>
-                <option value="与产品质量有关" th:selected="${hospitalDataForm.howgetInjure} == '与产品质量有关'">与产品质量有关</option>
-                <option value="像往常一样使用却突发事故" th:selected="${hospitalDataForm.howgetInjure} == '像往常一样使用却突发事故'">
-                    像往常一样使用却突发事故
-                </option>
-                <option value="不确定" th:selected="${hospitalDataForm.howgetInjure} == '不确定'">不确定</option>
-                <option value="其他" th:selected="${hospitalDataForm.howgetInjure} == '其他'">其他</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-default">搜索</button>
         <div th:inline="text">共检索到[[${{hos.totalElements}}]]条案例！</div>
-        <table class="table table-hover">
+        <table class="table table-hover table-bordered table-striped">
             <tr>
                 <th>姓名</th>
                 <th>性别</th>

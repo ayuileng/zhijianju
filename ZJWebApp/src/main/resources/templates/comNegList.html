@@ -26,25 +26,30 @@
     <!--<a href="/com?sort=3"><button type="button" class="btn btn-info">按照案例数升序排列</button></a>-->
     <!--</div>-->
     <div>
-        <form action="/com" th:object="${companyForm}" method="get" class="form-inline">
+        <form action="/com" th:object="${companyForm}" method="get" class="form-horizontal">
             <div class="form-group">
-                <label for="factory">企业名称</label><input class="form-control" type="text" id="factory"
-                                                        th:value="*{factory}" name="factory"/>
+                <label for="factory" class="col-md-2" style="text-align: right; margin-top: 7px">企业名称</label>
+                <div class="col-md-2">
+                    <input class="form-control" type="text" id="factory" th:value="*{factory}" name="factory"/>
+                </div>
+
+                <label for="province" class="col-md-2" style="text-align: right; margin-top: 7px">企业所在省份</label>
+                <div class="col-md-2">
+                    <input class="form-control" type="text" id="province" th:value="*{province}" name="province"/>
+                </div>
+
+                <label for="sort" class="col-md-2" style="text-align: right; margin-top: 7px">排序方式</label>
+                <div class="col-md-2">
+                    <select class="form-control" th:value="*{sort}" name="sort" id="sort">
+                        <option value="1" th:selected="${sort=='1'}">按照召回次数降序</option>
+                        <option value="0" th:selected="${sort=='0'}">按照案例数降序</option>
+                    </select>
+                </div>
             </div>
             <div class="form-group">
-                <label for="province">企业所在省份</label><input class="form-control" type="text" id="province"
-                                                           th:value="*{province}"
-                                                           name="province"/><br/>
-            </div>
-            <div class="form-group">
-                <label for="sort">排序方式</label>
-                <select class="form-control" th:value="*{sort}" name="sort" id="sort">
-                    <option value="1" th:selected="${sort=='1'}">按照召回次数降序</option>
-                    <option value="0" th:selected="${sort=='0'}">按照案例数降序</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="submit" value="搜索"/>
+                <div class="col-md-offset-5 col-md-2">
+                    <input class="btn btn-primary" type="submit" value="搜索"/>
+                </div>
             </div>
         </form>
     </div>
@@ -53,7 +58,7 @@
     <div class="container"><a href="/chart/comChart">
         <button type="button" class="btn btn-primary">查看统计图表</button>
     </a></div>
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered table-striped">
         <tr>
             <th>企业名称</th>
             <th>在案例库中搜索</th>
