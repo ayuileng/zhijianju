@@ -19,6 +19,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by xu on 2017/10/26.
@@ -148,7 +150,7 @@ public class CompanyNegativeListService {
         Page<CompanyNegativeList> pageTmp = companyNegativeListDao.findAllByProvinceEquals("", new PageRequest(0, pageSize));
         int totalPages = pageTmp.getTotalPages();
         logger.info(totalPages + "");
-        for (int i = totalPages - 1; i >= totalPages-30; i--) {
+        for (int i = totalPages - 1; i >= totalPages - 30; i--) {
             Page<CompanyNegativeList> page = companyNegativeListDao.findAllByProvinceEquals("", new PageRequest(0, pageSize));
             List<CompanyNegativeList> content = page.getContent();
             for (CompanyNegativeList companyNegativeList : content) {
@@ -205,10 +207,10 @@ public class CompanyNegativeListService {
 
     /**
      * 页数写死在编码里了，偷懒的做法
-     *  已经保存了
+     * 已经保存了
+     *
      * @throws IOException
      */
-    @Deprecated
     public void getCompanyZhaohui() throws IOException {
         List<String> urls = Lists.newArrayList();
         urls.add("http://www.dpac.gov.cn/xfpzh/xfpgnzh/");
@@ -239,7 +241,7 @@ public class CompanyNegativeListService {
                     if (title.contains("召回")) {
                         title = title.substring(0, title.indexOf("召回"));
                     }
-                    System.out.println(title);
+                    System.out.println(title + "--" + li.select("a[href]").first().attr("abs:href"));
                 }
             }
         }
@@ -264,5 +266,35 @@ public class CompanyNegativeListService {
         }
         return map;
     }
+
+    /**
+     * 解决名称错误，比如带前缀标称的
+     */
+    @Transactional
+    public void fixNameError() {
+        Page<CompanyNegativeList> page = companyNegativeListDao.findAll(new PageRequest(0, 100));
+        while (page.hasNext()) {
+            List<CompanyNegativeList> content = page.getContent();
+            List<CompanyNegativeList> errorList = content.stream().filter(c ->
+                    c.getCompanyName().contains("标称")
+            ).collect(Collectors.toList());
+            for (CompanyNegativeList companyNegativeList : errorList) {
+                String name = companyNegativeList.getCompanyName();
+                if(name.endsWith("（标称）")){
+                    name = name.substring(0,name.indexOf("（标称）"));
+                }else if(name.startsWith("标称：")){
+                    name = name.substring(name.indexOf("标称：")+"标称：".length());
+                }else if(name.startsWith("标称:")){
+                    name = name.substring(name.indexOf("标称:")+"标称:".length());
+                }
+                //System.out.println(name);
+                companyNegativeList.setCompanyName(name);
+            }
+            companyNegativeListDao.save(errorList);
+            page = companyNegativeListDao.findAll(page.nextPageable());
+        }
+        logger.info("process success");
+    }
+
 
 }

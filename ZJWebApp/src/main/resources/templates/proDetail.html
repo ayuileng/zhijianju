@@ -13,9 +13,12 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
+
 <div class="container wrapper">
+    <h3 style="text-align: center">产品详细信息：<span th:text="${readName}"></span></h3>
     <div class="container">
         <table class="table table-hover">
+
             <tr>
                 <th>产品名称</th>
                 <th>伤害发生时间</th>

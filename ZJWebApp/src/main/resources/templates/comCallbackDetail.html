@@ -15,6 +15,7 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
+    <h3 style="text-align: center">企业召回详情：<span th:text="${conpanyName}"></span></h3>
     <table class="table table-striped">
         <tr >
             <th>企业名</th>
@@ -22,7 +23,7 @@
         </tr>
         <tr th:each="i : ${urlList} " th:inline="text">
             <td th:text="${conpanyName}"></td>
-            <td ><a th:href="${i}" th:text="'召回信息链接'"></a></td>
+            <td ><a th:href="${i}" th:text="'召回信息链接'" target="_blank"></a></td>
         </tr>
     </table>
 

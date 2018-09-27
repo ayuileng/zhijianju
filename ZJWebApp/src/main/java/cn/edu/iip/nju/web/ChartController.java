@@ -6,6 +6,7 @@ import cn.edu.iip.nju.service.InjureCaseService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/chart")
+@Slf4j
 public class ChartController {
     @Autowired
     InjureCaseService injureCaseService;
@@ -40,12 +42,16 @@ public class ChartController {
         for (String prov : provs) {
             String tmp = "%" + prov + "%";
             long count = injureCaseService.countByProv(tmp);
+            log.info("count "+count);
             treeMap.put(prov, count);
             long count1 = injureCaseService.countByProvAndInjureDegree(tmp, "1");
+            log.info("count "+count);
             treeMapd1.put(prov, count1);
             long count2 = injureCaseService.countByProvAndInjureDegree(tmp, "2");
+            log.info("count "+count);
             treeMapd2.put(prov, count2);
             long count3 = injureCaseService.countByProvAndInjureDegree(tmp, "3");
+            log.info("count "+count);
             treeMapd3.put(prov, count3);
         }
         long max = findMax(treeMap.values());
@@ -57,9 +63,9 @@ public class ChartController {
         model.addAttribute("maxd2", maxd2);
         model.addAttribute("maxd3", maxd3);
         model.addAttribute("treemap", treeMap);
-        model.addAttribute("treemapd1", treeMapd1);
-        model.addAttribute("treemapd2", treeMapd2);
-        model.addAttribute("treemapd3", treeMapd3);
+        model.addAttribute("treemap1", treeMapd1);
+        model.addAttribute("treemap2", treeMapd2);
+        model.addAttribute("treemap3", treeMapd3);
         return "chart/injurecase";
     }
 
@@ -94,7 +100,7 @@ public class ChartController {
                 , "江苏省", "浙江省", "安徽省", "福建省", "江西省", "山东省"
                 , "河南省", "湖北省", "湖南省", "广东省", "广西壮族自治区"
                 , "海南省", "重庆市", "四川省", "贵州省", "云南省", "陕西省"
-                , "甘肃省", "青海省", "宁夏回族自治区");
+                , "甘肃省", "青海省", "宁夏回族自治区","新疆维吾尔自治区");
 
         TreeMap<String, Long> treeMap = Maps.newTreeMap();
         for (String prov : provs) {

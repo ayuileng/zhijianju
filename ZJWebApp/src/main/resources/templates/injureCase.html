@@ -14,23 +14,24 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
-    <div><a href="/chart/injureChart">统计图表</a></div>
+    <div><a href="/chart/injureChart" target="_blank">统计图表</a></div>
     <div>
         <form action="/injurecase" th:object="${injureCaseForm}" class="form-horizontal">
             <div class="form-group">
                 <label for="productName" class="col-md-2" style="text-align: right; margin-top: 7px">产品名称</label>
                 <div class="col-md-2">
-                    <input id="productName" class="form-control" type="text" th:value="*{productName}" name="productName" />
+                    <input id="productName" class="form-control" type="text" th:value="*{productName}"
+                           name="productName"/>
                 </div>
 
                 <label for="injureType" class="col-md-2" style="text-align: right; margin-top: 7px">伤害类别</label>
                 <div class="col-md-2">
-                    <input id="injureType" class="form-control" type="text" th:value="*{injureType}" name="injureType" />
+                    <input id="injureType" class="form-control" type="text" th:value="*{injureType}" name="injureType"/>
                 </div>
 
                 <label for="province" class="col-md-2" style="text-align: right; margin-top: 7px">发生地点</label>
                 <div class="col-md-2">
-                    <select class="form-control" id="province" name="province" >
+                    <select class="form-control" id="province" name="province">
                         <option value="" th:selected="${injureCaseForm.province} == ''">全国</option>
                         <option value="北京" th:selected="${injureCaseForm.province} == '北京'">北京</option>
                         <option value="上海" th:selected="${injureCaseForm.province} == '上海'">上海</option>
@@ -72,28 +73,34 @@
             <div class="form-group">
                 <label for="area" class="col-md-2" style="text-align: right; margin-top: 7px">地区</label>
                 <div class="col-md-2">
-                    <input id="area" class="form-control" type="text" th:value="*{area}" name="area" />
+                    <input id="area" class="form-control" type="text" th:value="*{area}" name="area"/>
                 </div>
 
                 <label for="injureDegree" class="col-md-2" style="text-align: right; margin-top: 7px">伤害程度</label>
                 <div class="col-md-2">
-                    <input id="injureDegree" class="form-control" type="text" th:value="*{injureDegree}" name="injureDegree" />
+                    <!--<input id="injureDegree" class="form-control" type="text" th:value="*{injureDegree}" name="injureDegree" />-->
+                    <select class="form-control" id="injureDegree" name="injureDegree">
+                        <option value="" th:selected="${injureCaseForm.injureDegree} == ''">全部</option>
+                        <option value="1" th:selected="${injureCaseForm.injureDegree} == '1'">一级伤害</option>
+                        <option value="2" th:selected="${injureCaseForm.injureDegree} == '2'">二级伤害</option>
+                        <option value="3" th:selected="${injureCaseForm.injureDegree} == '3'">三级伤害</option>
+                    </select>
                 </div>
 
                 <label for="dateFrom" class="col-md-2" style="text-align: right; margin-top: 7px">起始日期</label>
                 <div class="col-md-2">
-                    <input type="date" class="form-control" id="dateFrom" name="datefrom" th:value="*{datefrom}" />
+                    <input type="date" class="form-control" id="dateFrom" name="datefrom" th:value="*{datefrom}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="dateTo" class="col-md-2" style="text-align: right; margin-top: 7px">截至日期</label>
                 <div class="col-md-2">
-                    <input type="date" class="form-control" id="dateTo" name="dateto" th:value="*{dateto}" />
+                    <input type="date" class="form-control" id="dateTo" name="dateto" th:value="*{dateto}"/>
                 </div>
 
                 <label for="sort" class="col-md-2" style="text-align: right; margin-top: 7px">排序方式</label>
                 <div class="col-md-2">
-                    <select class="form-control" id="sort" name="sort" th:value="*{sort}" >
+                    <select class="form-control" id="sort" name="sort" th:value="*{sort}">
                         <option value="1" th:selected="${injureCaseForm.sort} == 1">发生时间升序</option>
                         <option value="2" th:selected="${injureCaseForm.sort} == 2">发生时间降序</option>
                         <option value="3" th:selected="${injureCaseForm.sort} == 3">严重程度升序</option>
@@ -130,7 +137,6 @@
             </table>
 
 
-            <!--todo pagingnation-->
             <div class="container paging">
                 <!--分页组件-->
                 <nav aria-label="Page navigation" th:object="${injureCases}">
@@ -144,7 +150,7 @@
                         </li>
                         <!--前往-->
                         <li class="page-item">
-                            输入页码：<input type="text" name="page" th:value="${injureCaseForm.page}"/>
+                            输入页码：<input id="page" type="text" name="page" th:value="${injureCaseForm.page}"/>
                             <input type="submit" value="前往"/>
                         </li>
                         <!--上一页-->
@@ -185,9 +191,12 @@ var area = [[${injureCaseForm.area}]];
 var injureType = [[${injureCaseForm.injureType}]];
 var sort = [[${injureCaseForm.sort}]];
 var page = [[${injureCaseForm.page}]];
+
 function getString(s) {
-    if(s == null||s.length == 0){
+    if (s == null || s.length == 0) {
         return ""
+    } else {
+        return s;
     }
 };
 productName = getString(productName);
@@ -199,13 +208,13 @@ var datefrom = getUrlParam("datefrom");
 var dateto = getUrlParam("dateto");
 
 nextPage = Number(page) + 1;
-prevPage =Number(page) - 1;
+prevPage = Number(page) - 1;
 
 var path = window.location.pathname;
 var requestParam = "?province="
     + province + "&injureDegree=" + injureDegree + "&datefrom=" + datefrom
     + "&dateto=" + dateto + "&productName=" + productName + "&area=" + area
-    + "&injureType=" + injureType +"&sort="+sort+"&page=";
+    + "&injureType=" + injureType + "&sort=" + sort + "&page=";
 //productName=&injureType=&province=&area=&injureDegree=&datefrom=&dateto=&sort=2&page=0
 $(".content > td > a").each(function (index) {
     $(this).attr("href", path + requestParam + $(this).attr("id"));

@@ -19,6 +19,7 @@ public class NewsDataService {
     private StringRedisTemplate template;
     private final int defaultPageSize = 40;
 
+
     public long count(){
         return newsDataDao.count();
     }

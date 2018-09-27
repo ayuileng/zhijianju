@@ -13,6 +13,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -65,7 +67,7 @@ public class InjureCaseController {
 
     @GetMapping("/com")
     public String CompanyNegativeList(Model model, CompanyForm companyForm) {
-        List<CompanyNegativeList> list = companyNegativeListService.getByCondition(companyForm);
+        Page<CompanyNegativeList> list = companyNegativeListService.getByCondition(companyForm);
 //        List<CompanyDto> newList = Lists.newArrayList();
 //        for (CompanyNegativeList companyNegativeList : list) {
 //            CompanyDto companyDto = new CompanyDto();
@@ -80,28 +82,29 @@ public class InjureCaseController {
     }
 
     private List<String> getUrlList(String companyName) {
-        Map<String, List<String>> map = getCom2URLMap();
+        Map<String, List<String>> map = null;
+        try {
+            map = getCom2URLMap();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return map.get(companyName);
     }
 
-    private Map<String,List<String>> getCom2URLMap(){
-        Map<String,List<String>> map = Maps.newHashMap();
+    private Map<String, List<String>> getCom2URLMap() throws IOException {
+        Map<String, List<String>> map = Maps.newHashMap();
         Resource resource = new ClassPathResource("keywords/com_url.txt");
-        try {
-            File file = resource.getFile();
-            List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
-            for (String line : lines) {
-                String[] split = line.split("--");
-                if(map.containsKey(split[0])){
-                    map.get(split[0]).add(split[1]);
-                }else{
-                    List<String> list  = Lists.newArrayList();
-                    list.add(split[1]);
-                    map.put(split[0],list);
-                }
+        InputStream inputStream = resource.getInputStream();
+        List<String> readLines = IOUtils.readLines(inputStream);
+        for (String line : readLines) {
+            String[] split = line.split("--");
+            if (map.containsKey(split[0])) {
+                map.get(split[0]).add(split[1]);
+            } else {
+                List<String> list = Lists.newArrayList();
+                list.add(split[1]);
+                map.put(split[0], list);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return map;
     }
@@ -123,17 +126,18 @@ public class InjureCaseController {
                 attachmentData.setChengjianjigou("未知");
             }
         }
+        model.addAttribute("name",name);
         model.addAttribute("companyDetail", company);
-        System.out.println(company);
+        //System.out.println(company);
         return "comDetail";
     }
 
     @GetMapping("/com/callbackDetail")
-    public String getComCallbackDetail(@RequestParam String companyName,Model model){
+    public String getComCallbackDetail(@RequestParam String companyName, Model model) throws IOException {
         Map<String, List<String>> urlMap = getCom2URLMap();
         List<String> urlList = urlMap.get(companyName);
-        model.addAttribute("urlList",urlList);
-        model.addAttribute("conpanyName",companyName);
+        model.addAttribute("urlList", urlList);
+        model.addAttribute("conpanyName", companyName);
         return "comCallbackDetail";
     }
 
@@ -147,22 +151,23 @@ public class InjureCaseController {
     }
 
     @GetMapping("/productList")
-    public String productList(Model model, ProductNegListForm form){
+    public String productList(Model model, ProductNegListForm form) {
         System.out.println(form);
         List<NegProduct> list = negProductService.getByCondition(form);
-        model.addAttribute("proList",list);
-        model.addAttribute("form",form);
+        model.addAttribute("proList", list);
+        model.addAttribute("form", form);
         return "negProList";
     }
 
     @GetMapping("/productList/productDetail")
-    public String proDetail(Model model,ProductNegListForm form,String realName){
+    public String proDetail(Model model, ProductNegListForm form, String realName) {
         List<NegProduct> list = negProductService.getByCondition(form);
         for (NegProduct negProduct : list) {
-            if(realName.equals(negProduct.getProductName())){
-                model.addAttribute("product",negProduct);
+            if (realName.equals(negProduct.getProductName())) {
+                model.addAttribute("product", negProduct);
             }
         }
+        model.addAttribute("readName",realName);
         return "proDetail";
 
     }

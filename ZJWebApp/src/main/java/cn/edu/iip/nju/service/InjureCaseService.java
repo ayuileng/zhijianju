@@ -132,7 +132,7 @@ public class InjureCaseService {
             if (!Strings.isNullOrEmpty(area)) {
                 predicateList.add(criteriaBuilder.like(root.get("injureArea"), "%" + area + "%"));
             }
-            if (!Strings.isNullOrEmpty(area)) {
+            if (!Strings.isNullOrEmpty(province)) {
                 predicateList.add(criteriaBuilder.like(root.get("province"), "%" + province + "%"));
             }
             if (!Strings.isNullOrEmpty(injureType)) {

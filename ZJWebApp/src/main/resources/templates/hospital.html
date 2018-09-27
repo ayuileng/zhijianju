@@ -17,10 +17,10 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container main">
-    <div><a href="/chart/hosChart">统计图表</a></div>
+    <div><a href="/chart/hosChart" target="_blank">统计图表</a></div>
     <form action="/hospital" method="get" class="form-horizontal" th:object="${hospitalDataForm}">
         <div class="form-group">
-            <label for="productType" class="col-md-2" style="text-align: right; margin-top: 7px">产品类别</label>
+            <label for="productType" class="col-md-2" style="text-align: right; margin-top: 7px">产品关键字</label>
             <div class="col-md-2">
                 <input type="text" class="form-control" name="productType" id="productType"/>
             </div>
@@ -28,7 +28,7 @@
             <label for="injureDegree" class="col-md-2" style="text-align: right; margin-top: 7px">伤害程度</label>
             <div class="col-md-2">
                 <select class="form-control" id="injureDegree" name="injureDegree"  >
-                    <option value=""    th:selected="${hospitalDataForm.injureDegree} == ''" >无</option>
+                    <option value=""    th:selected="${hospitalDataForm.injureDegree} == ''" >全部</option>
                     <option value="轻度" th:selected="${hospitalDataForm.injureDegree} == '轻度'" >轻度</option>
                     <option value="中度" th:selected="${hospitalDataForm.injureDegree} == '中度'" >中度</option>
                     <option value="重度" th:selected="${hospitalDataForm.injureDegree} == '重度'" >重度</option>
@@ -49,7 +49,7 @@
             <label for="howgetInjure" class="col-md-2" style="text-align: right; margin-top: 7px">是否与产品相关</label>
             <div class="col-md-2">
                 <select class="form-control" id="howgetInjure" name="howgetInjure" th:value="*{howgetInjure}">
-                    <option value="" th:selected="${hospitalDataForm.howgetInjure} == ''">无</option>
+                    <option value="" th:selected="${hospitalDataForm.howgetInjure} == ''">全部</option>
                     <option value="使用不当" th:selected="${hospitalDataForm.howgetInjure} == '使用不当'">使用不当</option>
                     <option value="与产品质量有关" th:selected="${hospitalDataForm.howgetInjure} == '与产品质量有关'">与产品质量有关</option>
                     <option value="像往常一样使用却突发事故" th:selected="${hospitalDataForm.howgetInjure} == '像往常一样使用却突发事故'">

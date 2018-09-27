@@ -59,18 +59,18 @@
     <div class="secondary-wrapper">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-xs-2 col-xs-offset-2"><a href="/injurecase" data-toggle="tooltip" title="伤害事件案例库"><img src="pic/injure.png" alt="伤害事件案例库" /></a></div>
-                <div class="col-xs-2"><a href="/productList" title="产品信息清单"><img src="pic/product.png" alt="产品信息清单" /></a></div>
-                <div class="col-xs-2"><a href="/com" title="企业信息清单"><img src="pic/enterprise.png" alt="企业信息清单" /></a></div>
-                <div class="col-xs-2"><a href="/hospital" title="医院数据入口"><img src="pic/hospital.png" alt="医院数据入口" /></a></div>
+                <div class="col-md-2 col-md-offset-2"><a href="/injurecase" data-toggle="tooltip" title="伤害事件案例库"><img src="pic/injure.png" alt="伤害事件案例库" /></a></div>
+                <div class="col-md-2"><a href="/productList" title="产品信息清单"><img src="pic/product.png" alt="产品信息清单" /></a></div>
+                <div class="col-md-2"><a href="/com" title="企业信息清单"><img src="pic/enterprise.png" alt="企业信息清单" /></a></div>
+                <div class="col-md-2"><a href="/hospital" title="医院数据入口"><img src="pic/hospital.png" alt="医院数据入口" /></a></div>
             </div>
         </div>
     </div>
 
 </div>
 <div class="chart">
-    <div class="col-md-6" id="main1" style="width: 450px;height:400px;float:left; display:inline"></div>
-    <div class="col-md-6" id="main2" style="width: 450px;height:400px;float:right; display:inline"></div>
+    <div class="col-md-6" id="main1" style="width: 450px;height:450px;float:left; display:inline"></div>
+    <div class="col-md-6" id="main2" style="width: 450px;height:450px;float:right; display:inline"></div>
     <div class="clear"></div>
 </div>
 
@@ -84,7 +84,7 @@
     var option1 = {
 
         title: {
-            text: '当前数据量,共' + [[${total[0]}]],
+            text: '当前数据量，共' + [[${total[0]}]]+'(更新于'+[[${#dates.format(date, 'yyyy-MM-dd')}]]+')',
             x: 'center'
 
         },
@@ -93,32 +93,32 @@
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
 
-        legend: {
-            orient : 'vertical',
-            x : 'left',
-            data:['政府网站','新闻网站','社交平台','其他']
-        },
-        toolbox: {
-            show : false,
-            feature : {
-                mark : {show: true},
-                dataView : {show: true, readOnly: false},
-                magicType : {
-                    show: true,
-                    type: ['pie', 'funnel'],
-                    option: {
-                        funnel: {
-                            x: '25%',
-                            width: '50%',
-                            funnelAlign: 'left',
-                            max: 1548
-                        }
-                    }
-                },
-                restore : {show: true},
-                saveAsImage : {show: true}
-            }
-        },
+        // legend: {
+        //     orient : 'vertical',
+        //     x : 'left',
+        //     data:['政府网站','新闻网站','社交平台','其他']
+        // },
+        // toolbox: {
+        //     show : false,
+        //     feature : {
+        //         mark : {show: true},
+        //         dataView : {show: true, readOnly: false},
+        //         magicType : {
+        //             show: true,
+        //             type: ['pie', 'funnel'],
+        //             option: {
+        //                 funnel: {
+        //                     x: '25%',
+        //                     width: '50%',
+        //                     funnelAlign: 'left',
+        //                     max: 1548
+        //                 }
+        //             }
+        //         },
+        //         restore : {show: true},
+        //         saveAsImage : {show: true}
+        //     }
+        // },
         calculable : true,
         series: [
             {
@@ -144,18 +144,19 @@
     var option2 = {
 
         title: {
-            text: '近期新增数据量,共' + [[${last[0]}]],
+            text: '新增数据,共' + [[${last[0]}]],
             x: 'center',
 
         },
         tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },legend: {
-            orient : 'vertical',
-            x : 'right',
-            data:['政府网站','新闻网站','社交平台','其他']
         },
+        // legend: {
+        //     orient : 'vertical',
+        //     x : 'right',
+        //     data:['政府网站','新闻网站','社交平台','其他']
+        // },
 //
 //        visualMap: {
 //            show: false,

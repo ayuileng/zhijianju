@@ -4,19 +4,22 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="${queryWord} +'_树蛙搜索'">Title</title>
+    <title th:text="${queryWord} +'_搜索'">Title</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <style>
-        .wrapper{
-            margin-top:70px;
+        .wrapper {
+            margin-top: 70px;
         }
-        .result{
+
+        .result {
             padding-top: 10px;
         }
+
         .mainContent {
             width: 60%;
         }
+
         .url {
             color: green;
         }
@@ -27,21 +30,27 @@
 <div th:replace="fragments/header :: header"></div>
 <div class="wrapper container">
     <div class="form-group">
-        <form action="/search" method="get"  class="form-inline">
+        <form action="/search" method="get" class="form-inline">
             <input class="form-control" type="text" name="queryWord" th:value="${queryWord}" style="width: 50%;"/>
-            <button class="form-control btn btn-primary" type="submit" >树蛙一下</button><br/>
-            <label>按照关键字权重<input class="form-control" type="radio" name="sort" value="keyWord" th:checked="${sort} eq 'keyWord'"/></label>
-            <label>按照发布时间权重<input class="form-control" type="radio" name="sort" value="posttime" th:checked="${sort} eq 'posttime'"/></label>
+            <button class="form-control btn btn-primary" type="submit">库中搜索</button>
+            <br/>
+            <label>按照关键字权重<input class="form-control" type="radio" name="sort" value="keyWord"
+                                 th:checked="${sort} eq 'keyWord'"/></label>
+            <label>按照发布时间权重<input class="form-control" type="radio" name="sort" value="posttime"
+                                  th:checked="${sort} eq 'posttime'"/></label>
 
         </form>
     </div>
 
     <div class="mainContent">
         <div class="result" th:each="result : ${results}">
-            <div><a th:href="${result.url}" target="_blank"><span th:utext="${result.title}">title</span></a></div>
-            <div>来源：<span th:text="${result.source}">source</span></div>
-            <div><span th:text="${result.content}">content</span></div>
-            <div><a class="url" th:href="${result.url}" target="_blank"><span th:text="${result.url}">url</span></a></div>
+            <div th:if="${!#strings.isEmpty(result.url)}">
+                <div><a th:href="${result.url}" target="_blank"><span th:utext="${result.title}">title</span></a></div>
+                <!--<div>发布时间：<span th:text="${#dates.format(result.postTime)}"></span></div>-->
+                <div><span th:text="${result.content}">content</span></div>
+                <div><a class="url" th:href="${result.url}" target="_blank"><span th:text="${result.url}">url</span></a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="container paging">
@@ -51,7 +60,9 @@
 
                 <!--上一页-->
                 <li class="page-item" th:classappend="*{first} ? 'disabled' : ''">
-                    <a  class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number - 1}}}" aria-label="Previous">
+                    <a class="page-link"
+                       th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number - 1}}}"
+                       aria-label="Previous">
                         <span aria-hidden="true">←</span>
                     </a>
                 </li>
@@ -65,7 +76,7 @@
 
                 <!-- 当前页面小于等于4 -->
                 <li class="page-item" th:if="${(results.number + 1) le 4}" th:each="i : ${#numbers.sequence(1,6)}"
-                    th:classappend="${(results.number + 1) eq i} ? 'active' : ''" >
+                    th:classappend="${(results.number + 1) eq i} ? 'active' : ''">
                     <a class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${i - 1}}}">
                         <span th:text="${i}"></span>
                     </a>
@@ -82,37 +93,56 @@
                         <span aria-hidden="true">...</span>
                     </a>
                 </li>
-                <li class="page-item" th:if="${(results.totalPages-(results.number + 1)) le 3}" th:each="i : ${#numbers.sequence(results.totalPages-5, results.totalPages)}"
-                    th:classappend="${(results.number + 1) eq i} ? 'active' : ''" >
-                    <a class="page-link" href="javascript:void(0);" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${i - 1}}}">
+                <li class="page-item" th:if="${(results.totalPages-(results.number + 1)) le 3}"
+                    th:each="i : ${#numbers.sequence(results.totalPages-5, results.totalPages)}"
+                    th:classappend="${(results.number + 1) eq i} ? 'active' : ''">
+                    <a class="page-link" href="javascript:void(0);"
+                       th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${i - 1}}}">
                         <span th:text="${i}"></span>
                     </a>
                 </li>
 
                 <!--中间的页码(>4&&<last-1)-->
-                <li class="page-item disabled" th:if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
+                <li class="page-item disabled"
+                    th:if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
                     <a href="javascript:void(0);" class="page-link">
                         <span aria-hidden="true">...</span>
                     </a>
                 </li>
                 <!--中间一共5页-->
-                <li class="page-item" data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}" >
-                    <a class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number - 2}}}" ><span th:text="${results.number-1}"></span></a>
+                <li class="page-item"
+                    data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
+                    <a class="page-link"
+                       th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number - 2}}}"><span
+                            th:text="${results.number-1}"></span></a>
                 </li>
-                <li class="page-item" data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}" >
-                    <a class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number-1}}}"><span th:text="${results.number}"></span></a>
+                <li class="page-item"
+                    data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
+                    <a class="page-link"
+                       th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number-1}}}"><span
+                            th:text="${results.number}"></span></a>
                 </li>
-                <li class="page-item active" data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}" >
-                    <a class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number}}}"><span th:text="${results.number+1}"></span></a>
+                <li class="page-item active"
+                    data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
+                    <a class="page-link"
+                       th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number}}}"><span
+                            th:text="${results.number+1}"></span></a>
                 </li>
-                <li class="page-item" data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}" >
-                    <a class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number + 1}}}"><span th:text="${results.number+2}"></span></a>
+                <li class="page-item"
+                    data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
+                    <a class="page-link"
+                       th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number + 1}}}"><span
+                            th:text="${results.number+2}"></span></a>
                 </li>
-                <li class="page-item" data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}" >
-                    <a class="page-link" th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number + 2}}}"><span th:text="${results.number+3}"></span></a>
+                <li class="page-item"
+                    data-th-if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
+                    <a class="page-link"
+                       th:href="@{'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number + 2}}}"><span
+                            th:text="${results.number+3}"></span></a>
                 </li>
 
-                <li class="page-item disabled"  th:if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
+                <li class="page-item disabled"
+                    th:if="${((results.number + 1) gt 4) and ((results.totalPages-(results.number + 1)) gt 3 )}">
                     <a href="javascript:void(0);" class="page-link">
                         <span aria-hidden="true">...</span>
                     </a>
@@ -126,7 +156,9 @@
                 </li>
                 <!--下一页-->
                 <li class="page-item" th:classappend="*{last} ? 'disabled' : ''">
-                    <a  class="page-link" th:href="'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number + 1}}" aria-label="Previous">
+                    <a class="page-link"
+                       th:href="'/search?queryWord='+${queryWord}+'&amp;page=' + @{${results.number + 1}}"
+                       aria-label="Previous">
                         <span aria-hidden="true">→</span>
                     </a>
                 </li>

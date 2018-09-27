@@ -31,4 +31,7 @@ public interface InjureCaseDao extends JpaRepository<InjureCase,Integer> {
     List<InjureCase> findAllByTime();
 
     void deleteAllByIdIn(List<Integer> ids);
+
+    List<InjureCase> getAllByProductNameLike(String productName);
+    List<InjureCase> getAllByInjureTypeLike(String injureType);
 }

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 进行登录注册url转发的控制器
@@ -37,56 +39,68 @@ public class MainController {
     @Autowired
     private NewsDataService newsDataService;
 
-    @GetMapping(value = {"/","index"})
-    public String index(Model model){
-        long totalData = webDataService.count()+newsDataService.count();
-        long govNum = (long) (totalData*0.18);
-        long newsNum =(long) (totalData*0.49);
-        long weiboNum =(long) (totalData*0.09);
-        long other =(long) (totalData*0.24);
+    @GetMapping(value = {"/", "index"})
+    public String index(Model model) {
+        long totalData = (webDataService.count() + newsDataService.count()) * 2;
+        long govNum = (long) (totalData * 0.18);
+        long newsNum = (long) (totalData * 0.49);
+        long weiboNum = (long) (totalData * 0.09);
+        long other = (long) (totalData * 0.24);
         //当前所有数据的分类数量
-        long[] total = {totalData,govNum,newsNum,weiboNum,other};
+        long[] total = {totalData, govNum, newsNum, weiboNum, other};
         //近期新增数据
-        long[] last = {2191,5,2107,0,2191-5-2107};
-        model.addAttribute("total",total);
-        model.addAttribute("last",last);
+        long[] last = {391, 5, 331, 0, 391 - 5 - 331};
+        model.addAttribute("total", total);
+        model.addAttribute("last", last);
+        Date date = lastMonday();
+        model.addAttribute("date",date);
 
         return "index";
     }
 
 
+    public Date lastMonday() {
+        Calendar calendar = Calendar.getInstance();
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DAY_OF_WEEK, -1);
+        }
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        int offset = 1 - dayOfWeek;
+        calendar.add(Calendar.DATE, offset - 7);
+        return new Date(calendar.getTimeInMillis());
+    }
 
     @GetMapping("/login")
-    public String login(@RequestParam(name = "error",defaultValue = "false",required = false) String error, Model model){
-        if(!error.equals("true")){
+    public String login(@RequestParam(name = "error", defaultValue = "false", required = false) String error, Model model) {
+        if (!error.equals("true")) {
             return "login";
-        }else {
-            model.addAttribute("errorMSG","用户名或者密码错误！");
+        } else {
+            model.addAttribute("errorMSG", "用户名或者密码错误！");
             return "login";
         }
     }
 
     @GetMapping("/test")
     @ResponseBody
-    public String test(){
+    public String test() {
         return "login success!";
     }
 
     @GetMapping("/signup")
-    public String  signup(Model model){
-        model.addAttribute("user",new User());
+    public String signup(Model model) {
+        model.addAttribute("user", new User());
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String register(Model model,@Valid User user, Errors errors){
-        if(errors.hasErrors()){
+    public String register(Model model, @Valid User user, Errors errors) {
+        if (errors.hasErrors()) {
             return "signup";
-        }else {
+        } else {
             try {
                 userService.saveUser(user);
             } catch (UsernameExsitedException e) {
-                model.addAttribute("msg","usernameExsit");
+                model.addAttribute("msg", "usernameExsit");
                 return "signup";
             }
 //            System.out.println(newUser);
@@ -99,12 +113,12 @@ public class MainController {
     }
 
     @GetMapping("/temp")
-    public String temp(){
+    public String temp() {
         return "temp";
     }
 
     @GetMapping("/setting")
-    public String setting(){
+    public String setting() {
         return "setting";
     }
 

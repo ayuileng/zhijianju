@@ -1,33 +1,14 @@
 package cn.edu.iip.nju.model.vo;
 
+import lombok.Data;
+
+@Data
 public class CompanyForm {
     private String province;
     private String factory;
-    private int sort;
+    private int sort=0;
+    private int page = 1;
 
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getFactory() {
-        return factory;
-    }
-
-    public void setFactory(String factory) {
-        this.factory = factory;
-    }
-
-    public int getSort() {
-        return sort;
-    }
-
-    public void setSort(int sort) {
-        this.sort = sort;
-    }
 
 
 }

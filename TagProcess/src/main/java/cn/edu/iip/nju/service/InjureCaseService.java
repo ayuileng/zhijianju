@@ -213,7 +213,7 @@ public class InjureCaseService {
         List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
         for (String line : lines) {
             String[] words = line.split(",");
-            if(words.length!=6){
+            if (words.length != 6) {
                 System.out.println(words[0]);
             }
             Integer id = Integer.valueOf(words[0]);
@@ -247,5 +247,75 @@ public class InjureCaseService {
         System.out.println(injureCase);
         injureCase.setInjureDegree("2");
         injureCaseDao.save(injureCase);
+    }
+
+    public void removeNoPro() {
+
+        List<InjureCase> pros = injureCaseDao.getAllByProductNameLike("%香水%");
+        List<InjureCase> pros1 = injureCaseDao.getAllByProductNameLike("%灭火器%");
+        pros.addAll(pros1);
+        for (InjureCase pro : pros) {
+            String productName = pro.getProductName().trim();
+            String[] split = productName.split("\\s+");
+            StringBuilder sb = new StringBuilder();
+            for (String s : split) {
+                if (!"香水".equals(s.trim()) && !"灭火器".equals(s.trim())) {
+                    sb.append(s).append(" ");
+                }
+            }
+            String proNameNEW = sb.toString().trim();
+            pro.setProductName(proNameNEW);
+
+        }
+        injureCaseDao.save(pros);
+
+    }
+
+
+    private void removeBy(String keyWord,String type) {
+        List<InjureCase> cases = new ArrayList<>();
+        if("productName".equals(keyWord)){
+            cases=injureCaseDao.getAllByProductNameLike("%" + type + "%");
+        } else if("injureType".equals(keyWord)){
+            cases=injureCaseDao.getAllByInjureTypeLike("%" + type + "%");
+        }
+        for (InjureCase aCase : cases) {
+            String injureType = aCase.getInjureType();
+            String[] split = injureType.split("\\s+");
+            StringBuilder sb = new StringBuilder();
+            for (String s : split) {
+                if (!type.equals(s.trim())) {
+                    sb.append(s).append(" ");
+                }
+            }
+            if (sb.length() == 0) {
+                sb.append("其他");
+            } else {
+                sb.deleteCharAt(sb.length() - 1);
+            }if("productName".equals(keyWord)){
+                aCase.setProductName(sb.toString());
+            } else if("injureType".equals(keyWord)){
+                aCase.setInjureType(sb.toString());
+            }
+            System.out.println(sb);
+        }
+        //injureCaseDao.save(cases);
+    }
+
+    public void removeType() {
+        String[] type = {"抢救", "呼吸道", "噪音", "急救", "截肢", "损伤", "神经","住院","疲劳","脱落","浓烟"};
+        for (String s : type) {
+            removeBy("injureType",s);
+            logger.info("finish remove {}",s);
+        }
+
+    }
+    public void removeProductName() {
+        String[] name = {"毛巾", "栏杆", "洗发水"};
+        for (String s : name) {
+            removeBy("productName",s);
+            logger.info("finish remove {}",s);
+        }
+
     }
 }

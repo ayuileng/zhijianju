@@ -13,4 +13,5 @@ public interface SolrDocumentDao extends SolrCrudRepository<Document, String> {
     @Highlight(prefix = "<font color='red'>", postfix = "</font>")
     HighlightPage<Document> findBySearchText(String searchText, Pageable pageable);
 
+
 }

@@ -34,7 +34,7 @@ public class NewsCrawler {
     private static final Logger logger = LoggerFactory.getLogger(NewsCrawler.class);
     private static volatile BloomFilter<String> bf = BloomFilter.create(Funnels.stringFunnel(Charset.forName("utf-8")),
             100000, 0.00001);
-    private static final String baiduUrl = "http://news.baidu.com/ns?tn=news&from=news&cl=2&rn=20&ct=1&word=";
+    private static final String baiduUrl = "http://news.baidu.com/ns?sr=0&cl=2&rn=20&tn=news&ct=0&clk=sortbytime&word=";
     private static final String sougouUrl = "http://news.sogou.com/news?query=";
     //private static final String weixinUrl = "http://weixin.sogou.com/weixin?type=2&s_from=input&ie=utf8&_sug_=y&_sug_type_=&w=01019900&sut=1018&sst0=1511354003438&lkt=0%2C0%2C0&query=";
     private static final String _360Url = "https://news.so.com/ns?tn=news&rank=rank&j=0&nso=5&tp=19&nc=0&src=page&q=";

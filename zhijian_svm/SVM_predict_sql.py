@@ -96,7 +96,7 @@ import sys
 print(sys.getdefaultencoding())
 
 #打开数据库连接
-db = pymysql.connect(host="114.212.82.101",port=3306,user="root",passwd='root',db="zhijianju1",charset="utf8")
+db = pymysql.connect(host="localhost",port=3306,user="root",passwd='root',db="zhijianju",charset="utf8")
 #使用cursor()方法获取游标对象
 cursor= db.cursor()
 #使用execute() 方法执行SQL查询
@@ -106,7 +106,7 @@ data1=cursor.fetchone()
 print("DB version is : %s" %data1)
 # SQL 查询语句
 sql = "SELECT id,content FROM news_data \
-       WHERE id > '%d'" % (81658)
+       WHERE id > '%d'" % (1)
 try:
    # 执行SQL语句
    cursor.execute(sql)

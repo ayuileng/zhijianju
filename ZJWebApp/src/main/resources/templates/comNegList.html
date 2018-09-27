@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8"/>
-    <title>企业负面清单</title>
+    <title>企业信息清单</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <style type="text/css">
@@ -41,8 +41,8 @@
                 <label for="sort" class="col-md-2" style="text-align: right; margin-top: 7px">排序方式</label>
                 <div class="col-md-2">
                     <select class="form-control" th:value="*{sort}" name="sort" id="sort">
-                        <option value="1" th:selected="${sort=='1'}">按照召回次数降序</option>
-                        <option value="0" th:selected="${sort=='0'}">按照案例数降序</option>
+                        <option value="0" th:selected="${companyForm.sort==0}">按照不合格率升序</option>
+                        <option value="1" th:selected="${companyForm.sort==1}">按照召回数降序</option>
                     </select>
                 </div>
             </div>
@@ -51,47 +51,120 @@
                     <input class="btn btn-primary" type="submit" value="搜索"/>
                 </div>
             </div>
+
+            <div class="container"><a href="/chart/comChart" target="_blank">
+                <button type="button" class="btn btn-primary">查看统计图表</button>
+            </a></div>
+            <table class="table table-hover table-bordered table-striped">
+                <tr>
+                    <th>企业名称</th>
+                    <th>所在省份</th>
+                    <th>企业基本信息</th>
+                    <th>在案例库中搜索</th>
+                    <th>抽检次数</th>
+                    <th>召回次数</th>
+                    <th>抽检不合格率</th>
+
+                </tr>
+                <tr th:each="i : ${pnl.content}"
+                    th:if="${i.companyName}!=null and ${#strings.length(i.companyName)} gt 2">
+                    <td><a th:href="@{'/com/detail?name='+${i.companyName} }" target="_blank"><span
+                            th:text="${i.companyName}">name</span></a>
+                    </td>
+                    <td th:text="${i.province}">江苏</td>
+                    <td><a target="_blank" th:href="'http://www.xizhi.com/search?wd='+${i.companyName}"><span
+                            class="label label-success">基本信息</span></a></td>
+                    <td><a target="_blank" th:href="@{'/search?queryWord='} + ${i.companyName}"><span
+                            class="label label-success">搜索</span></a>
+                    </td>
+                    <td th:text="${i.caseNum}">1</td>
+                    <td><span th:text="${i.callbackNum}">0</span>
+                        <a th:href="@{'/com/callbackDetail?companyName='+${i.companyName }} "
+                           th:if="${i.callbackNum>0}" target="_blank">详细信息</a>
+                    </td>
+                    <td th:text="${i.passPercent eq 1 ? 0 : (#numbers.formatInteger((1.0 - i.passPercent)*100,2) +'%') }">1</td>
+                </tr>
+            </table>
+            <div class="container paging">
+                <!--分页组件-->
+                <nav aria-label="Page navigation" th:object="${pnl}">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <span>共<span th:text="${pnl.totalPages}">1</span>页</span>
+                        </li>
+                        <!--当前页-->
+                        <li class="page-item disabled">
+                            <span th:inline="text">当前页码：[[${pnl.number}+1]]</span>
+                        </li>
+                        <!--前往-->
+                        <li class="page-item">
+                            输入页码：<input type="text" name="page" th:value="${companyForm.page}"/>
+                            <input type="submit" value="前往"/>
+                        </li>
+                        <!--上一页-->
+                        <li class="page-item" th:classappend="${pnl.isFirst()} ? 'disabled' : ''">
+                            <a id="prev" class="page-link" aria-label="Previous">
+                                <span aria-hidden="true">←</span>
+                            </a>
+                        </li>
+
+                        <!--下一页-->
+                        <li class="page-item" th:classappend="${pnl.isLast()} ? 'disabled' : ''">
+                            <a id="next" class="page-link" aria-label="Next">
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </form>
     </div>
 
-
-    <div class="container"><a href="/chart/comChart">
-        <button type="button" class="btn btn-primary">查看统计图表</button>
-    </a></div>
-    <table class="table table-hover table-bordered table-striped">
-        <tr>
-            <th>企业名称</th>
-            <th>在案例库中搜索</th>
-            <th>百度搜索</th>
-            <th>悉知搜索</th>
-            <th>案例数</th>
-            <th>召回次数</th>
-            <th>所在省份</th>
-            <th>抽检合格率</th>
-
-        </tr>
-        <tr th:each="i : ${pnl}" th:if="${i.companyName}!=null and ${#strings.length(i.companyName)} gt 2">
-            <td><a th:href="@{'/com/detail?name='+${i.companyName} }"><span th:text="${i.companyName}">name</span></a>
-            </td>
-            <td><a target="_blank" th:href="@{'/search?queryWord='} + ${i.companyName}"><span
-                    class="label label-success">搜索</span></a>
-            </td>
-            <td><a target="_blank" th:href="'https://www.baidu.com/s?wd='+${i.companyName}"><span
-                    class="label label-success">百度一下</span></a></td>
-            <td><a target="_blank" th:href="'http://www.xizhi.com/search?wd='+${i.companyName}"><span
-                    class="label label-success">悉知搜索</span></a></td>
-            <td th:text="${i.caseNum}">1</td>
-            <td><span th:text="${i.callbackNum}">0</span>
-                <a th:href="@{'/com/callbackDetail?companyName='+${i.companyName }} "
-                   th:if="${i.callbackNum>0}" target="_blank">详细信息</a>
-            </td>
-            <td th:text="${i.province}">江苏</td>
-            <td th:text="${#numbers.formatInteger(i.passPercent*100,2) +'%'}">1</td>
-        </tr>
-    </table>
 
 </div>
 
 <div th:replace="fragments/footer :: footer">...</div>
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script charset="uft-8" th:inline='javascript'>//<![CDATA[
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return decodeURI(r[2]);
+    return null; //返回参数值
+}
+
+var factory = [[${companyForm.factory}]];
+var province = [[${companyForm.province}]];
+var sort = [[${companyForm.sort}]];
+var page = [[${companyForm.page}]];
+
+function getString(s) {
+    if (s == null || s.length == 0) {
+        return ""
+    }
+    else{
+        return s;
+    }
+};
+factory = getString(factory);
+province = getString(province);
+nextPage = Number(page) + 1;
+prevPage = Number(page) - 1;
+
+var path = window.location.pathname;
+var requestParam = "?province="
+    + province + "&factory=" + factory + "&sort=" + sort + "&page=";
+//http://localhost:8889/com?factory=&province=&sort=1&page=1
+$(".content > td > a").each(function (index) {
+    $(this).attr("href", path + requestParam + $(this).attr("id"));
+});
+
+$("#next").attr("href", path + requestParam + nextPage);
+if (prevPage <= 0) {
+    prevPage = 1;
+}
+$("#prev").attr("href", path + requestParam + prevPage);
+//]]></script>
+
 </html>

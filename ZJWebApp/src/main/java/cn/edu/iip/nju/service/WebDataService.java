@@ -2,6 +2,7 @@ package cn.edu.iip.nju.service;
 
 import cn.edu.iip.nju.dao.WebDataDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 /**

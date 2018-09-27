@@ -6,6 +6,7 @@ import cn.edu.iip.nju.model.AttachmentData;
 import cn.edu.iip.nju.model.CompanyNegativeList;
 import cn.edu.iip.nju.model.vo.CompanyForm;
 import com.google.common.base.Strings;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import java.util.List;
  * 完成产品负面清单的创建，以及字段封装，向controller返回分页结果
  */
 @Service
+@Log4j
 public class CompanyNegativeListService {
     @Autowired
     private CompanyNegativeListDao companyNegativeListDao;
@@ -46,24 +48,25 @@ public class CompanyNegativeListService {
         return attachmentDataDao.getAllByFactoryName(name);
     }
 
-    public List<CompanyNegativeList> getByCondition(CompanyForm companyForm) {
+    public Page<CompanyNegativeList> getByCondition(CompanyForm companyForm) {
         String factory = companyForm.getFactory();
         String province = companyForm.getProvince();
-        int sort = companyForm.getSort();//0-按照案例数降序 1-按照召回次数降序
+        int sort = companyForm.getSort();//0-按照不合格率降序（即合格率升序） 1-按照召回次数降序
         Page<CompanyNegativeList> list = companyNegativeListDao.findAll((root, criteriaQuery, criteriaBuilder) -> {
-            if (Strings.isNullOrEmpty(factory)&&Strings.isNullOrEmpty(province)) {
+            if (Strings.isNullOrEmpty(factory) && Strings.isNullOrEmpty(province)) {
                 return null;
-            }
-            if(Strings.isNullOrEmpty(factory)){
-                return criteriaBuilder.like(root.get("province"), "%" + province + "%");
-            }
-            if(Strings.isNullOrEmpty(province)){
+            } else if (!Strings.isNullOrEmpty(factory)) {
                 return criteriaBuilder.like(root.get("companyName"), "%" + factory + "%");
+            } else if (!Strings.isNullOrEmpty(province)) {
+                return criteriaBuilder.like(root.get("province"), "%" + province + "%");
+            } else {
+                return criteriaBuilder.and(criteriaBuilder.like(root.get("province"), "%" + province + "%"),
+                        criteriaBuilder.like(root.get("companyName"), "%" + factory + "%"));
             }
-            return criteriaBuilder.and(criteriaBuilder.like(root.get("province"), "%" + province + "%"),
-                    criteriaBuilder.like(root.get("companyName"), "%" + factory + "%"));
-        }, new PageRequest(0, 50, new Sort(Sort.Direction.DESC, sort == 0 ? "caseNum" : "callbackNum")));
-        return list.getContent();
+        }, new PageRequest(companyForm.getPage()-1, 50, sort == 0 ?
+                new Sort(Sort.Direction.ASC, "passPercent") :
+                new Sort(Sort.Direction.DESC, "callbackNum")));
+        return list;
     }
 
 }

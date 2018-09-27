@@ -40,6 +40,7 @@ public class SearchController {
         if (Strings.isNullOrEmpty(queryWord)) {
             return "forward:/index";
         }
+        //log.info("queryword is %s",queryWord);
         //判断用户是否登录，如果是登录状态，则保存搜索历史
         Integer userId = isUserLogIn();
         if (userId != -1) {
@@ -56,16 +57,17 @@ public class SearchController {
         Page<Document> results;
         if(sort.equals("posttime")){
             s = new Sort(Sort.Direction.DESC,"post_time");
-            results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 10,s));
+            results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 50,s));
         }else {
-            results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 10));
+            results = solrDocumentService.findBySearchText(queryWord, new PageRequest(page, 50));
+        }
+        Document firstRecord = results.getContent().get(0);
+        if(!(firstRecord.getTitle()+firstRecord.getContent()).contains(queryWord)){
+            return "s/noresult";
         }
         model.addAttribute("queryWord", queryWord);
         model.addAttribute("results", results);
         model.addAttribute("sort",sort);
-
-        //TODO 分页时保留原有的查询参数
-
         return "s/result";
 
     }

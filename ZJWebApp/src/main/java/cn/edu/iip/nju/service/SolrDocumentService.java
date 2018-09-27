@@ -2,12 +2,16 @@ package cn.edu.iip.nju.service;
 
 import cn.edu.iip.nju.dao.SolrDocumentDao;
 import cn.edu.iip.nju.model.Document;
+import org.assertj.core.util.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by xu on 2017/9/8.
@@ -24,9 +28,15 @@ public class SolrDocumentService {
 
     public Page<Document> findBySearchText(String searchText, Pageable pageable) {
         int i = 0;
+        HashSet<String> urlSet = Sets.newHashSet();
         HighlightPage<Document> documents = solrDocumentDao.findBySearchText(searchText.trim(), pageable);
         for (HighlightEntry<Document> documentHighlightEntry : documents.getHighlighted()) {
             Document entity = documents.getContent().get(i);
+            if(urlSet.contains(entity.getUrl())){
+                entity.setUrl("");
+            }else{
+                urlSet.add(entity.getUrl());
+            }
             if (entity.getContent().length() > 100) {
                 entity.setContent(entity.getContent().substring(0, 99)+"...");
             }
@@ -42,6 +52,9 @@ public class SolrDocumentService {
             }
             i++;
         }
+
+
+
         return documents;
     }
 
