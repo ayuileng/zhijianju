@@ -13,7 +13,9 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -35,6 +37,7 @@ import java.util.Map;
  * Created by xu on 2017/10/24.
  */
 @Controller
+@Slf4j
 public class InjureCaseController {
 
     private final InjureCaseService injureCaseService;
@@ -58,7 +61,25 @@ public class InjureCaseController {
 
     @GetMapping("/injurecase")
     public String injureCase(Model model, InjureCaseForm injureCaseForm) {
-        Page<InjureCase> injureCases = injureCaseService.getByCondition(injureCaseForm);
+        InjureCaseForm form1 = new InjureCaseForm();
+        BeanUtils.copyProperties(injureCaseForm,form1);
+        String province = injureCaseForm.getProvince();
+        log.info("ori prov = {}",province);
+        String area = injureCaseForm.getArea();
+        if("请选择省份/直辖市".equals(province)){
+            province = "";
+        }
+        if("全部".equals(area) || "请选择城市/地区".equals(area)){
+            area = "";
+        }
+        if(!Strings.isNullOrEmpty(area) && !Strings.isNullOrEmpty(province)){
+            province = "";
+        }
+        log.info("after prov = {}",province);
+        log.info("after area = {}",area);
+        form1.setArea(area);
+        form1.setProvince(province);
+        Page<InjureCase> injureCases = injureCaseService.getByCondition(form1);
         model.addAttribute("injureCases", injureCases);
         model.addAttribute("injureCaseForm", injureCaseForm);
         return "injureCase";
@@ -68,14 +89,6 @@ public class InjureCaseController {
     @GetMapping("/com")
     public String CompanyNegativeList(Model model, CompanyForm companyForm) {
         Page<CompanyNegativeList> list = companyNegativeListService.getByCondition(companyForm);
-//        List<CompanyDto> newList = Lists.newArrayList();
-//        for (CompanyNegativeList companyNegativeList : list) {
-//            CompanyDto companyDto = new CompanyDto();
-//            BeanUtils.copyProperties(companyNegativeList,companyDto);
-//            if(companyNegativeList.getCaseNum()>0){
-//                companyDto.setUrls(getUrlList(companyNegativeList.getCompanyName()));
-//            }
-//        }
         model.addAttribute("pnl", list);
         model.addAttribute("companyForm", companyForm);
         return "comNegList";
