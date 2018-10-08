@@ -64,7 +64,7 @@ public class InjureCaseController {
         InjureCaseForm form1 = new InjureCaseForm();
         BeanUtils.copyProperties(injureCaseForm,form1);
         String province = injureCaseForm.getProvince();
-        log.info("ori prov = {}",province);
+//        log.info("ori prov = {}",province);
         String area = injureCaseForm.getArea();
         if("请选择省份/直辖市".equals(province)){
             province = "";
@@ -75,8 +75,8 @@ public class InjureCaseController {
         if(!Strings.isNullOrEmpty(area) && !Strings.isNullOrEmpty(province)){
             province = "";
         }
-        log.info("after prov = {}",province);
-        log.info("after area = {}",area);
+//        log.info("after prov = {}",province);
+//        log.info("after area = {}",area);
         form1.setArea(area);
         form1.setProvince(province);
         Page<InjureCase> injureCases = injureCaseService.getByCondition(form1);

@@ -16,7 +16,7 @@
 <div class="container wrapper">
     <div><a href="/chart/injureChart" target="_blank">统计图表</a></div>
     <div>
-        <form name="form1" action="/injurecase" th:object="${injureCaseForm}" class="form-horizontal">
+        <form id="form" name="form1" action="/injurecase" th:object="${injureCaseForm}" class="form-horizontal">
             <div class="form-group">
                 <label for="productName" class="col-md-2" style="text-align: right; margin-top: 7px">产品名称</label>
                 <div class="col-md-2">
@@ -111,13 +111,14 @@
                     </select>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="col-md-offset-5 col-md-2">
-                    <input class="btn btn-primary" type="submit" value="搜索"
-                           onclick="return changePagetoOne(this.form)"/>
+                    <input class="btn btn-primary" type="submit" value="搜索"/>
                 </div>
             </div>
             <div th:inline="text">共检索到[[${{injureCases.totalElements}}]]条案例！</div>
+
             <table class="table table-hover table-bordered table-striped">
                 <tr>
                     <th>产品名称</th>
@@ -229,7 +230,7 @@ $(function () {
     for (var j = 0; j < arr_city[index].length; j++) {
         console.log(arr_city[index][j]);
         $("#area").append("<option value='" + arr_city[index][j] + "'>" + arr_city[index][j] + "</option>");
-        if(arr_city[index][j] === area){
+        if (arr_city[index][j] === area) {
             areaIndex = j;
         }
 
@@ -243,7 +244,7 @@ function changeSelect(index) {
     //选择对象
     var city = document.form1.area;
     //修改省份列表的选择项
-     province.selectedIndex = index;
+    province.selectedIndex = index;
 
     //指定城市中<option>标记的个数
     city.length = arr_city[index].length;
@@ -269,6 +270,23 @@ var injureType = [[${injureCaseForm.injureType}]];
 var sort = [[${injureCaseForm.sort}]];
 var page = [[${injureCaseForm.page}]];
 
+
+$("#form").submit(function () {
+    var proName = $("#productName").val();
+    var injuType = $("#injureType").val();
+    var prov = $("#province").val();
+    var injud = $("#injureDegree").val();
+    var areaName = $("#area").val();
+    var dateF = $("#dateFrom").val();
+    var dateT = $("#dateTo").val();
+    if (productName !== proName || injureType !== injuType ||
+        prov !== province || areaName !== area || injud !== injureDegree ||
+        dateF !== datefrom || dateT !== dateto) {
+        $("#page").val(1);
+    }
+
+});
+
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
@@ -285,10 +303,6 @@ function getString(s) {
     }
 };
 
-// $(function () {
-//     console.log(province)
-//     $("#province").find("option[value='" + province + "']").attr("selected", "selected");
-// })
 productName = getString(productName);
 province = getString(province);
 injureDegree = getString(injureDegree);
