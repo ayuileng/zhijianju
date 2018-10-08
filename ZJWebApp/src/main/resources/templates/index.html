@@ -19,6 +19,11 @@
             padding-bottom: 50px;
         }
 
+        .logo {
+            margin-top: 160px;
+            margin-bottom: 40px;
+        }
+
         .searchForm {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -28,6 +33,7 @@
             position: relative;
             width: 100%;
             margin: 0 auto;
+            margin-top: 20px;
         }
 
         .footer {
@@ -47,7 +53,7 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="wrapper">
-    <div class="logo"><img src="pic/logo.png" alt="江苏省标准化研究院" height="220"/></div>
+    <div class="logo"><img src="pic/logo.png" alt="江苏省标准化研究院" height="60px" width="250px"/></div>
 
     <div class="searchForm">
         <form action="/search" method="get" class="form-inline">
