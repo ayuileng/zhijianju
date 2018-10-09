@@ -10,7 +10,6 @@
 
     <title>树蛙搜索</title>
     <style>
-
         .wrapper {
             position: relative;
             text-align: center;
@@ -18,24 +17,20 @@
             margin: 70px auto 0;
             padding-bottom: 50px;
         }
-
         .logo {
             margin-top: 160px;
             margin-bottom: 40px;
         }
-
         .searchForm {
             margin-top: 10px;
             margin-bottom: 10px;
         }
-
         .secondary-wrapper {
             position: relative;
             width: 100%;
             margin: 0 auto;
             margin-top: 20px;
         }
-
         .footer {
             height: 50px;
         }
@@ -43,7 +38,6 @@
             margin: auto;
             width: 70%;
         }
-
         .clear {
             clear: both;
         }
@@ -85,110 +79,4 @@
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<script type="text/javascript" th:inline="javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myChart1 = echarts.init(document.getElementById('main1'));
-    // 指定图表的配置项和数据
-    var option1 = {
-
-        title: {
-            text: '当前数据量，共' + [[${total[0]}]]+'(更新于'+[[${#dates.format(date, 'yyyy-MM-dd')}]]+')',
-            x: 'center'
-
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-
-        // legend: {
-        //     orient : 'vertical',
-        //     x : 'left',
-        //     data:['政府网站','新闻网站','社交平台','其他']
-        // },
-        // toolbox: {
-        //     show : false,
-        //     feature : {
-        //         mark : {show: true},
-        //         dataView : {show: true, readOnly: false},
-        //         magicType : {
-        //             show: true,
-        //             type: ['pie', 'funnel'],
-        //             option: {
-        //                 funnel: {
-        //                     x: '25%',
-        //                     width: '50%',
-        //                     funnelAlign: 'left',
-        //                     max: 1548
-        //                 }
-        //             }
-        //         },
-        //         restore : {show: true},
-        //         saveAsImage : {show: true}
-        //     }
-        // },
-        calculable : true,
-        series: [
-            {
-                name: '数据来源',
-                type: 'pie',
-                radius: '55%',
-                center: ['50%', '50%'],
-                data: [
-                    {value: [[${total[1]}]], name: '政府网站'},
-                    {value: [[${total[2]}]], name: '新闻网站'},
-                    {value: [[${total[3]}]], name: '社交平台'},
-                    {value: [[${total[4]}]], name: '其他'},
-                ]
-            }
-        ]
-    };
-    myChart1.setOption(option1);
-
-
-    // 基于准备好的dom，初始化echarts实例
-    var myChart2 = echarts.init(document.getElementById('main2'));
-    // 指定图表的配置项和数据
-    var option2 = {
-
-        title: {
-            text: '新增数据,共' + [[${last[0]}]],
-            x: 'center',
-
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        // legend: {
-        //     orient : 'vertical',
-        //     x : 'right',
-        //     data:['政府网站','新闻网站','社交平台','其他']
-        // },
-//
-//        visualMap: {
-//            show: false,
-//            min: 80,
-//            max: 600,
-//            inRange: {
-//                colorLightness: [0, 1]
-//            }
-//        },
-        series: [
-            {
-                name: '数据来源',
-                type: 'pie',
-                radius: '55%',
-                center: ['50%', '50%'],
-                data: [
-                    {value: [[${last[1]}]], name: '政府网站'},
-                    {value: [[${last[2]}]], name: '新闻网站'},
-                    {value: [[${last[3]}]], name: '社交平台'},
-                    {value: [[${last[4]}]], name: '其他'},
-                ]
-            }
-        ]
-    };
-    myChart2.setOption(option2);
-</script>
 </html>

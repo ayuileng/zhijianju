@@ -25,7 +25,7 @@
     <!--<a href="/com?sort=3"><button type="button" class="btn btn-info">按照案例数升序排列</button></a>-->
     <!--</div>-->
     <div>
-        <form action="/com" th:object="${companyForm}" method="get" class="form-horizontal">
+        <form id="form" action="/com" th:object="${companyForm}" method="get" class="form-horizontal">
             <div class="form-group">
                 <label for="factory" class="col-md-2" style="text-align: right; margin-top: 7px">企业名称</label>
                 <div class="col-md-2">
@@ -40,7 +40,7 @@
                 <label for="sort" class="col-md-2" style="text-align: right; margin-top: 7px">排序方式</label>
                 <div class="col-md-2">
                     <select class="form-control" th:value="*{sort}" name="sort" id="sort">
-                        <option value="0" th:selected="${companyForm.sort==0}">按照不合格率升序</option>
+                        <option value="0" th:selected="${companyForm.sort==0}">按照不合格率降序</option>
                         <option value="1" th:selected="${companyForm.sort==1}">按照召回数降序</option>
                     </select>
                 </div>
@@ -60,8 +60,9 @@
                     <th>所在省份</th>
                     <th>企业基本信息</th>
                     <th>在案例库中搜索</th>
-                    <th>抽检次数</th>
                     <th>召回次数</th>
+                    <th>召回信息</th>
+                    <th>抽检次数</th>
                     <th>抽检不合格率</th>
 
                 </tr>
@@ -76,12 +77,14 @@
                     <td><a target="_blank" th:href="@{'/search?queryWord='} + ${i.companyName}"><span
                             class="label label-success">搜索</span></a>
                     </td>
+
+                    <td><span th:text="${i.callbackNum}">0</span></td>
+                    <td><a th:href="@{'/com/callbackDetail?companyName='+${i.companyName }} "
+                           th:if="${i.callbackNum>0}" target="_blank">详细信息</a></td>
                     <td th:text="${i.caseNum}">1</td>
-                    <td><span th:text="${i.callbackNum}">0</span>
-                        <a th:href="@{'/com/callbackDetail?companyName='+${i.companyName }} "
-                           th:if="${i.callbackNum>0}" target="_blank">详细信息</a>
+                    <td th:text="${i.passPercent eq 1 ? 0 : (#numbers.formatInteger((1.0 - i.passPercent)*100,2) +'%') }">
+                        1
                     </td>
-                    <td th:text="${i.passPercent eq 1 ? 0 : (#numbers.formatInteger((1.0 - i.passPercent)*100,2) +'%') }">1</td>
                 </tr>
             </table>
             <div class="container paging">
@@ -97,7 +100,7 @@
                         </li>
                         <!--前往-->
                         <li class="page-item">
-                            输入页码：<input type="text" name="page" th:value="${companyForm.page}"/>
+                            输入页码：<input id="page" type="text" name="page" th:value="${companyForm.page}"/>
                             <input type="submit" value="前往"/>
                         </li>
                         <!--上一页-->
@@ -142,7 +145,7 @@ function getString(s) {
     if (s == null || s.length == 0) {
         return ""
     }
-    else{
+    else {
         return s;
     }
 };
@@ -150,6 +153,17 @@ factory = getString(factory);
 province = getString(province);
 nextPage = Number(page) + 1;
 prevPage = Number(page) - 1;
+
+
+$("#form").submit(function () {
+    var fac = $("#factory").val();
+
+    var prov = $("#province").val();
+
+    if (fac !== factory || prov !== province) {
+        $("#page").val(1);
+    }
+});
 
 var path = window.location.pathname;
 var requestParam = "?province="

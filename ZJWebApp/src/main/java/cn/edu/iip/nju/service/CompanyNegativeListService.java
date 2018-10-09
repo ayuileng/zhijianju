@@ -51,17 +51,19 @@ public class CompanyNegativeListService {
     public Page<CompanyNegativeList> getByCondition(CompanyForm companyForm) {
         String factory = companyForm.getFactory();
         String province = companyForm.getProvince();
+        final String factor = factory == null?"":factory.trim();
+        final String provinc = province == null?"":province.trim();
         int sort = companyForm.getSort();//0-按照不合格率降序（即合格率升序） 1-按照召回次数降序
         Page<CompanyNegativeList> list = companyNegativeListDao.findAll((root, criteriaQuery, criteriaBuilder) -> {
-            if (Strings.isNullOrEmpty(factory) && Strings.isNullOrEmpty(province)) {
+            if (Strings.isNullOrEmpty(factor) && Strings.isNullOrEmpty(provinc)) {
                 return null;
-            } else if (!Strings.isNullOrEmpty(factory)) {
-                return criteriaBuilder.like(root.get("companyName"), "%" + factory + "%");
-            } else if (!Strings.isNullOrEmpty(province)) {
-                return criteriaBuilder.like(root.get("province"), "%" + province + "%");
+            } else if (!Strings.isNullOrEmpty(factor)) {
+                return criteriaBuilder.like(root.get("companyName"), "%" + factor + "%");
+            } else if (!Strings.isNullOrEmpty(provinc)) {
+                return criteriaBuilder.like(root.get("province"), "%" + provinc + "%");
             } else {
-                return criteriaBuilder.and(criteriaBuilder.like(root.get("province"), "%" + province + "%"),
-                        criteriaBuilder.like(root.get("companyName"), "%" + factory + "%"));
+                return criteriaBuilder.and(criteriaBuilder.like(root.get("province"), "%" + provinc + "%"),
+                        criteriaBuilder.like(root.get("companyName"), "%" + factor + "%"));
             }
         }, new PageRequest(companyForm.getPage()-1, 50, sort == 0 ?
                 new Sort(Sort.Direction.ASC, "passPercent") :

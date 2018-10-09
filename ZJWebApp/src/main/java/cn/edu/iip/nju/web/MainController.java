@@ -40,21 +40,7 @@ public class MainController {
     private NewsDataService newsDataService;
 
     @GetMapping(value = {"/", "index"})
-    public String index(Model model) {
-        long totalData = (webDataService.count() + newsDataService.count()) * 2;
-        long govNum = (long) (totalData * 0.18);
-        long newsNum = (long) (totalData * 0.49);
-        long weiboNum = (long) (totalData * 0.09);
-        long other = (long) (totalData * 0.24);
-        //当前所有数据的分类数量
-        long[] total = {totalData, govNum, newsNum, weiboNum, other};
-        //近期新增数据
-        long[] last = {391, 5, 331, 0, 391 - 5 - 331};
-        model.addAttribute("total", total);
-        model.addAttribute("last", last);
-        Date date = lastMonday();
-        model.addAttribute("date",date);
-
+    public String index() {
         return "index";
     }
 
@@ -120,6 +106,24 @@ public class MainController {
     @GetMapping("/setting")
     public String setting() {
         return "setting";
+    }
+
+    @GetMapping("/state")
+    public String state(Model model){
+        long totalData = (webDataService.count() + newsDataService.count()) * 2;
+        long govNum = (long) (totalData * 0.18);
+        long newsNum = (long) (totalData * 0.49);
+        long weiboNum = (long) (totalData * 0.09);
+        long other = (long) (totalData * 0.24);
+        //当前所有数据的分类数量
+        long[] total = {totalData, govNum, newsNum, weiboNum, other};
+        //近期新增数据
+        long[] last = {391, 5, 331, 0, 391 - 5 - 331};
+        model.addAttribute("total", total);
+        model.addAttribute("last", last);
+        Date date = lastMonday();
+        model.addAttribute("date",date);
+        return "state";
     }
 
 }
