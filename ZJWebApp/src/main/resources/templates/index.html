@@ -19,6 +19,11 @@
             padding-bottom: 50px;
         }
 
+        .logo {
+            margin-top: 160px;
+            margin-bottom: 40px;
+        }
+
         .searchForm {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -26,8 +31,9 @@
 
         .secondary-wrapper {
             position: relative;
-            width: 80%;
+            width: 100%;
             margin: 0 auto;
+            margin-top: 20px;
         }
 
         .footer {
@@ -47,7 +53,7 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="wrapper">
-    <div class="logo"><img src="pic/logo.png" alt="江苏省标准化研究院" height="220"/></div>
+    <div class="logo"><img src="pic/logo.png" alt="江苏省标准化研究院" height="60px" width="250px"/></div>
 
     <div class="searchForm">
         <form action="/search" method="get" class="form-inline">
@@ -58,10 +64,10 @@
     <div class="secondary-wrapper">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2 col-md-offset-2"><a href="/injurecase" data-toggle="tooltip" title="伤害事件案例库"><img src="pic/injure.png" alt="伤害事件案例库" /></a></div>
-                <div class="col-md-2"><a href="/productList" title="产品信息清单"><img src="pic/product.png" alt="产品信息清单" /></a></div>
-                <div class="col-md-2"><a href="/com" title="企业信息清单"><img src="pic/enterprise.png" alt="企业信息清单" /></a></div>
-                <div class="col-md-2"><a href="/hospital" title="医院数据入口"><img src="pic/hospital.png" alt="医院数据入口" /></a></div>
+                <div class="col-md-2 col-md-offset-2"><a href="/injurecase" data-toggle="tooltip" title="伤害事件案例库"><div class="thumbnail"><img src="pic/injure.png" alt="伤害事件案例库" /><div class="caption"><span>伤害事件</span></div></div></a></div>
+                <div class="col-md-2"><a href="/productList" title="产品信息清单"><div class="thumbnail"><img src="pic/product.png" alt="产品信息清单" /><div class="caption"><span>产品信息</span></div></div></a></div>
+                <div class="col-md-2"><a href="/com" title="企业信息清单"><div class="thumbnail"><img src="pic/enterprise.png" alt="企业信息清单" /><div class="caption"><span>企业信息</span></div></div></a></div>
+                <div class="col-md-2"><a href="/hospital" title="医院数据入口"><div class="thumbnail"><img src="pic/hospital.png" alt="医院数据入口" /><div class="caption"><span>医院数据</span></div></div></a></div>
             </div>
         </div>
     </div>
@@ -77,6 +83,7 @@
 </body>
 <!--<script th:src="@{/js/bootstrap.min.js}"></script>-->
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 <script type="text/javascript" th:inline="javascript">
     // 基于准备好的dom，初始化echarts实例
