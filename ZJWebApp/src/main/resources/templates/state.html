@@ -14,7 +14,7 @@
         .wrapper {
             position: relative;
             text-align: center;
-            width: 60%;
+            width: 1000px;
             margin: 70px auto 0;
             padding-bottom: 50px;
         }
@@ -28,8 +28,8 @@
 <div class="wrapper">
 
     <div class="chart">
-        <div class="col-md-6" id="main1" style="width: 450px;height:450px;float:left; display:inline"></div>
-        <div class="col-md-6" id="main2" style="width: 450px;height:450px;float:right; display:inline"></div>
+        <div id="main1" style="width: 450px;height:450px;float:left; display:inline"></div>
+        <div id="main2" style="width: 450px;height:450px;float:right; display:inline"></div>
         <div class="clear"></div>
     </div>
 
@@ -38,6 +38,10 @@
 </body>
 <!--<script th:src="@{/js/bootstrap.min.js}"></script>-->
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#system-states").addClass("active");
+    $("#system-states").siblings().removeClass("active");
+</script>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 <script type="text/javascript" th:inline="javascript">
     // 基于准备好的dom，初始化echarts实例

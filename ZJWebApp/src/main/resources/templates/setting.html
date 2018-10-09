@@ -69,5 +69,11 @@
 </div>
 <div style="height: 50px"></div>
 <div th:replace="fragments/footer :: footer">...</div>
+
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#setting").addClass("active");
+    $("#setting").siblings().removeClass("active");
+</script>
 </body>
 </html>
