@@ -96,7 +96,7 @@ import sys
 print(sys.getdefaultencoding())
 
 #打开数据库连接
-db = pymysql.connect(host="localhost",port=3306,user="root",passwd='root',db="zhijianju",charset="utf8")
+db = pymysql.connect(host="114.212.82.150",port=3306,user="root",passwd='iipconfig',db="zhijianju1",charset="utf8")
 #使用cursor()方法获取游标对象
 cursor= db.cursor()
 #使用execute() 方法执行SQL查询
