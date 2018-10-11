@@ -47,6 +47,10 @@
     </div>
 </div>
 <div th:replace="fragments/footer :: footer">...</div>
-
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#user-profile").addClass("active");
+    $("#user-profile").siblings().removeClass("active");
+</script>
 </body>
 </html>

@@ -100,10 +100,11 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/">首页</a></li>
-                    <li sec:authorize="isAuthenticated()"><a th:href="@{'/u/' + ${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}}"><span class="glyphicon glyphicon-user"></span>个人中心</a></li>
-                    <li sec:authorize="isAuthenticated()"><a href="/setting"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
-                    <li sec:authorize="isAuthenticated()"><a href="/logout"><span class="glyphicon glyphicon-remove-sign"></span> 退出</a></li>
+                    <li id="homepage" class="active"><a href="/">首页</a></li>
+                    <li id="user-profile" sec:authorize="isAuthenticated()"><a th:href="@{'/u/' + ${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}}"><span class="glyphicon glyphicon-user"></span>个人中心</a></li>
+                    <li id="setting" sec:authorize="isAuthenticated()"><a href="/setting"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
+                    <li id="system-states" sec:authorize="isAuthenticated()"><a href="/state"><span class="glyphicon glyphicon-stats"></span> 系统状态</a></li>
+                    <li id="logout" sec:authorize="isAuthenticated()"><a href="/logout"><span class="glyphicon glyphicon-remove-sign"></span> 退出</a></li>
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

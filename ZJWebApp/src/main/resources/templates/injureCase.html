@@ -130,10 +130,10 @@
                 <tr th:each="i : ${injureCases.content}"
                     th:if="${i.productName != null and ! #strings.isEmpty(i.productName)}">
                     <td><a target="_blank" th:href="${i.url}" th:text="${i.productName}"></a></td>
-                    <td th:text="${#dates.format(i.injureTime, 'yyyy-MM-dd')}">1</td>
-                    <td th:text="${i.injureArea}">1</td>
+                    <td style="text-align: center" th:text="${#dates.format(i.injureTime, 'yyyy-MM-dd')}">1</td>
+                    <td style="text-align: center" th:text="${i.injureArea}">1</td>
                     <td th:text="${i.injureType}">1</td>
-                    <td>
+                    <td style="text-align: center">
                         <span th:if="${i.injureDegree} eq '1'" th:text="一级伤害"></span>
                         <span th:if="${i.injureDegree} eq '2'" th:text="二级伤害"></span>
                         <span th:if="${i.injureDegree} eq '3'" th:text="三级伤害"></span>
