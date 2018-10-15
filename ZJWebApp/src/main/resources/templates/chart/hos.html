@@ -22,7 +22,7 @@
     <div id='main3' style='width: 80%;height:600px;'></div>
 </div>
 <script src='http://echarts.baidu.com/build/dist/echarts-all.js'></script>
-<div th:replace="fragments/float-footer :: footer">...</div>
+<div th:replace='fragments/footer :: footer'>...</div>
 </body>
 
 <script type='text/javascript' th:inline='javascript'>
@@ -90,13 +90,11 @@
     var option2 = {
         title : {
             text: '伤害事件月份统计图',
+            x:'center'
 
         },
         tooltip : {
             trigger: 'axis'
-        },
-        legend: {
-            data:['事件数']
         },
         // toolbox: {
         //     show : true,
@@ -124,14 +122,29 @@
             {
                 name:'伤害事件数',
                 type:'bar',
+                itemStyle:{
+                    normal: {
+                        color: "#89cff0",
+                    }
+                },
                 data:[[${list}]],
                 markPoint : {
+                    itemStyle:{
+                        normal: {
+                            color: "#89cff0",
+                        }
+                    },
                     data : [
                         {type : 'max', name: '最大值'},
                         {type : 'min', name: '最小值'}
                     ]
                 },
                 markLine : {
+                    itemStyle:{
+                        normal: {
+                            color: "#89cff0",
+                        }
+                    },
                     data : [
                         {type : 'average', name: '平均值'}
                     ]
@@ -145,13 +158,11 @@
     var option3 = {
         title : {
             text: '主成分分析预警指数',
+            x:'center'
 
         },
         tooltip : {
             trigger: 'axis'
-        },
-        legend: {
-            data:['预警程度']
         },
         // toolbox: {
         //     show : true,
@@ -179,6 +190,11 @@
             {
                 name:'伤害事件数',
                 type:'bar',
+                itemStyle:{
+                    normal: {
+                        color: "#89cff0",
+                    }
+                },
                 data:[[${pcavalue}]]
             }
         ]

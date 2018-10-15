@@ -31,10 +31,10 @@
         </div>
     </form>
 
-    <div id="main1" style="height: 640px"></div>
-    <div id="main2" style="height: 640px"></div>
-    <div id="main3" style="height: 640px"></div>
-    <div id="main4" style="height: 640px"></div>
+    <div id="main1" style="height: 640px;width:1000px;margin:0 auto"></div>
+    <div id="main2" style="height: 640px;width:1000px;margin:0 auto"></div>
+    <div id="main3" style="height: 640px;width:1000px;margin:0 auto"></div>
+    <div id="main4" style="height: 640px;width:1000px;margin:0 auto"></div>
 
 
 
@@ -69,8 +69,11 @@
         },
 
         roamController: {
-            show: true,
+            show:true,
             x: 'right',
+            y:'top',
+            width:80,
+            height:100,
             mapTypeControl: {
                 'china': true
             }
@@ -151,6 +154,9 @@
         roamController: {
             show: true,
             x: 'right',
+            y:'top',
+            width:80,
+            height:100,
             mapTypeControl: {
                 'china': true
             }
@@ -231,6 +237,9 @@
         roamController: {
             show: true,
             x: 'right',
+            y:'top',
+            width:80,
+            height:100,
             mapTypeControl: {
                 'china': true
             }
@@ -311,6 +320,9 @@
         roamController: {
             show: true,
             x: 'right',
+            y:'top',
+            width:80,
+            height:100,
             mapTypeControl: {
                 'china': true
             }
@@ -370,25 +382,25 @@
     function changeSelect(index) {
         var value = $("#degree option:selected").val();
         if(value == 0){
-            $("#main1").attr("style","display:block;");
-            $("#main2").attr("style","display:none;");
-            $("#main3").attr("style","display:none;");
-            $("#main4").attr("style","display:none;");
+            $("#main1").attr("style","display:block;width:1000;margin: 0px auto;");
+            $("#main2").attr("style","display:none;width:1000;margin: 0px auto;");
+            $("#main3").attr("style","display:none;width:1000;margin: 0px auto;");
+            $("#main4").attr("style","display:none;width:1000;margin: 0px auto;");
         }else if(value == 1){
-            $("#main2").attr("style","display:block;");
-            $("#main1").attr("style","display:none;");
-            $("#main3").attr("style","display:none;");
-            $("#main4").attr("style","display:none;");
+            $("#main2").attr("style","display:block;width:1000px;margin: 0px auto;");
+            $("#main1").attr("style","display:none;width:1000px;margin: 0px auto;");
+            $("#main3").attr("style","display:none;width:1000px;margin: 0px auto;");
+            $("#main4").attr("style","display:none;width:1000px;margin: 0px auto;");
         }else if (value == 2){
-            $("#main3").attr("style","display:block;");
-            $("#main2").attr("style","display:none;");
-            $("#main1").attr("style","display:none;");
-            $("#main4").attr("style","display:none;");
+            $("#main3").attr("style","display:block;width:1000px;margin: 0px auto;");
+            $("#main2").attr("style","display:none;width:1000px;margin: 0px auto;");
+            $("#main1").attr("style","display:none;width:1000px;margin: 0px auto;");
+            $("#main4").attr("style","display:none;width:1000px;margin: 0px auto;");
         }else{
-            $("#main4").attr("style","display:block;");
-            $("#main2").attr("style","display:none;");
-            $("#main3").attr("style","display:none;");
-            $("#main1").attr("style","display:none;");
+            $("#main4").attr("style","display:block;width:1000px;margin: 0px auto;");
+            $("#main2").attr("style","display:none;width:1000px;margin: 0px auto;");
+            $("#main3").attr("style","display:none;width:1000px;margin: 0px auto;");
+            $("#main1").attr("style","display:none;width:1000px;margin: 0px auto;");
         }
     }
 
