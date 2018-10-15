@@ -16,10 +16,28 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="wrapper">
+    <form id="form" name="form1" action="/injurecase"  class="form-horizontal">
+        <div class="form-group">
+            <label for="degree" class="col-md-2" style="text-align: right; margin-top: 7px">伤害程度选择</label>
+            <div class="col-md-2">
+                <select class="form-control" id="degree" name="degree"
+                        onchange="changeSelect(this.selectedIndex)">
+                    <option value="0" >全部伤害</option>
+                    <option value="1" >一级伤害</option>
+                    <option value="2" >二级伤害</option>
+                    <option value="3" >三级伤害</option>
+                </select>
+            </div>
+        </div>
+    </form>
+
     <div id="main1" style="height: 640px"></div>
     <div id="main2" style="height: 640px"></div>
     <div id="main3" style="height: 640px"></div>
     <div id="main4" style="height: 640px"></div>
+
+
+
 </div>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 <div th:replace="fragments/footer :: footer">...</div>
@@ -118,7 +136,7 @@
         legend: {
             orient: 'vertical',
             x: 'left',
-            data: ['事件数']
+            data: ['一级伤害事件数']
         },
         dataRange: {
             min: 0,
@@ -198,7 +216,7 @@
         legend: {
             orient: 'vertical',
             x: 'left',
-            data: ['事件数']
+            data: ['二级伤害事件数']
         },
         dataRange: {
             min: 0,
@@ -278,7 +296,7 @@
         legend: {
             orient: 'vertical',
             x: 'left',
-            data: ['事件数']
+            data: ['三级伤害事件数']
         },
         dataRange: {
             min: 0,
@@ -345,6 +363,35 @@
         ]
     };
     myChart4.setOption(option4);
+
+    $("#main2").attr("style","display:none;");
+    $("#main3").attr("style","display:none;");
+    $("#main4").attr("style","display:none;");
+    function changeSelect(index) {
+        var value = $("#degree option:selected").val();
+        if(value == 0){
+            $("#main1").attr("style","display:block;");
+            $("#main2").attr("style","display:none;");
+            $("#main3").attr("style","display:none;");
+            $("#main4").attr("style","display:none;");
+        }else if(value == 1){
+            $("#main2").attr("style","display:block;");
+            $("#main1").attr("style","display:none;");
+            $("#main3").attr("style","display:none;");
+            $("#main4").attr("style","display:none;");
+        }else if (value == 2){
+            $("#main3").attr("style","display:block;");
+            $("#main2").attr("style","display:none;");
+            $("#main1").attr("style","display:none;");
+            $("#main4").attr("style","display:none;");
+        }else{
+            $("#main4").attr("style","display:block;");
+            $("#main2").attr("style","display:none;");
+            $("#main3").attr("style","display:none;");
+            $("#main1").attr("style","display:none;");
+        }
+    }
+
 
 </script>
 </html>
