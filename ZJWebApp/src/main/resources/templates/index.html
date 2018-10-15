@@ -31,15 +31,12 @@
             margin: 0 auto;
             margin-top: 20px;
         }
-        .footer {
-            height: 50px;
+        .no-border {
+            border: none;
         }
         .chart{
             margin: auto;
             width: 70%;
-        }
-        .clear {
-            clear: both;
         }
     </style>
 </head>
@@ -58,19 +55,14 @@
     <div class="secondary-wrapper">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2 col-md-offset-2"><a href="/injurecase" data-toggle="tooltip" title="伤害事件案例库"><div class="thumbnail"><img src="pic/injure.png" alt="伤害事件案例库" /><div class="caption"><span>伤害事件</span></div></div></a></div>
-                <div class="col-md-2"><a href="/productList" title="产品信息清单"><div class="thumbnail"><img src="pic/product.png" alt="产品信息清单" /><div class="caption"><span>产品信息</span></div></div></a></div>
-                <div class="col-md-2"><a href="/com" title="企业信息清单"><div class="thumbnail"><img src="pic/enterprise.png" alt="企业信息清单" /><div class="caption"><span>企业信息</span></div></div></a></div>
-                <div class="col-md-2"><a href="/hospital" title="医院数据入口"><div class="thumbnail"><img src="pic/hospital.png" alt="医院数据入口" /><div class="caption"><span>医院数据</span></div></div></a></div>
+                <div class="col-md-2 col-md-offset-2"><a href="/injurecase"><div class="thumbnail no-border"><img src="pic/injure.png" alt="伤害事件案例库" /><div class="caption"><span>伤害事件</span></div></div></a></div>
+                <div class="col-md-2"><a href="/productList"><div class="thumbnail no-border"><img src="pic/product.png" alt="产品信息清单" /><div class="caption"><span>产品信息</span></div></div></a></div>
+                <div class="col-md-2"><a href="/com"><div class="thumbnail no-border"><img src="pic/enterprise.png" alt="企业信息清单" /><div class="caption"><span>企业信息</span></div></div></a></div>
+                <div class="col-md-2"><a href="/hospital"><div class="thumbnail no-border"><img src="pic/hospital.png" alt="医院数据入口" /><div class="caption"><span>医院数据</span></div></div></a></div>
             </div>
         </div>
     </div>
 
-</div>
-<div class="chart">
-    <div class="col-md-6" id="main1" style="width: 450px;height:450px;float:left; display:inline"></div>
-    <div class="col-md-6" id="main2" style="width: 450px;height:450px;float:right; display:inline"></div>
-    <div class="clear"></div>
 </div>
 
 <div th:replace="fragments/footer :: footer">...</div>
