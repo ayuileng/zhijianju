@@ -187,23 +187,36 @@ public class InjureCaseService {
     }
 
 
+    @Transactional
     public void readFromCsv() throws IOException {
-        Resource resource = new FileSystemResource("C:\\Users\\yajima\\Desktop\\tmp.csv");
+        List<InjureCase> useful = Lists.newArrayList();
+        Resource resource = new FileSystemResource("C:\\Users\\yajima\\Desktop\\data10_9_gai.csv");
         File file = resource.getFile();
         List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
         for (String line : lines) {
-            String[] words = line.split(",");
-            InjureCase injureCase = new InjureCase();
-            injureCase.setId(Integer.valueOf(words[0]));
-            injureCase.setInjureArea(words[1]);
-            injureCase.setInjureType(words[2]);
-            injureCase.setProductName(words[3]);
-            injureCase.setUrl(words[4]);
-            System.out.println(injureCase);
-
-
-//id,injure_area,injure_type,product_name,url
+            String[] split = line.split(",");
+            if (split.length != 4 || Strings.isNullOrEmpty(split[0])||"\"\"".equals(split[0])) {
+                continue;
+            }
+            String url = split[3];
+            InjureCase injureCase = injureCaseDao.findByUrl(url);
+            if("\"\"".equals(split[0])){
+                split[0] = "";
+            }
+            if("\"\"".equals(split[2])){
+                split[2] = "";
+            }
+            injureCase.setProductName(split[0]);
+            injureCase.setInjureType(split[2]);
+            useful.add(injureCase);
         }
+//
+//        List<Integer> idsUseful = useful.stream().map(InjureCase::getId).collect(Collectors.toList());
+//        List<Integer> allId = injureCaseDao.findAll().stream().map(InjureCase::getId).collect(Collectors.toList());
+//        allId.removeAll(idsUseful);
+////        System.out.println(allId.size());
+//        injureCaseDao.deleteAllByIdIn(allId);
+        injureCaseDao.save(useful);
     }
 
     @Transactional()
@@ -272,12 +285,12 @@ public class InjureCaseService {
     }
 
 
-    private void removeBy(String keyWord,String type) {
+    private void removeBy(String keyWord, String type) {
         List<InjureCase> cases = new ArrayList<>();
-        if("productName".equals(keyWord)){
-            cases=injureCaseDao.getAllByProductNameLike("%" + type + "%");
-        } else if("injureType".equals(keyWord)){
-            cases=injureCaseDao.getAllByInjureTypeLike("%" + type + "%");
+        if ("productName".equals(keyWord)) {
+            cases = injureCaseDao.getAllByProductNameLike("%" + type + "%");
+        } else if ("injureType".equals(keyWord)) {
+            cases = injureCaseDao.getAllByInjureTypeLike("%" + type + "%");
         }
         for (InjureCase aCase : cases) {
             String injureType = aCase.getInjureType();
@@ -292,29 +305,31 @@ public class InjureCaseService {
                 sb.append("其他");
             } else {
                 sb.deleteCharAt(sb.length() - 1);
-            }if("productName".equals(keyWord)){
+            }
+            if ("productName".equals(keyWord)) {
                 aCase.setProductName(sb.toString());
-            } else if("injureType".equals(keyWord)){
+            } else if ("injureType".equals(keyWord)) {
                 aCase.setInjureType(sb.toString());
             }
             System.out.println(sb);
         }
-        //injureCaseDao.save(cases);
+        injureCaseDao.save(cases);
     }
 
     public void removeType() {
-        String[] type = {"抢救", "呼吸道", "噪音", "急救", "截肢", "损伤", "神经","住院","疲劳","脱落","浓烟"};
+        String[] type = {"抢救", "呼吸道", "噪音", "急救", "截肢", "损伤", "神经", "住院", "疲劳", "脱落", "浓烟"};
         for (String s : type) {
-            removeBy("injureType",s);
-            logger.info("finish remove {}",s);
+            removeBy("injureType", s);
+            logger.info("finish remove {}", s);
         }
 
     }
+
     public void removeProductName() {
         String[] name = {"毛巾", "栏杆", "洗发水"};
         for (String s : name) {
-            removeBy("productName",s);
-            logger.info("finish remove {}",s);
+            removeBy("productName", s);
+            logger.info("finish remove {}", s);
         }
 
     }

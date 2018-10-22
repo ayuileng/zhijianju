@@ -33,6 +33,6 @@ public class TagProcessApplication implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        injureCaseService.removeProductName();
+        injureCaseService.readFromCsv();
     }
 }

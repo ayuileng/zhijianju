@@ -18,9 +18,11 @@
             margin: 70px auto 0;
             padding-bottom: 50px;
         }
+
         .clear {
             clear: both;
         }
+
         .container {
             text-align: center;
             width: 80%;
@@ -32,15 +34,51 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="wrapper">
-
-    <div class="chart">
-        <div id="main1" style="width: 450px;height:450px;float:left; display:inline"></div>
-        <div id="main2" style="width: 450px;height:450px;float:right; display:inline"></div>
-        <div class="clear"></div>
-    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th style="text-align: center;">系统参数</th>
+            <th style="text-align: center;">详情</th>
+        </tr>
+        <tr>
+            <td>系统运行时长</td>
+            <td>
+                1天
+            </td>
+        </tr>
+        <tr>
+            <td>数据量总大小</td>
+            <td>
+                49.8G
+            </td>
+        </tr>
+        <tr>
+            <td>URL seeds数量</td>
+            <td>
+                47
+            </td>
+        </tr>
+        <tr>
+            <td>文件总数</td>
+            <td>
+                139
+            </td>
+        </tr>
+        <tr>
+            <td>数据分布</td>
+            <td style="text-align: center;">
+                <div id="main1" style="width: 350px;height:350px; display: block; margin: 0 auto;"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>新增数据分布</td>
+            <td style="text-align: center;">
+                <div id="main2" style="width: 350px;height:350px; display: block; margin: 0 auto;"></div>
+            </td>
+        </tr>
+    </table>
 
 </div>
-<div th:replace="fragments/footer :: footer">...</div>
+<div th:replace="fragments/float-footer :: footer">...</div>
 </body>
 <!--<script th:src="@{/js/bootstrap.min.js}"></script>-->
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>

@@ -17,10 +17,10 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="wrapper">
-    <div id="main1" style="width: 80%;height:600px;"></div>
+    <div id="main1" style="width: 80%;height:600px;margin:0 auto;"></div>
 </div>
-<div th:replace="fragments/float-footer :: footer">...</div>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<div th:replace="fragments/footer :: footer">...</div>
 </body>
 
 <script type="text/javascript" th:inline="javascript">
@@ -68,7 +68,7 @@
         },
         series: [
             {
-                name: '企业数',
+                name: '企业数目',
                 type: 'map',
                 mapType: 'china',
                 roam: false,

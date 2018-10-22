@@ -84,8 +84,19 @@ public class ZhijianjuCrawlerApplication implements CommandLineRunner {
 //    CPZLJDS cpzljds;//问题很大，网页变了，而且附件也没了
     @Override
     public void run(String... strings) throws Exception {
-        excelProcess.run();
-        logger.info("excel done");
+        pool.submit(() -> {
+            newsCrawler.startBaiduNewsCrawler();
+            logger.info("baidu success");
+        });
+        pool.submit(() -> {
+            newsCrawler.startSougouNewsCrawler();
+            logger.info("sougou success");
+        });
+        pool.submit(() -> {
+            newsCrawler.start360NewsCrawler();
+            logger.info("360 success");
+        });
+        pool.shutdown();
     }
 
 
