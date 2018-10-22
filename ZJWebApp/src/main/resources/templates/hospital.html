@@ -16,7 +16,8 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container main">
-    <div><a href="/chart/hosChart" target="_blank">统计图表</a></div>
+    <h2 class="title" style="text-align: center">医院数据</h2>
+    <div><a href="/chart/hosChart" target="_blank"><button type="button" class="btn btn-primary">查看统计图表</button></a></div>
     <form action="/hospital" method="get" class="form-horizontal" th:object="${hospitalDataForm}">
         <div class="form-group">
             <label for="productType" class="col-md-2" style="text-align: right; margin-top: 7px">产品关键字</label>
@@ -68,38 +69,38 @@
         <table class="table table-hover table-bordered table-striped">
             <tr>
                 <th>姓名</th>
-                <th>性别</th>
-                <th>年龄</th>
-                <th>伤害发生时间</th>
-                <th>就诊时间</th>
+                <th style="text-align: center" >性别</th>
+                <th style="text-align: center" >年龄</th>
+                <th style="text-align: center" >伤害发生时间</th>
+                <th style="text-align: center" >就诊时间</th>
                 <th>伤害发生原因</th>
                 <th>伤害涉及物品</th>
                 <th>伤害发生地点</th>
                 <th>伤害发生时活动</th>
                 <th>伤害部位</th>
                 <th>伤害临床诊断</th>
-                <th>伤害严重程度</th>
-                <th>伤害结局</th>
-                <th>是否饮酒</th>
-                <th>产品质量是否有关</th>
+                <th style="text-align: center" >伤害严重程度</th>
+                <th style="text-align: center" >伤害结局</th>
+                <th style="text-align: center" >是否饮酒</th>
+                <th style="text-align: center" >产品质量是否有关</th>
             </tr>
             <tr th:each="i : ${hos.content}">
                 <td th:text="${i.name}">1</td>
-                <td><span th:if="${i.gender}==1" th:text="男"></span><span th:if="${i.gender}==2" th:text="女"></span>
+                <td style="text-align: center" ><span th:if="${i.gender}==1" th:text="男"></span><span th:if="${i.gender}==2" th:text="女"></span>
                 </td>
-                <td th:text="${i.age}">1</td>
-                <td th:text="${#dates.format(i.injureDate, 'yyyy-MM-dd')}">1</td>
-                <td th:text="${#dates.format(i.visDate, 'yyyy-MM-dd')}">1</td>
+                <td style="text-align: center" th:text="${i.age}">1</td>
+                <td style="text-align: center" th:text="${#dates.format(i.injureDate, 'yyyy-MM-dd')}">1</td>
+                <td style="text-align: center" th:text="${#dates.format(i.visDate, 'yyyy-MM-dd')}">1</td>
                 <td th:text="${i.injureReason}">1</td>
                 <td th:text="${i.product}">1</td>
                 <td th:text="${i.injureLocation}">1</td>
                 <td th:text="${i.activityWhenInjure}">1</td>
                 <td th:text="${i.injureSite}">1</td>
                 <td th:text="${i.injurejudge}">1</td>
-                <td th:text="${i.injureDegree}">1</td>
-                <td th:text="${i.injureResult}">1</td>
-                <td th:text="${i.alcohol}">1</td>
-                <td th:text="${i.howGetInjure}">1</td>
+                <td style="text-align: center" th:text="${i.injureDegree}">1</td>
+                <td style="text-align: center" th:text="${i.injureResult}">1</td>
+                <td style="text-align: center" th:text="${i.alcohol}">1</td>
+                <td style="text-align: center" th:text="${i.howGetInjure}">1</td>
             </tr>
         </table>
         <div class="container paging">

@@ -13,6 +13,7 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
+    <h2 class="title" style="text-align: center; margin-bottom: 30px;">产品信息</h2>
     <div class="container">
         <form action="/productList" method="get" class="form-horizontal" th:object="${form}">
             <div class="form-group">
@@ -95,21 +96,21 @@
 
         <table class="table table-hover table-bordered table-striped">
             <tr>
-                <th>产品名称</th>
-                <th>案例数</th>
-                <th>影响地区数</th>
+                <th style="text-align: center" >产品名称</th>
+                <th style="text-align: center" >案例数</th>
+                <th style="text-align: center" >影响地区数</th>
                 <th>地区分布</th>
                 <th>主要发生问题</th>
-                <th>伤害指数</th>
+                <th style="text-align: center" >伤害指数</th>
             </tr>
 
             <tr class="content" th:each=" i : ${proList}" th:if="${proList!=null and proList.size()>=0}">
-                <td><a target="_blank" th:id="${i.productName}" ><span th:text="${i.productName}">111</span></a></td>
-                <td th:text="${i.caseNum}">111</td>
-                <td th:text="${i.area.size()}">111</td>
+                <td style="text-align: center" ><a target="_blank" th:id="${i.productName}" ><span th:text="${i.productName}">111</span></a></td>
+                <td style="text-align: center" th:text="${i.caseNum}">111</td>
+                <td style="text-align: center" th:text="${i.area.size()}">111</td>
                 <td th:text="${i.areaString}"></td>
                 <td th:text="${i.mainReason}">111</td>
-                <td th:text="${i.injureIndex}">111</td>
+                <td style="text-align: center" th:text="${i.injureIndex}">111</td>
             </tr>
 
         </table>

@@ -109,7 +109,7 @@
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li sec:authorize="isAnonymous()"><a data-toggle="modal" data-target="#login" href="">登录</a></li>
+                    <li sec:authorize="isAnonymous()"><a data-toggle="modal" data-target="#login" href="#login">登录</a></li>
                     <li sec:authorize="isAnonymous()"><a href="/signup">注册</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -120,7 +120,6 @@
     <div id="login" class="modal fade">
         <div class="modal-dialog" id="login-modal-dialog">
             <div class="modal-content" id="login-modal-content">
-
                 <div class="modal-body">
                     <div id="wrapper" class="login-page">
                         <div sec:authorize="isAuthenticated()">
