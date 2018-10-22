@@ -14,7 +14,8 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container wrapper">
-    <div><a href="/chart/injureChart" target="_blank">统计图表</a></div>
+    <h2 class="title" style="text-align: center">伤害事件</h2>
+    <div class="container"><a href="/chart/injureChart" target="_blank"><button type="button" class="btn btn-primary">查看统计图表</button></a></div>
     <div>
         <form id="form" name="form1" action="/injurecase" th:object="${injureCaseForm}" class="form-horizontal">
             <div class="form-group">
@@ -122,10 +123,10 @@
             <table class="table table-hover table-bordered table-striped">
                 <tr>
                     <th>产品名称</th>
-                    <th>伤害发生时间</th>
-                    <th>伤害发生地点</th>
+                    <th style="text-align: center" >伤害发生时间</th>
+                    <th style="text-align: center" >伤害发生地点</th>
                     <th>伤害类别</th>
-                    <th>伤害程度</th>
+                    <th style="text-align: center" >伤害程度</th>
                 </tr>
                 <tr th:each="i : ${injureCases.content}"
                     th:if="${i.productName != null and ! #strings.isEmpty(i.productName)}">

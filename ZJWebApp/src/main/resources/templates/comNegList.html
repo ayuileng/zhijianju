@@ -25,6 +25,10 @@
     <!--<a href="/com?sort=3"><button type="button" class="btn btn-info">按照案例数升序排列</button></a>-->
     <!--</div>-->
     <div>
+        <h2 class="title" style="text-align: center">企业信息</h2>
+        <div class="container"><a href="/chart/comChart" target="_blank">
+            <button type="button" class="btn btn-primary">查看统计图表</button>
+        </a></div>
         <form id="form" action="/com" th:object="${companyForm}" method="get" class="form-horizontal">
             <div class="form-group">
                 <label for="factory" class="col-md-2" style="text-align: right; margin-top: 7px">企业名称</label>
@@ -51,19 +55,16 @@
                 </div>
             </div>
 
-            <div class="container"><a href="/chart/comChart" target="_blank">
-                <button type="button" class="btn btn-primary">查看统计图表</button>
-            </a></div>
             <table class="table table-hover table-bordered table-striped">
                 <tr>
                     <th>企业名称</th>
                     <th>所在省份</th>
-                    <th>企业基本信息</th>
-                    <th>在案例库中搜索</th>
-                    <th>召回次数</th>
-                    <th>召回信息</th>
-                    <th>抽检次数</th>
-                    <th>抽检不合格率</th>
+                    <th style="text-align: center" >企业基本信息</th>
+                    <th style="text-align: center" >在案例库中搜索</th>
+                    <th style="text-align: center" >召回次数</th>
+                    <th style="text-align: center" >召回信息</th>
+                    <th style="text-align: center" >抽检次数</th>
+                    <th style="text-align: center" >抽检不合格率</th>
 
                 </tr>
                 <tr th:each="i : ${pnl.content}"
